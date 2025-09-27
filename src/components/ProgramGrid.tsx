@@ -129,8 +129,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
               </p>
             </div>
 
-            {/* Coverage info - more compact */}
-            {program.coverage && program.coverage !== 'US' && (
+            {/* Coverage info - only show if no state implementations */}
+            {program.coverage && program.coverage !== 'US' && !program.stateImplementations && (
               <div style={{ marginBottom: '12px' }}>
                 <span style={{
                   color: colors.DARKEST_BLUE,
