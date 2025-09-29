@@ -24,11 +24,13 @@ const getStatusIcon = (status: CoverageStatus) => {
 
 const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onStateSelect }) => {
   let displayStatus = program.status;
+  let isStateSpecificView = false;
 
   if (selectedState && selectedState !== 'All' && program.stateImplementations) {
     const stateImpl = program.stateImplementations.find(impl => impl.state === selectedState);
     if (stateImpl) {
       displayStatus = stateImpl.status;
+      isStateSpecificView = true;
     }
   }
 
@@ -73,7 +75,7 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
             }}>
               {program.name}
             </h3>
-            {program.coverage && program.coverage !== 'US' && (
+            {program.stateImplementations && program.coverage && program.coverage !== 'US' && (
               <span style={{
                 color: colors.GRAY,
                 fontSize: '11px',

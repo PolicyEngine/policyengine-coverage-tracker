@@ -59,8 +59,15 @@ function App() {
             expandedPrograms.push(stateSpecificProgram);
           });
         } else {
-          // For programs without state implementations, just add the original
-          expandedPrograms.push(program);
+          // For state-local mode, only add programs that are state/local or state income tax
+          if (filterMode === 'state-local') {
+            if (program.agency === 'State' || program.agency === 'Local' || program.id === 'state_income_tax') {
+              expandedPrograms.push(program);
+            }
+          } else {
+            // For federal mode, add all programs without state implementations
+            expandedPrograms.push(program);
+          }
         }
       });
 
@@ -93,16 +100,22 @@ function App() {
     } else if (filterMode === 'state-local') {
       // Show State and Local programs, plus state-specific versions of federal programs
       filtered = filtered.filter((program) => {
-        // Always include State and Local agency programs
-        if (program.agency === 'State' || program.agency === 'Local') return true;
-
         // For federal programs with state implementations, show only the state-specific versions
         if (program.id.includes('_')) return true; // State-specific versions
 
-        // Show general federal program only if it has state implementations AND we're in "All" state view
-        if (program.stateImplementations && program.stateImplementations.length > 0 && selectedState === 'All') {
-          return true;
+        // When "All" states is selected
+        if (selectedState === 'All') {
+          // Show State Income Taxes as it varies by state
+          if (program.id === 'state_income_tax') return true;
+          // Don't show other programs without state implementations
+          return false;
         }
+
+        // When a specific state is selected, include State and Local agency programs
+        if (program.agency === 'State' || program.agency === 'Local') return true;
+
+        // Also include State Income Taxes when a specific state is selected
+        if (program.id === 'state_income_tax') return true;
 
         return false;
       });

@@ -48,11 +48,13 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
       {programs.map((program) => {
         // Check if this program has state-specific implementation
         let displayStatus = program.status;
+        let isStateSpecificView = false;
 
         if (selectedState && selectedState !== 'All' && program.stateImplementations) {
           const stateImpl = program.stateImplementations.find(impl => impl.state === selectedState);
           if (stateImpl) {
             displayStatus = stateImpl.status;
+            isStateSpecificView = true;
           }
         }
 
@@ -98,21 +100,38 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                 }}>
                   {program.name}
                 </h3>
-                <div
-                  style={{
-                    display: 'flex',
-                    alignItems: 'center',
-                    padding: '3px 8px',
-                    borderRadius: '12px',
-                    backgroundColor: `${statusColor}20`,
-                    color: statusColor,
-                    fontSize: '12px',
-                    fontWeight: 600,
-                    whiteSpace: 'nowrap',
-                  }}
-                >
-                  <span style={{ marginRight: '4px', fontSize: '14px' }}>{getStatusIcon(displayStatus)}</span>
-                  {getStatusLabel(displayStatus)}
+                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                  {!program.stateImplementations && program.coverage && program.coverage !== 'US' && (
+                    <div
+                      style={{
+                        padding: '3px 8px',
+                        borderRadius: '12px',
+                        backgroundColor: colors.LIGHT_GRAY,
+                        color: colors.DARKEST_BLUE,
+                        fontSize: '12px',
+                        fontWeight: 600,
+                        whiteSpace: 'nowrap',
+                      }}
+                    >
+                      {program.coverage}
+                    </div>
+                  )}
+                  <div
+                    style={{
+                      display: 'flex',
+                      alignItems: 'center',
+                      padding: '3px 8px',
+                      borderRadius: '12px',
+                      backgroundColor: `${statusColor}20`,
+                      color: statusColor,
+                      fontSize: '12px',
+                      fontWeight: 600,
+                      whiteSpace: 'nowrap',
+                    }}
+                  >
+                    <span style={{ marginRight: '4px', fontSize: '14px' }}>{getStatusIcon(displayStatus)}</span>
+                    {getStatusLabel(displayStatus)}
+                  </div>
                 </div>
               </div>
               <p style={{
@@ -128,20 +147,6 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                 {program.fullName}
               </p>
             </div>
-
-            {/* Coverage info - only show if no state implementations */}
-            {program.coverage && program.coverage !== 'US' && !program.stateImplementations && (
-              <div style={{ marginBottom: '12px' }}>
-                <span style={{
-                  color: colors.DARKEST_BLUE,
-                  fontSize: '12px',
-                  fontWeight: 500,
-                  display: 'inline-block',
-                }}>
-                  {program.coverage}
-                </span>
-              </div>
-            )}
 
             {/* Notes (if any) - more compact */}
             {program.notes && (
