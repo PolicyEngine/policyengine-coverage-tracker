@@ -26,6 +26,7 @@ export const programs: Program[] = [
     category: 'Taxes',
     status: 'complete',
     coverage: 'US',
+    hasStateVariation: true,
     notes: 'Validated against NBER TAXSIM',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states`,

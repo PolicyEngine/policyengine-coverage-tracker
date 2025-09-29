@@ -52,26 +52,28 @@ function App() {
 
       programs.forEach(program => {
         if (program.stateImplementations && program.stateImplementations.length > 0) {
-          // Only add the general program if NOT in state-local mode
-          if (filterMode !== 'state-local') {
+          // In federal mode, only add the general/parent program
+          if (filterMode === 'federal') {
             expandedPrograms.push(program);
           }
-
-          // Add state-specific versions of the program
-          program.stateImplementations.forEach(stateImpl => {
-            const stateSpecificProgram: Program = {
-              ...program,
-              id: `${program.id}_${stateImpl.state}`,
-              name: stateImpl.name || `${program.name} (${stateImpl.state})`,
-              fullName: stateImpl.fullName || program.fullName,
-              status: stateImpl.status,
-              coverage: stateImpl.state,
-              notes: stateImpl.notes || program.notes,
-              githubLinks: stateImpl.githubLinks || program.githubLinks,
-              stateImplementations: undefined,
-            };
-            expandedPrograms.push(stateSpecificProgram);
-          });
+          // In state-local mode, add state-specific versions only
+          else if (filterMode === 'state-local') {
+            // Add state-specific versions of the program
+            program.stateImplementations.forEach(stateImpl => {
+              const stateSpecificProgram: Program = {
+                ...program,
+                id: `${program.id}_${stateImpl.state}`,
+                name: stateImpl.name || `${program.name} (${stateImpl.state})`,
+                fullName: stateImpl.fullName || program.fullName,
+                status: stateImpl.status,
+                coverage: stateImpl.state,
+                notes: stateImpl.notes || program.notes,
+                githubLinks: stateImpl.githubLinks || program.githubLinks,
+                stateImplementations: undefined,
+              };
+              expandedPrograms.push(stateSpecificProgram);
+            });
+          }
         } else {
           // For state-local mode, only add programs that are state/local or state income tax
           if (filterMode === 'state-local') {
@@ -95,10 +97,10 @@ function App() {
 
     // Filter by program level (federal vs state/local) - only applies when not in "all" mode
     if (filterMode === 'federal') {
-      // Show only federal agency programs (exclude State and Local) and only general cards (not state-specific)
+      // Show only federal programs (exclude State and Local agencies)
       filtered = filtered.filter((program) =>
-        program.agency && program.agency !== 'State' && program.agency !== 'Local' &&
-        !program.id.includes('_') // Exclude state-specific versions
+        // Include programs without an agency (e.g., federal taxes) OR programs with federal agencies
+        (!program.agency || (program.agency !== 'State' && program.agency !== 'Local'))
       );
 
       // Further filter by specific federal agency if selected
