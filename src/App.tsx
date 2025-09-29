@@ -29,10 +29,22 @@ function App() {
   };
 
   const filteredPrograms = useMemo(() => {
+    // If there's a search query, ignore all filters and search everything
+    if (searchQuery) {
+      const query = searchQuery.toLowerCase();
+      return programs.filter(
+        (program) =>
+          program.name.toLowerCase().includes(query) ||
+          program.fullName.toLowerCase().includes(query) ||
+          program.notes?.toLowerCase().includes(query) ||
+          program.coverage?.toLowerCase().includes(query)
+      );
+    }
+
     let filtered: Program[];
 
     if (filterMode === 'all') {
-      // In "All Programs" mode, show only the original 33 programs
+      // In "All Programs" mode, show only the original programs
       filtered = [...programs];
     } else {
       // For other modes, create expanded program list with state-specific versions
@@ -150,18 +162,6 @@ function App() {
     }
     // No additional filtering needed for filterMode === 'all' since we already set filtered to the original programs
     // If filterMode is 'all', show all programs without level filtering
-
-    // Search filter
-    if (searchQuery) {
-      const query = searchQuery.toLowerCase();
-      filtered = filtered.filter(
-        (program) =>
-          program.name.toLowerCase().includes(query) ||
-          program.fullName.toLowerCase().includes(query) ||
-          program.notes?.toLowerCase().includes(query) ||
-          program.coverage?.toLowerCase().includes(query)
-      );
-    }
 
     return filtered;
   }, [selectedStatus, filterMode, selectedAgency, selectedState, searchQuery]);
