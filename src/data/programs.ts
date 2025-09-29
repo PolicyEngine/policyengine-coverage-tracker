@@ -322,7 +322,7 @@ export const programs: Program[] = [
       {
         state: 'NC',
         status: 'complete',
-        name: 'NC SCCA',
+        name: 'North Carolina SCCA',
         fullName: 'North Carolina Subsidized Child Care Assistance',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/nc/ncdhhs/scca`,
