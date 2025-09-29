@@ -25,6 +25,7 @@ export interface Program {
   hasFederalRules?: boolean;
   description?: string;
   stateImplementations?: StateImplementation[];
+  hasStateVariation?: boolean; // Indicates program has full state-by-state variation
   githubLinks: {
     parameters?: string;
     variables?: string;

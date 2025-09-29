@@ -56,6 +56,7 @@ export const programs: Program[] = [
     agency: 'USDA',
     status: 'complete',
     coverage: 'US',
+    hasStateVariation: true,
     notes: 'Needs some special deductions in AK, AZ, HI, NY, TN, VA',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/usda/snap`,
@@ -112,6 +113,7 @@ export const programs: Program[] = [
     agency: 'HHS',
     status: 'complete',
     coverage: 'US',
+    hasStateVariation: true,
     notes: '8 pathways',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hhs/medicaid`,
@@ -126,6 +128,7 @@ export const programs: Program[] = [
     agency: 'HHS',
     status: 'complete',
     coverage: 'US',
+    hasStateVariation: true,
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hhs/chip`,
       variables: `${GITHUB_BASE}/variables/gov/hhs/chip`,
@@ -139,6 +142,7 @@ export const programs: Program[] = [
     agency: 'ACA',
     status: 'complete',
     coverage: 'US',
+    hasStateVariation: true,
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/aca`,
       variables: `${GITHUB_BASE}/variables/gov/aca`,
