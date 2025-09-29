@@ -42,9 +42,9 @@ export const programs: Program[] = [
     coverage: 'US',
     notes: 'Social Security and Medicare',
     githubLinks: {
-      parameters: `${GITHUB_BASE}/parameters/gov/irs/social_security`,
-      variables: `${GITHUB_BASE}/variables/gov/irs/social_security`,
-      tests: `${TESTS_BASE}/policy/baseline/gov/irs/social_security`,
+      parameters: `${GITHUB_BASE}/parameters/gov/irs/payroll`,
+      variables: `${GITHUB_BASE}/variables/gov/irs/payroll`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/irs/payroll`,
     },
   },
 
@@ -98,11 +98,7 @@ export const programs: Program[] = [
     agency: 'USDA',
     status: 'inProgress',
     coverage: 'US',
-    githubLinks: {
-      parameters: `${GITHUB_BASE}/parameters/gov/usda/summer_ebt`,
-      variables: `${GITHUB_BASE}/variables/gov/usda/summer_ebt`,
-      tests: `${TESTS_BASE}/policy/baseline/gov/usda/summer_ebt`,
-    },
+    githubLinks: {},
   },
 
   // HHS Programs
@@ -160,12 +156,12 @@ export const programs: Program[] = [
       {
         state: 'CA',
         status: 'complete',
-        name: 'CalWORKs Cash Aid',
-        fullName: 'CalWORKs Cash Aid Program',
+        name: 'CalWORKs Cash Benefit',
+        fullName: 'California CalWORKs Cash Benefit',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/ca/tanf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/ca/tanf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/ca/tanf`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ca/cdss/tanf/cash`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ca/cdss/tanf/cash`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ca/cdss/tanf/cash`,
         }
       },
       {
@@ -174,53 +170,53 @@ export const programs: Program[] = [
         name: 'Colorado Works',
         fullName: 'Colorado Works Program',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/co/tanf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/co/tanf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/co/tanf`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/co/cdhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/co/cdhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/co/cdhs/tanf`,
         }
       },
       {
         state: 'DC',
         status: 'complete',
-        name: 'TANF',
+        name: 'DC TANF',
         fullName: 'DC Temporary Assistance for Needy Families',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/dc/tanf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/dc/tanf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/dc/tanf`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/dc/dhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/dc/dhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/dc/dhs/tanf`,
         }
       },
       {
         state: 'IL',
         status: 'complete',
-        name: 'TANF',
+        name: 'Illinois TANF',
         fullName: 'Illinois Temporary Assistance for Needy Families',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/il/tanf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/il/tanf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/il/tanf`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/il/dhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/il/dhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/il/dhs/tanf`,
         }
       },
       {
         state: 'NY',
         status: 'complete',
-        name: 'Family Assistance',
-        fullName: 'New York Family Assistance Program',
+        name: 'NY Temporary Assistance for Needy Families',
+        fullName: 'New York Temporary Assistance for Needy Families (TANF) Plan',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/ny/tanf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/ny/tanf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/ny/tanf`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ny/otda/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ny/otda/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ny/otda/tanf`,
         }
       },
       {
         state: 'MA',
         status: 'complete',
-        name: 'TAFDC',
+        name: 'Massachusets TAFDC',
         fullName: 'Transitional Aid to Families with Dependent Children',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/ma/tanf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/ma/tanf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/tanf`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ma/dta/tcap/tafdc`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ma/dta/tcap/tafdc`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/dta/tcap/tafdc`,
         }
       },
     ],
