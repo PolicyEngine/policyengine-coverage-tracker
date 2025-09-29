@@ -69,77 +69,44 @@ const FilterBar: React.FC<FilterBarProps> = ({
           onChange={(e) => onSearchChange(e.target.value)}
           style={{
             width: '100%',
-            padding: '12px 16px',
-            fontSize: '16px',
-            border: `1px solid ${colors.LIGHT_GRAY}`,
-            borderRadius: '8px',
+            maxWidth: '400px',
+            padding: '8px 14px',
+            fontSize: '13px',
+            border: `2px solid ${colors.LIGHT_GRAY}`,
+            borderRadius: '6px',
             outline: 'none',
             transition: 'border-color 0.2s',
+            fontFamily: 'inherit',
           }}
           onFocus={(e) => {
-            e.currentTarget.style.borderColor = colors.BLUE_PRIMARY;
+            e.currentTarget.style.border = `2px solid ${colors.BLUE_PRIMARY}`;
           }}
           onBlur={(e) => {
-            e.currentTarget.style.borderColor = colors.LIGHT_GRAY;
+            e.currentTarget.style.border = `2px solid ${colors.LIGHT_GRAY}`;
           }}
         />
       </div>
 
-      {/* Reset button and Toggle button for filters */}
-      <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-        <button
-          onClick={() => {
-            onStatusChange('all');
-            onFilterModeChange('all');
-            onAgencyChange('All');
-            onStateChange('All');
-            onSearchChange('');
-          }}
-          style={{
-            padding: '12px 16px',
-            backgroundColor: filtersActive ? colors.TEAL_ACCENT : colors.BLUE_98,
-            border: `1px solid ${filtersActive ? colors.TEAL_ACCENT : colors.LIGHT_GRAY}`,
-            borderRadius: '8px',
-            fontSize: '14px',
-            fontWeight: 600,
-            color: filtersActive ? colors.WHITE : colors.DARKEST_BLUE,
-            cursor: filtersActive ? 'pointer' : 'default',
-            transition: 'all 0.2s',
-            whiteSpace: 'nowrap',
-            opacity: filtersActive ? 1 : 0.6,
-          }}
-          onMouseEnter={(e) => {
-            if (filtersActive) {
-              e.currentTarget.style.backgroundColor = colors.TEAL_PRESSED;
-            }
-          }}
-          onMouseLeave={(e) => {
-            if (filtersActive) {
-              e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
-            }
-          }}
-          disabled={!filtersActive}
-        >
-          {filtersActive ? '✕ Reset Filters' : 'No Filters Active'}
-        </button>
-
+      {/* Advanced Filters and Reset button */}
+      <div style={{ display: 'flex', gap: '12px', alignItems: 'center', marginBottom: isExpanded ? '20px' : '0' }}>
         <button
         onClick={() => setIsExpanded(!isExpanded)}
         style={{
           display: 'flex',
           alignItems: 'center',
-          justifyContent: 'space-between',
-          width: '100%',
-          padding: '12px 16px',
+          justifyContent: 'center',
+          gap: '6px',
+          padding: '8px 14px',
           backgroundColor: colors.BLUE_98,
           border: `1px solid ${colors.LIGHT_GRAY}`,
-          borderRadius: '8px',
-          fontSize: '14px',
-          fontWeight: 600,
+          borderRadius: '6px',
+          fontSize: '13px',
+          fontWeight: 500,
           color: colors.DARKEST_BLUE,
           cursor: 'pointer',
           transition: 'all 0.2s',
-          marginBottom: isExpanded ? '20px' : '0',
+          whiteSpace: 'nowrap',
+          fontFamily: 'inherit',
         }}
         onMouseEnter={(e) => {
           e.currentTarget.style.backgroundColor = colors.BLUE_95;
@@ -149,10 +116,43 @@ const FilterBar: React.FC<FilterBarProps> = ({
         }}
       >
         <span>Advanced Filters</span>
-        <span style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s' }}>
+        <span style={{ transform: isExpanded ? 'rotate(180deg)' : 'rotate(0deg)', transition: 'transform 0.2s', fontSize: '10px' }}>
           ▼
         </span>
       </button>
+
+        {filtersActive && (
+          <button
+            onClick={() => {
+              onStatusChange('all');
+              onFilterModeChange('all');
+              onAgencyChange('All');
+              onStateChange('All');
+              onSearchChange('');
+            }}
+            style={{
+              padding: '8px 14px',
+              backgroundColor: colors.TEAL_ACCENT,
+              border: `1px solid ${colors.TEAL_ACCENT}`,
+              borderRadius: '6px',
+              fontSize: '13px',
+              fontWeight: 500,
+              color: colors.WHITE,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+              whiteSpace: 'nowrap',
+              fontFamily: 'inherit',
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.backgroundColor = colors.TEAL_PRESSED;
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
+            }}
+          >
+            ✕ Reset Filters
+          </button>
+        )}
       </div>
 
       {/* Collapsible filters section */}
