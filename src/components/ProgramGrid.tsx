@@ -116,21 +116,6 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                       {program.coverage}
                     </div>
                   )}
-                  {program.hasStateVariation && (
-                    <div
-                      style={{
-                        padding: '3px 8px',
-                        borderRadius: '12px',
-                        backgroundColor: colors.TEAL_LIGHT,
-                        color: colors.TEAL_PRESSED,
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      Full state variation
-                    </div>
-                  )}
                   <div
                     style={{
                       display: 'flex',
@@ -161,6 +146,21 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
               }}>
                 {program.fullName}
               </p>
+              {program.hasStateVariation && (
+                <div style={{ marginTop: '8px' }}>
+                  <span style={{
+                    display: 'inline-block',
+                    padding: '3px 8px',
+                    borderRadius: '12px',
+                    backgroundColor: colors.TEAL_LIGHT,
+                    color: colors.TEAL_PRESSED,
+                    fontSize: '11px',
+                    fontWeight: 600,
+                  }}>
+                    Full state variation
+                  </span>
+                </div>
+              )}
             </div>
 
             {/* Notes (if any) - more compact */}
