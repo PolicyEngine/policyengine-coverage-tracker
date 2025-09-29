@@ -233,18 +233,16 @@ export const programs: Program[] = [
     agency: 'HHS',
     status: 'partial',
     coverage: 'CA, CO, IL, MA, DC, NY',
-    notes: 'CCCAP in CO, CalWORKS Childcare in CA',
     stateImplementations: [
       {
         state: 'CA',
         status: 'complete',
         name: 'CalWORKs Childcare',
-        fullName: 'CalWORKs Child Care Program',
-        notes: 'CalWORKS Childcare',
+        fullName: 'California CalWORKs Child Care',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/ca/ccdf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/ca/ccdf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/ca/ccdf`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ca/cdss/tanf/child_care`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ca/cdss/tanf/child_care`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ca/cdss/tanf/child_care`,
         }
       },
       {
@@ -254,9 +252,9 @@ export const programs: Program[] = [
         fullName: 'Colorado Child Care Assistance Program',
         notes: 'CCCAP',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/co/ccdf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/co/ccdf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/co/ccdf`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/co/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/co/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/co/ccap`,
         }
       },
       {
@@ -264,51 +262,33 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'CCAP',
         fullName: 'Child Care Assistance Program (Illinois)',
+        notes: 'Only includes eligibility rules',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/il/ccdf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/il/ccdf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/il/ccdf`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/il/dhs/ccap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/il/dhs/ccap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/il/dhs/ccap`,
         }
       },
       {
         state: 'MA',
-        status: 'complete',
-        name: 'Child Care Financial Assistance',
-        fullName: 'Massachusetts Child Care Financial Assistance Program',
-        githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/ma/ccdf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/ma/ccdf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/ccdf`,
-        }
+        status: 'inProgress',
+        name: 'Massachusetts CCFA',
+        fullName: 'Massachusetts Child Care Financial Assistance',
+        githubLinks: {},
       },
       {
         state: 'DC',
         status: 'complete',
-        name: 'DC Child Care Subsidy Program (CCSP)',
+        name: 'DC CCSP',
         fullName: 'DC Child Care Subsidy Program',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/dc/ccdf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/dc/ccdf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/dc/ccdf`,
-        }
-      },
-      {
-        state: 'NY',
-        status: 'complete',
-        name: 'Child Care Assistance Program',
-        fullName: 'New York Child Care Assistance Program',
-        githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/ny/ccdf`,
-          variables: `${GITHUB_BASE}/variables/gov/states/ny/ccdf`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/ny/ccdf`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/dc/dhs/ccsp`,
+          variables: `${GITHUB_BASE}/variables/gov/states/dc/dhs/ccsp`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/dc/dhs/ccsp`,
         }
       },
     ],
-    githubLinks: {
-      parameters: `${GITHUB_BASE}/parameters/gov/hhs/ccdf`,
-      variables: `${GITHUB_BASE}/variables/gov/hhs/ccdf`,
-      tests: `${TESTS_BASE}/policy/baseline/gov/hhs/ccdf`,
-    },
+    githubLinks: {},
   },
   {
     id: 'head_start',
@@ -337,63 +317,43 @@ export const programs: Program[] = [
         status: 'inProgress',
         name: 'LIHEAP',
         fullName: 'Low Income Home Energy Assistance Program (Oregon)',
-        githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/or/liheap`,
-          variables: `${GITHUB_BASE}/variables/gov/states/or/liheap`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/or/liheap`,
-        }
+        githubLinks: {},
       },
       {
         state: 'DC',
-        status: 'inProgress',
-        name: 'LIHEAP',
-        fullName: 'Low Income Home Energy Assistance Program (DC)',
+        status: 'complete',
+        name: 'DC LIHEAP',
+        fullName: 'DC Low Income Home Energy Assistance Program',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/dc/liheap`,
-          variables: `${GITHUB_BASE}/variables/gov/states/dc/liheap`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/dc/liheap`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/dc/doee/liheap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/dc/doee/liheap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/dc/doee/liheap`,
         }
       },
       {
         state: 'MA',
-        status: 'inProgress',
-        name: 'LIHEAP',
-        fullName: 'Low Income Home Energy Assistance Program (Massachusetts)',
+        status: 'complete',
+        name: 'Massachusetts LIHEAP',
+        fullName: 'Massachusetts Low Income Home Energy Assistance Program',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/ma/liheap`,
-          variables: `${GITHUB_BASE}/variables/gov/states/ma/liheap`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/liheap`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ma/doer/liheap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ma/doer/liheap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/doer/liheap`,
         }
       },
       {
         state: 'IL',
         status: 'inProgress',
-        name: 'LIHEAP',
-        fullName: 'Low Income Home Energy Assistance Program (Illinois)',
+        name: 'Illinois LIHEAP',
+        fullName: 'Illinois Low Income Home Energy Assistance Program',
         githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/states/il/liheap`,
-          variables: `${GITHUB_BASE}/variables/gov/states/il/liheap`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/states/il/liheap`,
-        }
-      },
-      {
-        state: 'CA',
-        status: 'inProgress',
-        name: 'LIHEAP',
-        fullName: 'Low Income Home Energy Assistance Program (Riverside County)',
-        notes: 'Riverside County only',
-        githubLinks: {
-          parameters: `${GITHUB_BASE}/parameters/gov/local/riverside/liheap`,
-          variables: `${GITHUB_BASE}/variables/gov/local/riverside/liheap`,
-          tests: `${TESTS_BASE}/policy/baseline/gov/local/riverside/liheap`,
+          parameters: `${GITHUB_BASE}/parameters/gov/states/il/dceo/liheap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/il/dceo/liheap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/il/dceo/liheap`,
         }
       },
     ],
-    githubLinks: {
-      parameters: `${GITHUB_BASE}/parameters/gov/hhs/liheap`,
-      variables: `${GITHUB_BASE}/variables/gov/hhs/liheap`,
-      tests: `${TESTS_BASE}/policy/baseline/gov/hhs/liheap`,
-    },
+    githubLinks: {},
   },
 
   // SSA Programs
