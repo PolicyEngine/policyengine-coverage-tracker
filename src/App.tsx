@@ -52,8 +52,10 @@ function App() {
 
       programs.forEach(program => {
         if (program.stateImplementations && program.stateImplementations.length > 0) {
-          // Add the general program
-          expandedPrograms.push(program);
+          // Only add the general program if NOT in state-local mode
+          if (filterMode !== 'state-local') {
+            expandedPrograms.push(program);
+          }
 
           // Add state-specific versions of the program
           program.stateImplementations.forEach(stateImpl => {
@@ -136,11 +138,9 @@ function App() {
       if (selectedState !== 'All') {
         filtered = filtered.filter((program) => {
           // For state-specific versions (from stateImplementations), check if it matches the selected state
-          // These don't have stateImplementations property since they were expanded
-          if (!program.stateImplementations && program.id.includes('_') &&
-              (program.id.match(/_/g) || []).length === 1 &&
-              program.coverage && program.coverage.length === 2) {
-            // This is likely a state-specific version like "tanf_CA"
+          // These are identified by not having stateImplementations and having coverage that's a 2-letter state code
+          if (!program.stateImplementations && program.coverage && program.coverage.length === 2) {
+            // This is a state-specific version like "tanf_CA" or "ssi_state_supplement_CA"
             return program.coverage === selectedState;
           }
 

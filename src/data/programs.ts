@@ -167,7 +167,7 @@ export const programs: Program[] = [
       {
         state: 'CO',
         status: 'complete',
-        name: 'Colorado Works',
+        name: 'Colorado TANF',
         fullName: 'Colorado Works Program',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/co/cdhs/tanf`,
@@ -200,8 +200,8 @@ export const programs: Program[] = [
       {
         state: 'NY',
         status: 'complete',
-        name: 'NY Temporary Assistance for Needy Families',
-        fullName: 'New York Temporary Assistance for Needy Families (TANF) Plan',
+        name: 'NY TANF',
+        fullName: 'New York Temporary Assistance for Needy Families',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/ny/otda/tanf`,
           variables: `${GITHUB_BASE}/variables/gov/states/ny/otda/tanf`,
@@ -419,7 +419,7 @@ export const programs: Program[] = [
     fullName: 'SSI State Supplement',
     agency: 'SSA',
     status: 'partial',
-    coverage: 'CA, CO, MA',
+    coverage: 'CA, CO, MA, IL',
     stateImplementations: [
       {
         state: 'CA',
