@@ -105,7 +105,7 @@ export const programs: Program[] = [
   {
     id: 'medicaid',
     name: 'Medicaid',
-    fullName: 'Medicaid',
+    fullName: '',
     agency: 'HHS',
     status: 'complete',
     coverage: 'US',
@@ -476,8 +476,7 @@ export const programs: Program[] = [
     fullName: 'Housing Choice Voucher Program',
     agency: 'HUD',
     status: 'inProgress',
-    coverage: 'Los Angeles County, CO',
-    notes: 'National rules; only have AMI for LA County. IL, MA in progress',
+    notes: 'National rules; only have AMI for Los Angeles County and Colorado. Illinois, Massachusetts in progress',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hud`,
       variables: `${GITHUB_BASE}/variables/gov/hud`,

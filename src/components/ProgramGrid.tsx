@@ -86,54 +86,19 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
               e.currentTarget.style.borderColor = colors.LIGHT_GRAY;
             }}
           >
-            {/* Header with name and status */}
+            {/* Header with name */}
             <div style={{ marginBottom: '12px' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: '8px' }}>
-                <h3 style={{
-                  margin: 0,
-                  color: colors.DARKEST_BLUE,
-                  fontSize: '18px',
-                  fontWeight: 600,
-                  lineHeight: '1.2',
-                  flex: 1,
-                  marginRight: '8px'
-                }}>
-                  {program.name}
-                </h3>
-                <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
-                  {!program.stateImplementations && program.coverage && program.coverage !== 'US' && (
-                    <div
-                      style={{
-                        padding: '3px 8px',
-                        borderRadius: '12px',
-                        backgroundColor: colors.LIGHT_GRAY,
-                        color: colors.DARKEST_BLUE,
-                        fontSize: '12px',
-                        fontWeight: 600,
-                        whiteSpace: 'nowrap',
-                      }}
-                    >
-                      {program.coverage}
-                    </div>
-                  )}
-                  <div
-                    style={{
-                      display: 'flex',
-                      alignItems: 'center',
-                      padding: '3px 8px',
-                      borderRadius: '12px',
-                      backgroundColor: `${statusColor}20`,
-                      color: statusColor,
-                      fontSize: '12px',
-                      fontWeight: 600,
-                      whiteSpace: 'nowrap',
-                    }}
-                  >
-                    <span style={{ marginRight: '4px', fontSize: '14px' }}>{getStatusIcon(displayStatus)}</span>
-                    {getStatusLabel(displayStatus)}
-                  </div>
-                </div>
-              </div>
+              <h3 style={{
+                margin: 0,
+                marginBottom: '8px',
+                color: colors.DARKEST_BLUE,
+                fontSize: '18px',
+                fontWeight: 600,
+                lineHeight: '1.3',
+                wordBreak: 'break-word',
+              }}>
+                {program.name}
+              </h3>
               <p style={{
                 margin: '6px 0 0',
                 color: colors.GRAY,
@@ -181,9 +146,45 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
               </p>
             )}
 
+            {/* Status and coverage badges */}
+            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '6px', marginBottom: '12px' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  alignItems: 'center',
+                  padding: '3px 8px',
+                  borderRadius: '12px',
+                  backgroundColor: `${statusColor}20`,
+                  color: statusColor,
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  whiteSpace: 'nowrap',
+                }}
+              >
+                <span style={{ marginRight: '4px', fontSize: '14px' }}>{getStatusIcon(displayStatus)}</span>
+                {getStatusLabel(displayStatus)}
+              </div>
+              {!program.stateImplementations && program.coverage && program.coverage !== 'US' && (
+                <div
+                  style={{
+                    padding: '3px 8px',
+                    borderRadius: '12px',
+                    backgroundColor: colors.LIGHT_GRAY,
+                    color: colors.DARKEST_BLUE,
+                    fontSize: '12px',
+                    fontWeight: 600,
+                    whiteSpace: 'nowrap',
+                  }}
+                >
+                  {program.coverage}
+                </div>
+              )}
+            </div>
+
             {/* GitHub links or State options */}
             <div style={{
               display: 'flex',
+              flexWrap: 'wrap',
               gap: '8px',
               paddingTop: '12px',
               borderTop: `1px solid ${colors.LIGHT_GRAY}`,
@@ -194,7 +195,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                   <button
                     key={stateImpl.state}
                     style={{
-                      flex: 1,
+                      flex: '0 0 auto',
+                      minWidth: '60px',
                       textAlign: 'center',
                       padding: '6px',
                       backgroundColor: colors.TEAL_LIGHT,
