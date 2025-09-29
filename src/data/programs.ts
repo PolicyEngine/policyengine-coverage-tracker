@@ -26,6 +26,7 @@ export const programs: Program[] = [
     category: 'Taxes',
     status: 'complete',
     coverage: 'US',
+    hasStateVariation: true,
     notes: 'Validated against NBER TAXSIM',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states`,
@@ -322,7 +323,7 @@ export const programs: Program[] = [
       {
         state: 'NC',
         status: 'complete',
-        name: 'NC SCCA',
+        name: 'North Carolina SCCA',
         fullName: 'North Carolina Subsidized Child Care Assistance',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/nc/ncdhhs/scca`,
