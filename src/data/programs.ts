@@ -625,8 +625,22 @@ export const programs: Program[] = [
     },
   },
   {
+    id: 'ca_riv_liheap',
+    name: 'Riverside County LIHEAP',
+    fullName: '',
+    agency: 'Local',
+    status: 'complete',
+    coverage: 'Riverside County',
+    notes: 'Eligibility rules only',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/local/ca/riv/liheap`,
+      variables: `${GITHUB_BASE}/variables/gov/local/ca/riv/liheap`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/local/ca/riv/liheap`,
+    },
+  },
+  {
     id: 'share',
-    name: 'Riverside CountySHARE',
+    name: 'Riverside County SHARE',
     fullName: 'Riverside County Sharing Households Assist Riverside Energy program',
     agency: 'Local',
     status: 'complete',
@@ -635,6 +649,19 @@ export const programs: Program[] = [
       parameters: `${GITHUB_BASE}/parameters/gov/local/ca/riv/share`,
       variables: `${GITHUB_BASE}/variables/gov/local/ca/riv/share`,
       tests: `${TESTS_BASE}/policy/baseline/gov/local/ca/riv/share`,
+    },
+  },
+  {
+    id: 'ca_ala_general_assistance',
+    name: 'Alameda County General Assistance',
+    fullName: '',
+    agency: 'Local',
+    status: 'complete',
+    coverage: 'Riverside County',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/local/ca/ala/ga`,
+      variables: `${GITHUB_BASE}/variables/gov/local/ca/ala/ga`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/local/ca/ala/ga`,
     },
   },
 
