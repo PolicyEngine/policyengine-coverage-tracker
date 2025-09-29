@@ -151,7 +151,7 @@ export const programs: Program[] = [
     fullName: 'Temporary Assistance for Needy Families',
     agency: 'HHS',
     status: 'partial',
-    coverage: 'CA, CO, DC, IL, NY, MA, NC, NJ',
+    coverage: 'CA, CO, DC, IL, NY, MA, NC, NJ, MT, TX',
     stateImplementations: [
       {
         state: 'CA',
@@ -220,6 +220,13 @@ export const programs: Program[] = [
         }
       },
       {
+        state: 'MT',
+        status: 'inProgress',
+        name: 'Montana TANF',
+        fullName: 'Montana Temporary Assistance for Needy Families',
+        githubLinks: {}
+      },
+      {
         state: 'NC',
         status: 'complete',
         name: 'North Carolina TANF',
@@ -235,6 +242,13 @@ export const programs: Program[] = [
         status: 'inProgress',
         name: 'New Jersey TANF',
         fullName: 'New Jersey Work First',
+        githubLinks: {}
+      },
+      {
+        state: 'TX',
+        status: 'inProgress',
+        name: 'Texas TANF',
+        fullName: 'Texas Temporary Assistance for Needy Families',
         githubLinks: {}
       },
     ],
@@ -673,6 +687,32 @@ export const programs: Program[] = [
       parameters: `${GITHUB_BASE}/parameters/gov/states/ma/dot/mbta`,
       variables: `${GITHUB_BASE}/variables/gov/states/ma/dot/mbta`,
       tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/dot/mbta`,
+    },
+  },
+  {
+    id: 'ny_drive_clean_rebate',
+    name: 'NY Drive Clean Rebate',
+    fullName: '',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'NY',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/ny/nyserda/drive_clean`,
+      variables: `${GITHUB_BASE}/variables/gov/states/ny/nyserda/drive_clean`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/ny/nyserda/drive_clean`,
+    },
+  },
+  {
+    id: 'tx_dart_benefit',
+    name: 'Texas DART',
+    fullName: '',
+    agency: 'Local',
+    status: 'complete',
+    coverage: 'Dallas County',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/tx/dart`,
+      variables: `${GITHUB_BASE}/variables/gov/states/tx/dart`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/tx/dart`,
     },
   },
 
