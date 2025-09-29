@@ -151,7 +151,7 @@ export const programs: Program[] = [
     fullName: 'Temporary Assistance for Needy Families',
     agency: 'HHS',
     status: 'partial',
-    coverage: 'CA, CO, DC, IL, NY, MA',
+    coverage: 'CA, CO, DC, IL, NY, MA, NC, NJ',
     stateImplementations: [
       {
         state: 'CA',
@@ -219,6 +219,24 @@ export const programs: Program[] = [
           tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/dta/tcap/tafdc`,
         }
       },
+      {
+        state: 'NC',
+        status: 'complete',
+        name: 'North Carolina TANF',
+        fullName: 'North Carolina Work First',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/nc/ncdhhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/nc/ncdhhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/nc/ncdhhs/tanf`,
+        }
+      },
+      {
+        state: 'NJ',
+        status: 'inProgress',
+        name: 'New Jersey TANF',
+        fullName: 'New Jersey Work First',
+        githubLinks: {}
+      },
     ],
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hhs/tanf`,
@@ -232,7 +250,7 @@ export const programs: Program[] = [
     fullName: 'Child Care and Development Fund',
     agency: 'HHS',
     status: 'partial',
-    coverage: 'CA, CO, IL, MA, DC, NY',
+    coverage: 'CA, CO, IL, MA, DC, NC',
     stateImplementations: [
       {
         state: 'CA',
@@ -248,7 +266,7 @@ export const programs: Program[] = [
       {
         state: 'CO',
         status: 'complete',
-        name: 'CCCAP',
+        name: 'CCAP',
         fullName: 'Colorado Child Care Assistance Program',
         notes: 'CCCAP',
         githubLinks: {
@@ -285,6 +303,17 @@ export const programs: Program[] = [
           parameters: `${GITHUB_BASE}/parameters/gov/states/dc/dhs/ccsp`,
           variables: `${GITHUB_BASE}/variables/gov/states/dc/dhs/ccsp`,
           tests: `${TESTS_BASE}/policy/baseline/gov/states/dc/dhs/ccsp`,
+        }
+      },
+      {
+        state: 'NC',
+        status: 'complete',
+        name: 'NC SCCA',
+        fullName: 'North Carolina Subsidized Child Care Assistance',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/nc/ncdhhs/scca`,
+          variables: `${GITHUB_BASE}/variables/gov/states/nc/ncdhhs/scca`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/nc/ncdhhs/scca`,
         }
       },
     ],
@@ -411,6 +440,17 @@ export const programs: Program[] = [
           tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/dta/ssp`,
         }
       },
+      {
+        state: 'IL',
+        status: 'complete',
+        name: 'Illinois AABD',
+        fullName: 'Illinois Aid to the Aged, Blind or Disabled',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/il/dhs/aabd`,
+          variables: `${GITHUB_BASE}/variables/gov/states/il/dhs/aabd`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/il/dhs/aabd`,
+        }
+      },
     ],
     githubLinks: {},
   },
@@ -492,6 +532,45 @@ export const programs: Program[] = [
     },
   },
   {
+    id: 'co_chp',
+    name: 'Colorado CHP',
+    fullName: 'Colorado Child Health Plan Plus',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'CO',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/co/hcpf/chp`,
+      variables: `${GITHUB_BASE}/variables/gov/states/co/hcpf/chp`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/co/hcpf/chp`,
+    },
+  },
+  {
+    id: 'dc_power',
+    name: 'DC Power',
+    fullName: 'DC Program on Work, Employment, and Responsibility',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'DC',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/dc/dhc/power`,
+      variables: `${GITHUB_BASE}/variables/gov/states/dc/dhc/power`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/dc/dhc/power`,
+    },
+  },
+  {
+    id: 'dc_gac',
+    name: 'DC GAC',
+    fullName: 'DC General Assistance for Children',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'DC',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/dc/dhc/gac`,
+      variables: `${GITHUB_BASE}/variables/gov/states/dc/dhc/gac`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/dc/dhc/gac`,
+    },
+  },
+  {
     id: 'ca_cvrp',
     name: 'California CVRP',
     fullName: 'California Clean Vehicle Rebate Project',
@@ -502,6 +581,19 @@ export const programs: Program[] = [
       parameters: `${GITHUB_BASE}/parameters/gov/states/ca/calepa/carb/cvrp`,
       variables: `${GITHUB_BASE}/variables/gov/states/ca/calepa/carb/cvrp`,
       tests: `${TESTS_BASE}/policy/baseline/gov/states/ca/calepa/carb/cvrp`,
+    },
+  },
+  {
+    id: 'ca_capi',
+    name: 'California CAPI',
+    fullName: 'California Cash Assistance Program for Immigrants',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'CA',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/ca/cdss/capi`,
+      variables: `${GITHUB_BASE}/variables/gov/states/ca/cdss/capi`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/ca/cdss/capi`,
     },
   },
   {
@@ -528,6 +620,32 @@ export const programs: Program[] = [
       parameters: `${GITHUB_BASE}/parameters/gov/states/ca/cpuc/fera`,
       variables: `${GITHUB_BASE}/variables/gov/states/ca/cpuc/fera`,
       tests: `${TESTS_BASE}/policy/baseline/gov/states/ca/cpuc/fera`,
+    },
+  },
+  {
+    id: 'il_bap',
+    name: 'Illinois BAP',
+    fullName: 'Illinois Chicago Department of Aging Benefit Access Program',
+    agency: 'Local',
+    status: 'complete',
+    coverage: 'Chicago',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/il/idoa/bap`,
+      variables: `${GITHUB_BASE}/variables/gov/states/il/idoa/bap`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/il/idoa/bap`,
+    },
+  },
+  {
+    id: 'il_cta_benefit',
+    name: 'Illinois CTA Benefit',
+    fullName: 'Illinois Chicago Transit Authority Benefit',
+    agency: 'Local',
+    status: 'complete',
+    coverage: 'Chicago',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/il/rta/cta`,
+      variables: `${GITHUB_BASE}/variables/gov/states/il/rta/cta`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/il/rta/cta`,
     },
   },
   {
@@ -669,7 +787,7 @@ export const programs: Program[] = [
   {
     id: 'chapter_7_bankruptcy',
     name: 'Chapter 7 Bankruptcy',
-    fullName: 'Chapter 7 Bankruptcy',
+    fullName: '',
     category: 'Legal',
     status: 'inProgress',
     coverage: 'US',
