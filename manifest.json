@@ -1,0 +1,15 @@
+{
+  "short_name": "PE Coverage",
+  "name": "PolicyEngine Coverage Tracker",
+  "icons": [
+    {
+      "src": "policyengine.png",
+      "sizes": "any",
+      "type": "image/png"
+    }
+  ],
+  "start_url": ".",
+  "display": "standalone",
+  "theme_color": "#2C6496",
+  "background_color": "#F7FAFD"
+}
