@@ -135,26 +135,42 @@ function App() {
       // Further filter by specific state if selected
       if (selectedState !== 'All') {
         filtered = filtered.filter((program) => {
-          // For state-specific versions, check if it matches the selected state
-          if (program.id.includes('_')) {
+          // For state-specific versions (from stateImplementations), check if it matches the selected state
+          // These don't have stateImplementations property since they were expanded
+          if (!program.stateImplementations && program.id.includes('_') &&
+              (program.id.match(/_/g) || []).length === 1 &&
+              program.coverage && program.coverage.length === 2) {
+            // This is likely a state-specific version like "tanf_CA"
             return program.coverage === selectedState;
           }
 
           // For regular programs, check coverage
           if (!program.coverage) return false;
 
+          // Check for local county programs first
+          if (selectedState === 'CA') {
+            if (program.coverage.includes('Los Angeles County') ||
+                program.coverage.includes('Riverside County') ||
+                program.coverage.includes('Alameda County') ||
+                program.coverage === 'Los Angeles' ||
+                program.coverage === 'Riverside County') {
+              return true;
+            }
+          }
+
+          if (selectedState === 'TX' && program.coverage.includes('Dallas County')) {
+            return true;
+          }
+
+          if (selectedState === 'IL' && program.coverage.includes('Chicago')) {
+            return true;
+          }
+
           // Check if the selected state is in the coverage
           const coverageStates = program.coverage.split(',').map(s => s.trim());
 
           // Direct state match
           if (coverageStates.includes(selectedState)) return true;
-
-          // Check for local programs (Los Angeles, Riverside County)
-          if (selectedState === 'CA') {
-            if (program.coverage.includes('Los Angeles') || program.coverage.includes('Riverside')) {
-              return true;
-            }
-          }
 
           return false;
         });

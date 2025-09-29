@@ -23,9 +23,9 @@ export const extractStatesFromPrograms = (programs: Program[]): string[] => {
           statesSet.add(part);
         }
         // Also check for "Los Angeles" or "Riverside County" type entries
-        else if (part.includes('Los Angeles')) {
+        else if (part.includes('Los Angeles County')) {
           statesSet.add('CA'); // Los Angeles is in CA
-        } else if (part.includes('Riverside')) {
+        } else if (part.includes('Riverside County')) {
           statesSet.add('CA'); // Riverside County is in CA
         }
       });

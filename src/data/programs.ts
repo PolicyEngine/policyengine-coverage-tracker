@@ -814,7 +814,7 @@ export const programs: Program[] = [
     fullName: '',
     agency: 'Local',
     status: 'complete',
-    coverage: 'Riverside County',
+    coverage: 'Alameda County',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/local/ca/ala/ga`,
       variables: `${GITHUB_BASE}/variables/gov/local/ca/ala/ga`,
