@@ -329,8 +329,66 @@ export const programs: Program[] = [
     name: 'LIHEAP',
     fullName: 'Low Income Home Energy Assistance Program',
     agency: 'HHS',
-    status: 'inProgress',
+    status: 'partial',
     coverage: 'OR, DC, Riverside County, MA, IL',
+    stateImplementations: [
+      {
+        state: 'OR',
+        status: 'inProgress',
+        name: 'LIHEAP',
+        fullName: 'Low Income Home Energy Assistance Program (Oregon)',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/or/liheap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/or/liheap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/or/liheap`,
+        }
+      },
+      {
+        state: 'DC',
+        status: 'inProgress',
+        name: 'LIHEAP',
+        fullName: 'Low Income Home Energy Assistance Program (DC)',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/dc/liheap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/dc/liheap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/dc/liheap`,
+        }
+      },
+      {
+        state: 'MA',
+        status: 'inProgress',
+        name: 'LIHEAP',
+        fullName: 'Low Income Home Energy Assistance Program (Massachusetts)',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ma/liheap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ma/liheap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/liheap`,
+        }
+      },
+      {
+        state: 'IL',
+        status: 'inProgress',
+        name: 'LIHEAP',
+        fullName: 'Low Income Home Energy Assistance Program (Illinois)',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/il/liheap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/il/liheap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/il/liheap`,
+        }
+      },
+      {
+        state: 'CA',
+        status: 'inProgress',
+        name: 'LIHEAP',
+        fullName: 'Low Income Home Energy Assistance Program (Riverside County)',
+        notes: 'Riverside County only',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/local/riverside/liheap`,
+          variables: `${GITHUB_BASE}/variables/gov/local/riverside/liheap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/local/riverside/liheap`,
+        }
+      },
+    ],
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hhs/liheap`,
       variables: `${GITHUB_BASE}/variables/gov/hhs/liheap`,
