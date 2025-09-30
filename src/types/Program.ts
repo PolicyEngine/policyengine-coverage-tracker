@@ -7,6 +7,7 @@ export interface StateImplementation {
   notes?: string;
   name?: string; // State-specific program name
   fullName?: string; // State-specific full name
+  variable?: string; // Variable name for flowchart visualization
   githubLinks?: {
     parameters?: string;
     variables?: string;
@@ -26,6 +27,7 @@ export interface Program {
   description?: string;
   stateImplementations?: StateImplementation[];
   hasStateVariation?: boolean; // Indicates program has full state-by-state variation
+  variable?: string; // Variable name for flowchart visualization
   githubLinks: {
     parameters?: string;
     variables?: string;

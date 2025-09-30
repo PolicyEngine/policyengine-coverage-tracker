@@ -208,6 +208,34 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
                 Tests
               </a>
             )}
+            {program.variable && (
+              <a
+                href={`https://policyengine.github.io/flowchart/?variable=${program.variable}&country=US`}
+                target="_blank"
+                rel="noopener noreferrer"
+                style={{
+                  padding: '2px 6px',
+                  backgroundColor: colors.TEAL_LIGHT,
+                  color: colors.TEAL_PRESSED,
+                  textDecoration: 'none',
+                  borderRadius: '3px',
+                  fontSize: '11px',
+                  fontWeight: 500,
+                  transition: 'background-color 0.1s',
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
+                  e.currentTarget.style.color = colors.WHITE;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
+                  e.currentTarget.style.color = colors.TEAL_PRESSED;
+                }}
+                onClick={(e) => e.stopPropagation()}
+              >
+                Tree
+              </a>
+            )}
           </>
         )}
       </div>
