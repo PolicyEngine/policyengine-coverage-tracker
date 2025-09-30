@@ -190,42 +190,173 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
               borderTop: `1px solid ${colors.LIGHT_GRAY}`,
             }}>
               {program.stateImplementations && program.stateImplementations.length > 0 ? (
-                // Show state buttons for programs with state implementations
-                program.stateImplementations.map((stateImpl) => (
-                  <button
-                    key={stateImpl.state}
-                    style={{
-                      flex: '0 0 auto',
-                      minWidth: '60px',
-                      textAlign: 'center',
-                      padding: '6px',
-                      backgroundColor: colors.TEAL_LIGHT,
-                      color: colors.TEAL_PRESSED,
-                      border: 'none',
-                      borderRadius: '4px',
-                      fontSize: '12px',
-                      fontWeight: 500,
-                      transition: 'background-color 0.2s',
-                      cursor: 'pointer',
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
-                      e.currentTarget.style.color = colors.WHITE;
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
-                      e.currentTarget.style.color = colors.TEAL_PRESSED;
-                    }}
-                    onClick={(e) => {
-                      e.stopPropagation();
-                      if (onStateSelect) {
-                        onStateSelect(stateImpl.state);
-                      }
-                    }}
-                  >
-                    {stateImpl.state}
-                  </button>
-                ))
+                // Show state buttons or state-specific links for programs with state implementations
+                <>
+                  {!isStateSpecificView ? (
+                    // Show state buttons when viewing all states
+                    program.stateImplementations.map((stateImpl) => (
+                      <button
+                        key={stateImpl.state}
+                        style={{
+                          flex: '0 0 auto',
+                          minWidth: '60px',
+                          textAlign: 'center',
+                          padding: '6px',
+                          backgroundColor: colors.TEAL_LIGHT,
+                          color: colors.TEAL_PRESSED,
+                          border: 'none',
+                          borderRadius: '4px',
+                          fontSize: '12px',
+                          fontWeight: 500,
+                          transition: 'background-color 0.2s',
+                          cursor: 'pointer',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
+                          e.currentTarget.style.color = colors.WHITE;
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
+                          e.currentTarget.style.color = colors.TEAL_PRESSED;
+                        }}
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          if (onStateSelect) {
+                            onStateSelect(stateImpl.state);
+                          }
+                        }}
+                      >
+                        {stateImpl.state}
+                      </button>
+                    ))
+                  ) : (
+                    // Show state-specific GitHub links and flowchart when viewing a specific state
+                    <>
+                      {(() => {
+                        const stateImpl = program.stateImplementations!.find(impl => impl.state === selectedState);
+                        if (!stateImpl) return null;
+                        return (
+                          <>
+                            {stateImpl.githubLinks?.parameters && (
+                              <a
+                                href={stateImpl.githubLinks.parameters}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  flex: 1,
+                                  textAlign: 'center',
+                                  padding: '6px',
+                                  backgroundColor: colors.BLUE_98,
+                                  color: colors.BLUE_PRIMARY,
+                                  textDecoration: 'none',
+                                  borderRadius: '4px',
+                                  fontSize: '12px',
+                                  fontWeight: 500,
+                                  transition: 'background-color 0.2s',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                Parameters
+                              </a>
+                            )}
+                            {stateImpl.githubLinks?.variables && (
+                              <a
+                                href={stateImpl.githubLinks.variables}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  flex: 1,
+                                  textAlign: 'center',
+                                  padding: '6px',
+                                  backgroundColor: colors.BLUE_98,
+                                  color: colors.BLUE_PRIMARY,
+                                  textDecoration: 'none',
+                                  borderRadius: '4px',
+                                  fontSize: '12px',
+                                  fontWeight: 500,
+                                  transition: 'background-color 0.2s',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                Variables
+                              </a>
+                            )}
+                            {stateImpl.githubLinks?.tests && (
+                              <a
+                                href={stateImpl.githubLinks.tests}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  flex: 1,
+                                  textAlign: 'center',
+                                  padding: '6px',
+                                  backgroundColor: colors.BLUE_98,
+                                  color: colors.BLUE_PRIMARY,
+                                  textDecoration: 'none',
+                                  borderRadius: '4px',
+                                  fontSize: '12px',
+                                  fontWeight: 500,
+                                  transition: 'background-color 0.2s',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                Tests
+                              </a>
+                            )}
+                            {stateImpl.variable && (
+                              <a
+                                href={`https://policyengine.github.io/flowchart/?variable=${stateImpl.variable}&country=US`}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                style={{
+                                  flex: '1 1 100%',
+                                  textAlign: 'center',
+                                  padding: '6px',
+                                  backgroundColor: colors.TEAL_LIGHT,
+                                  color: colors.TEAL_PRESSED,
+                                  textDecoration: 'none',
+                                  borderRadius: '4px',
+                                  fontSize: '12px',
+                                  fontWeight: 500,
+                                  transition: 'background-color 0.2s',
+                                }}
+                                onMouseEnter={(e) => {
+                                  e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
+                                  e.currentTarget.style.color = colors.WHITE;
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
+                                  e.currentTarget.style.color = colors.TEAL_PRESSED;
+                                }}
+                                onClick={(e) => e.stopPropagation()}
+                              >
+                                Show computation tree
+                              </a>
+                            )}
+                          </>
+                        );
+                      })()}
+                    </>
+                  )}
+                </>
               ) : (
                 // Show regular GitHub links for programs without state implementations
                 <>
@@ -311,6 +442,36 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                       onClick={(e) => e.stopPropagation()}
                     >
                       Tests
+                    </a>
+                  )}
+                  {program.variable && (
+                    <a
+                      href={`https://policyengine.github.io/flowchart/?variable=${program.variable}&country=US`}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        flex: '1 1 100%',
+                        textAlign: 'center',
+                        padding: '6px',
+                        backgroundColor: colors.TEAL_LIGHT,
+                        color: colors.TEAL_PRESSED,
+                        textDecoration: 'none',
+                        borderRadius: '4px',
+                        fontSize: '12px',
+                        fontWeight: 500,
+                        transition: 'background-color 0.2s',
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
+                        e.currentTarget.style.color = colors.WHITE;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
+                        e.currentTarget.style.color = colors.TEAL_PRESSED;
+                      }}
+                      onClick={(e) => e.stopPropagation()}
+                    >
+                      Show computation tree
                     </a>
                   )}
                 </>

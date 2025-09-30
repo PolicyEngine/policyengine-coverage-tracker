@@ -68,6 +68,7 @@ function App() {
                 status: stateImpl.status,
                 coverage: stateImpl.state,
                 notes: stateImpl.notes || program.notes,
+                variable: stateImpl.variable || program.variable,
                 githubLinks: stateImpl.githubLinks || program.githubLinks,
                 stateImplementations: undefined,
               };

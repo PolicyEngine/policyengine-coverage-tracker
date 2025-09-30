@@ -12,6 +12,7 @@ export const programs: Program[] = [
     category: 'Taxes',
     status: 'complete',
     coverage: 'US',
+    variable: 'income_tax',
     notes: 'Validated against NBER TAXSIM',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/irs`,
@@ -27,6 +28,7 @@ export const programs: Program[] = [
     status: 'complete',
     coverage: 'US',
     hasStateVariation: true,
+    variable: 'state_income_tax',
     notes: 'Validated against NBER TAXSIM',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states`,
@@ -41,6 +43,7 @@ export const programs: Program[] = [
     category: 'Taxes',
     status: 'complete',
     coverage: 'US',
+    variable: 'employee_payroll_tax',
     notes: 'Social Security and Medicare',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/irs/payroll`,
@@ -58,6 +61,7 @@ export const programs: Program[] = [
     status: 'complete',
     coverage: 'US',
     hasStateVariation: true,
+    variable: 'snap',
     notes: 'Needs some special deductions in AK, AZ, HI, NY, TN, VA',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/usda/snap`,
@@ -72,6 +76,7 @@ export const programs: Program[] = [
     agency: 'USDA',
     status: 'complete',
     coverage: 'US',
+    variable: 'wic',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/usda/wic`,
       variables: `${GITHUB_BASE}/variables/gov/usda/wic`,
@@ -86,6 +91,7 @@ export const programs: Program[] = [
     status: 'partial',
     coverage: 'US',
     notes: 'Nationwide rules; needs states with universal coverage',
+    variable: 'free_school_meals',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/usda/school_meals`,
       variables: `${GITHUB_BASE}/variables/gov/usda/school_meals`,
@@ -111,6 +117,7 @@ export const programs: Program[] = [
     status: 'complete',
     coverage: 'US',
     hasStateVariation: true,
+    variable: 'medicaid',
     notes: '8 pathways',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hhs/medicaid`,
@@ -126,6 +133,7 @@ export const programs: Program[] = [
     status: 'complete',
     coverage: 'US',
     hasStateVariation: true,
+    variable: 'chip',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hhs/chip`,
       variables: `${GITHUB_BASE}/variables/gov/hhs/chip`,
@@ -140,6 +148,7 @@ export const programs: Program[] = [
     status: 'complete',
     coverage: 'US',
     hasStateVariation: true,
+    variable: 'aca_ptc',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/aca`,
       variables: `${GITHUB_BASE}/variables/gov/aca`,
@@ -159,6 +168,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'CalWORKs Cash Benefit',
         fullName: 'California CalWORKs Cash Benefit',
+        variable: 'ca_tanf',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/ca/cdss/tanf/cash`,
           variables: `${GITHUB_BASE}/variables/gov/states/ca/cdss/tanf/cash`,
@@ -170,6 +180,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'Colorado TANF',
         fullName: 'Colorado Works Program',
+        variable: 'co_tanf',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/co/cdhs/tanf`,
           variables: `${GITHUB_BASE}/variables/gov/states/co/cdhs/tanf`,
@@ -181,6 +192,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'DC TANF',
         fullName: 'DC Temporary Assistance for Needy Families',
+        variable: 'dc_tanf',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/dc/dhs/tanf`,
           variables: `${GITHUB_BASE}/variables/gov/states/dc/dhs/tanf`,
@@ -192,6 +204,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'Illinois TANF',
         fullName: 'Illinois Temporary Assistance for Needy Families',
+        variable: 'il_tanf',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/il/dhs/tanf`,
           variables: `${GITHUB_BASE}/variables/gov/states/il/dhs/tanf`,
@@ -203,6 +216,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'NY TANF',
         fullName: 'New York Temporary Assistance for Needy Families',
+        variable: 'ny_tanf',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/ny/otda/tanf`,
           variables: `${GITHUB_BASE}/variables/gov/states/ny/otda/tanf`,
@@ -214,6 +228,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'Massachusets TAFDC',
         fullName: 'Transitional Aid to Families with Dependent Children',
+        variable: 'ma_tafdc',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/ma/dta/tcap/tafdc`,
           variables: `${GITHUB_BASE}/variables/gov/states/ma/dta/tcap/tafdc`,
@@ -232,6 +247,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'North Carolina TANF',
         fullName: 'North Carolina Work First',
+        variable: 'nc_tanf',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/nc/ncdhhs/tanf`,
           variables: `${GITHUB_BASE}/variables/gov/states/nc/ncdhhs/tanf`,
@@ -272,6 +288,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'CalWORKs Childcare',
         fullName: 'California CalWORKs Child Care',
+        variable: 'ca_calworks_child_care',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/ca/cdss/tanf/child_care`,
           variables: `${GITHUB_BASE}/variables/gov/states/ca/cdss/tanf/child_care`,
@@ -284,6 +301,7 @@ export const programs: Program[] = [
         name: 'CCAP',
         fullName: 'Colorado Child Care Assistance Program',
         notes: 'CCCAP',
+        variable: 'co_ccap_subsidy',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/co/ccap`,
           variables: `${GITHUB_BASE}/variables/gov/states/co/ccap`,
@@ -296,6 +314,7 @@ export const programs: Program[] = [
         name: 'CCAP',
         fullName: 'Child Care Assistance Program (Illinois)',
         notes: 'Only includes eligibility rules',
+        variable: 'il_ccap_eligible',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/il/dhs/ccap`,
           variables: `${GITHUB_BASE}/variables/gov/states/il/dhs/ccap`,
@@ -314,6 +333,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'DC CCSP',
         fullName: 'DC Child Care Subsidy Program',
+        variable: 'dc_ccsp',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/dc/dhs/ccsp`,
           variables: `${GITHUB_BASE}/variables/gov/states/dc/dhs/ccsp`,
@@ -325,6 +345,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'North Carolina SCCA',
         fullName: 'North Carolina Subsidized Child Care Assistance',
+        variable: 'nc_scca',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/nc/ncdhhs/scca`,
           variables: `${GITHUB_BASE}/variables/gov/states/nc/ncdhhs/scca`,
@@ -342,6 +363,7 @@ export const programs: Program[] = [
     status: 'partial',
     coverage: 'US',
     notes: 'Currently adding immigration rules',
+    variable: 'head_start',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hhs/head_start`,
       variables: `${GITHUB_BASE}/variables/gov/hhs/head_start`,
@@ -368,6 +390,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'DC LIHEAP',
         fullName: 'DC Low Income Home Energy Assistance Program',
+        variable: 'dc_liheap',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/dc/doee/liheap`,
           variables: `${GITHUB_BASE}/variables/gov/states/dc/doee/liheap`,
@@ -379,6 +402,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'Massachusetts LIHEAP',
         fullName: 'Massachusetts Low Income Home Energy Assistance Program',
+        variable: 'ma_liheap',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/ma/doer/liheap`,
           variables: `${GITHUB_BASE}/variables/gov/states/ma/doer/liheap`,
@@ -390,6 +414,7 @@ export const programs: Program[] = [
         status: 'inProgress',
         name: 'Illinois LIHEAP',
         fullName: 'Illinois Low Income Home Energy Assistance Program',
+        variable: 'il_liheap',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/il/dceo/liheap`,
           variables: `${GITHUB_BASE}/variables/gov/states/il/dceo/liheap`,
@@ -408,6 +433,7 @@ export const programs: Program[] = [
     agency: 'SSA',
     status: 'complete',
     coverage: 'US',
+    variable: 'ssi',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/ssa/ssi`,
       variables: `${GITHUB_BASE}/variables/gov/ssa/ssi`,
@@ -427,6 +453,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'California SSP',
         fullName: 'California State Supplementary Payment',
+        variable: 'ca_state_supplement',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/ca/cdss/state_supplement`,
           variables: `${GITHUB_BASE}/variables/gov/states/ca/cdss/state_supplement`,
@@ -438,6 +465,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'Colorado SSP',
         fullName: 'Colorado State Supplementary Payment',
+        variable: 'co_state_supplement',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/co/ssa/state_supplement`,
           variables: `${GITHUB_BASE}/variables/gov/states/co/ssa/state_supplement`,
@@ -449,6 +477,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'Massachusetts SSP',
         fullName: 'Massachusetts State Supplementary Payment',
+        variable: 'ma_state_supplement',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/ma/dta/ssp`,
           variables: `${GITHUB_BASE}/variables/gov/states/ma/dta/ssp`,
@@ -460,6 +489,7 @@ export const programs: Program[] = [
         status: 'complete',
         name: 'Illinois AABD',
         fullName: 'Illinois Aid to the Aged, Blind or Disabled',
+        variable: 'il_aabd',
         githubLinks: {
           parameters: `${GITHUB_BASE}/parameters/gov/states/il/dhs/aabd`,
           variables: `${GITHUB_BASE}/variables/gov/states/il/dhs/aabd`,
@@ -477,6 +507,7 @@ export const programs: Program[] = [
     fullName: 'Housing Choice Voucher Program',
     agency: 'HUD',
     status: 'inProgress',
+    variable: 'hud_hap',
     notes: 'National rules; only have AMI for Los Angeles County and Colorado. Illinois, Massachusetts in progress',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hud`,
@@ -493,6 +524,7 @@ export const programs: Program[] = [
     agency: 'FCC',
     status: 'complete',
     coverage: 'US',
+    variable: 'lifeline',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/fcc/lifeline`,
       variables: `${GITHUB_BASE}/variables/gov/fcc/lifeline`,
@@ -508,6 +540,7 @@ export const programs: Program[] = [
     agency: 'ED',
     status: 'complete',
     coverage: 'US',
+    variable: 'pell_grant',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/ed/pell_grant`,
       variables: `${GITHUB_BASE}/variables/gov/ed/pell_grant`,
@@ -523,6 +556,7 @@ export const programs: Program[] = [
     category: 'Energy',
     status: 'complete',
     coverage: 'US',
+    variable: 'energy_efficient_home_improvement_credit',
     notes: 'High efficiency electric home rebate, residential efficiency electrification rebate',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/irs/credits`,
@@ -539,6 +573,7 @@ export const programs: Program[] = [
     agency: 'State',
     status: 'complete',
     coverage: 'CO',
+    variable: 'co_oap',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/co/ssa/oap`,
       variables: `${GITHUB_BASE}/variables/gov/states/co/ssa/oap`,
@@ -552,6 +587,7 @@ export const programs: Program[] = [
     agency: 'State',
     status: 'complete',
     coverage: 'CO',
+    variable: 'co_chp',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/co/hcpf/chp`,
       variables: `${GITHUB_BASE}/variables/gov/states/co/hcpf/chp`,
@@ -565,6 +601,7 @@ export const programs: Program[] = [
     agency: 'State',
     status: 'complete',
     coverage: 'DC',
+    variable: 'dc_power',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/dc/dhc/power`,
       variables: `${GITHUB_BASE}/variables/gov/states/dc/dhc/power`,
@@ -578,6 +615,7 @@ export const programs: Program[] = [
     agency: 'State',
     status: 'complete',
     coverage: 'DC',
+    variable: 'dc_gac',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/dc/dhc/gac`,
       variables: `${GITHUB_BASE}/variables/gov/states/dc/dhc/gac`,
@@ -591,6 +629,7 @@ export const programs: Program[] = [
     agency: 'State',
     status: 'complete',
     coverage: 'CA',
+    variable: 'ca_cvrp',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/ca/calepa/carb/cvrp`,
       variables: `${GITHUB_BASE}/variables/gov/states/ca/calepa/carb/cvrp`,
@@ -604,6 +643,7 @@ export const programs: Program[] = [
     agency: 'State',
     status: 'complete',
     coverage: 'CA',
+    variable: 'ca_capi',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/ca/cdss/capi`,
       variables: `${GITHUB_BASE}/variables/gov/states/ca/cdss/capi`,
@@ -617,6 +657,7 @@ export const programs: Program[] = [
     agency: 'State',
     status: 'complete',
     coverage: 'CA',
+    variable: 'ca_care',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/ca/cpuc/care`,
       variables: `${GITHUB_BASE}/variables/gov/states/ca/cpuc/care`,
@@ -630,6 +671,7 @@ export const programs: Program[] = [
     agency: 'State',
     status: 'complete',
     coverage: 'CA',
+    variable: 'ca_fera',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/ca/cpuc/fera`,
       variables: `${GITHUB_BASE}/variables/gov/states/ca/cpuc/fera`,
@@ -643,6 +685,8 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Chicago',
+    variable: 'il_bap_eligible',
+    notes: 'Only includes eligibility rules',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/il/idoa/bap`,
       variables: `${GITHUB_BASE}/variables/gov/states/il/idoa/bap`,
@@ -656,6 +700,7 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Chicago',
+    variable: 'il_cta_benefit',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/il/rta/cta`,
       variables: `${GITHUB_BASE}/variables/gov/states/il/rta/cta`,
@@ -669,6 +714,7 @@ export const programs: Program[] = [
     agency: 'State',
     status: 'complete',
     coverage: 'NE',
+    variable: 'ne_child_care_subsidy',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/ne/dhhs/child_care_subsidy`,
       variables: `${GITHUB_BASE}/variables/gov/states/ne/dhhs/child_care_subsidy`,
@@ -683,6 +729,7 @@ export const programs: Program[] = [
     status: 'complete',
     notes: 'Includes eligiblity rules for the Reduced Fares, Tap Charlie Card, and Senior Charlie Card Program',
     coverage: 'MA',
+    variable: 'ma_mbta_income_eligible_reduced_fare_eligible',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/ma/dot/mbta`,
       variables: `${GITHUB_BASE}/variables/gov/states/ma/dot/mbta`,
@@ -696,6 +743,7 @@ export const programs: Program[] = [
     agency: 'State',
     status: 'complete',
     coverage: 'NY',
+    variable: 'ny_drive_clean_rebate',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/ny/nyserda/drive_clean`,
       variables: `${GITHUB_BASE}/variables/gov/states/ny/nyserda/drive_clean`,
@@ -709,6 +757,7 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Dallas County',
+    variable: 'tx_dart_benefit_person',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/tx/dart`,
       variables: `${GITHUB_BASE}/variables/gov/states/tx/dart`,
@@ -724,6 +773,7 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Los Angeles County',
+    variable: 'ca_la_ez_save',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/local/ca/la/dwp/ez_save`,
       variables: `${GITHUB_BASE}/variables/gov/local/ca/la/dwp/ez_save`,
@@ -737,6 +787,7 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Los Angeles County',
+    variable: 'ca_la_infant_supplement',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/local/ca/la/dss/infant_supplement`,
       variables: `${GITHUB_BASE}/variables/gov/local/ca/la/dss/infant_supplement`,
@@ -750,6 +801,7 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Los Angeles County',
+    variable: 'ca_la_expectant_parent_payment',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/local/ca/la/dss/expectant_parent`,
       variables: `${GITHUB_BASE}/variables/gov/local/ca/la/dss/expectant_parent`,
@@ -763,6 +815,7 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Los Angeles County',
+    variable: 'la_general_relief',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/local/ca/la/general_relief`,
       variables: `${GITHUB_BASE}/variables/gov/local/ca/la/general_relief`,
@@ -776,6 +829,7 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Riverside County',
+    variable: 'ca_riv_general_relief',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/local/ca/riv/general_relief`,
       variables: `${GITHUB_BASE}/variables/gov/local/ca/riv/general_relief`,
@@ -789,7 +843,8 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Riverside County',
-    notes: 'Eligibility rules only',
+    notes: 'Only includes eligibility rules',
+    variable: 'ca_riv_liheap_eligible',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/local/ca/riv/liheap`,
       variables: `${GITHUB_BASE}/variables/gov/local/ca/riv/liheap`,
@@ -803,6 +858,7 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Riverside County',
+    variable: 'ca_riv_share_payment',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/local/ca/riv/share`,
       variables: `${GITHUB_BASE}/variables/gov/local/ca/riv/share`,
@@ -816,6 +872,7 @@ export const programs: Program[] = [
     agency: 'Local',
     status: 'complete',
     coverage: 'Alameda County',
+    variable: 'ca_ala_general_assistance',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/local/ca/ala/ga`,
       variables: `${GITHUB_BASE}/variables/gov/local/ca/ala/ga`,
