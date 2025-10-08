@@ -1,7 +1,7 @@
 import { Program } from '../types/Program';
 
 const GITHUB_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us';
-const TESTS_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/master/tests';
+const TESTS_BASE = 'https://github.com/PolicyEngine/policyengine-us/tree/master/policyengine_us/tests';
 
 export const programs: Program[] = [
   // Tax Programs
