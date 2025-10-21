@@ -263,10 +263,15 @@ export const programs: Program[] = [
       },
       {
         state: 'TX',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Texas TANF',
         fullName: 'Texas Temporary Assistance for Needy Families',
-        githubLinks: {}
+        variable: 'tx_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/tx/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/tx/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/tx/tanf`,
+        }
       },
     ],
     githubLinks: {
@@ -281,7 +286,7 @@ export const programs: Program[] = [
     fullName: 'Child Care and Development Fund',
     agency: 'HHS',
     status: 'partial',
-    coverage: 'CA, CO, IL, MA, DC, NC',
+    coverage: 'CA, CO, IL, MA, DC, NC, TX',
     stateImplementations: [
       {
         state: 'CA',
@@ -350,6 +355,18 @@ export const programs: Program[] = [
           parameters: `${GITHUB_BASE}/parameters/gov/states/nc/ncdhhs/scca`,
           variables: `${GITHUB_BASE}/variables/gov/states/nc/ncdhhs/scca`,
           tests: `${TESTS_BASE}/policy/baseline/gov/states/nc/ncdhhs/scca`,
+        }
+      },
+      {
+        state: 'TX',
+        status: 'complete',
+        name: 'Texas CCS',
+        fullName: 'Texas Child Care Services',
+        variable: 'tx_ccs',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/tx/twc/ccs`,
+          variables: `${GITHUB_BASE}/variables/gov/states/tx/twc/ccs`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/tx/twc/ccs`,
         }
       },
     ],
@@ -751,17 +768,45 @@ export const programs: Program[] = [
     },
   },
   {
+    id: 'tx_fpp_benefit',
+    name: 'Texas FPP',
+    fullName: 'Texas Family Planning Program',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'TX',
+    variable: 'tx_fpp_benefit',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/tx/fpp`,
+      variables: `${GITHUB_BASE}/variables/gov/states/tx/fpp`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/tx/fpp`,
+    },
+  },
+  {
     id: 'tx_dart_benefit',
     name: 'Texas DART',
-    fullName: '',
+    fullName: 'Texas Dallas Area Rapid Transit Benefit',
     agency: 'Local',
     status: 'complete',
-    coverage: 'Dallas County',
+    coverage: 'Dallas County, TX',
     variable: 'tx_dart_benefit_person',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/tx/dart`,
       variables: `${GITHUB_BASE}/variables/gov/states/tx/dart`,
       tests: `${TESTS_BASE}/policy/baseline/gov/states/tx/dart`,
+    },
+  },
+  {
+    id: 'tx_harris_rides_subsidy',
+    name: 'Harris County Rides Subsidy',
+    fullName: 'Harris County Transportation Subsidy',
+    agency: 'Local',
+    status: 'complete',
+    coverage: 'Harris County, TX',
+    variable: 'tx_harris_rides_subsidy',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/local/tx/harris/rides`,
+      variables: `${GITHUB_BASE}/variables/gov/local/tx/harris/rides`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/local/tx/harris/rides`,
     },
   },
 
