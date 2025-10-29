@@ -78,7 +78,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     // Programs that apply to all states
     const universalStatePrograms = new Set([
       'snap', 'tanf', 'medicaid', 'wic', 'state_income_tax',
-      'social_security', 'ssi', 'medicare', 'eitc', 'ctc', 'federal_income_tax'
+      'social_security', 'ssi', 'medicare', 'eitc', 'ctc'
     ]);
 
     // Build matrix rows - using major programs
@@ -100,32 +100,43 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       let level: 'federal' | 'state' | 'local' = 'federal';
       if (program.agency === 'Local') {
         level = 'local';
-      } else if (program.agency === 'State' || (program.coverage && program.coverage.length === 2 && program.coverage !== 'US')) {
+      } else if (program.id === 'state_income_tax' || program.agency === 'State' || (program.coverage && program.coverage.length === 2 && program.coverage !== 'US')) {
         level = 'state';
       }
 
-      // Federal status
-      if (!program.stateImplementations || program.agency !== 'State') {
-        if (level === 'federal') {
-          jurisdictionMap.set('Federal', program.status);
-        } else if (level === 'state' && program.coverage && program.coverage.length === 2) {
-          // State-specific program
-          jurisdictionMap.set(program.coverage, program.status);
-        }
-      }
-
-      // For universal programs, mark all states with the program's status
-      if (universalStatePrograms.has(program.id)) {
+      // Special handling for income taxes
+      if (program.id === 'federal_income_tax') {
+        // Federal income tax only applies at federal level
+        jurisdictionMap.set('Federal', program.status);
+      } else if (program.id === 'state_income_tax') {
+        // State income tax does NOT apply at federal level, only states
         allStates.forEach(state => {
           jurisdictionMap.set(state, program.status);
         });
-      }
+      } else {
+        // Federal status for other programs
+        if (!program.stateImplementations || program.agency !== 'State') {
+          if (level === 'federal') {
+            jurisdictionMap.set('Federal', program.status);
+          } else if (level === 'state' && program.coverage && program.coverage.length === 2) {
+            // State-specific program
+            jurisdictionMap.set(program.coverage, program.status);
+          }
+        }
 
-      // State statuses from stateImplementations (these will override universal status if present)
-      if (program.stateImplementations) {
-        program.stateImplementations.forEach(impl => {
-          jurisdictionMap.set(impl.state, impl.status);
-        });
+        // For universal programs, mark all states with the program's status
+        if (universalStatePrograms.has(program.id)) {
+          allStates.forEach(state => {
+            jurisdictionMap.set(state, program.status);
+          });
+        }
+
+        // State statuses from stateImplementations (these will override universal status if present)
+        if (program.stateImplementations) {
+          program.stateImplementations.forEach(impl => {
+            jurisdictionMap.set(impl.state, impl.status);
+          });
+        }
       }
 
       return {
