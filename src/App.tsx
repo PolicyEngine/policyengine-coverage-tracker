@@ -153,13 +153,14 @@ function App() {
           // For regular programs, check coverage
           if (!program.coverage) return false;
 
-          // Check for local county programs first
+          // Check for local county/city programs first
           if (selectedState === 'CA') {
             if (program.coverage.includes('Los Angeles County') ||
                 program.coverage.includes('Riverside County') ||
                 program.coverage.includes('Alameda County') ||
                 program.coverage === 'Los Angeles' ||
-                program.coverage === 'Riverside County') {
+                program.coverage === 'Riverside County' ||
+                program.coverage.includes('San Francisco')) {
               return true;
             }
           }
@@ -169,6 +170,14 @@ function App() {
           }
 
           if (selectedState === 'IL' && program.coverage.includes('Chicago')) {
+            return true;
+          }
+
+          if (selectedState === 'NY' && program.coverage.includes('New York City')) {
+            return true;
+          }
+
+          if (selectedState === 'MD' && program.coverage.includes('Montgomery County')) {
             return true;
           }
 

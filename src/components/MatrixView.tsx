@@ -121,6 +121,29 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
           } else if (level === 'state' && program.coverage && program.coverage.length === 2) {
             // State-specific program
             jurisdictionMap.set(program.coverage, program.status);
+          } else if (level === 'local' && program.coverage) {
+            // Local program - map to appropriate state column
+            // Extract state from coverage string
+            let stateCode = null;
+            if (program.coverage.includes('California') || program.coverage.includes('Los Angeles') ||
+                program.coverage.includes('Riverside') || program.coverage.includes('Alameda') ||
+                program.coverage.includes('San Francisco')) {
+              stateCode = 'CA';
+            } else if (program.coverage.includes('New York')) {
+              stateCode = 'NY';
+            } else if (program.coverage.includes('Texas') || program.coverage.includes('Dallas')) {
+              stateCode = 'TX';
+            } else if (program.coverage.includes('Illinois') || program.coverage.includes('Chicago')) {
+              stateCode = 'IL';
+            } else if (program.coverage.includes('Maryland') || program.coverage.includes('Montgomery County, MD')) {
+              stateCode = 'MD';
+            } else if (program.coverage.includes('DC') || program.coverage === 'DC') {
+              stateCode = 'DC';
+            }
+
+            if (stateCode) {
+              jurisdictionMap.set(stateCode, program.status);
+            }
           }
         }
 
