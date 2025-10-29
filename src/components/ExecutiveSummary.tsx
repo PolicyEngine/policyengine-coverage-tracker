@@ -1,7 +1,6 @@
 import React from 'react';
 import { colors, typography, spacing } from '../designTokens';
 import { Program, CoverageStatus } from '../types/Program';
-import { getProgramBreakdown } from '../utils/programStats';
 
 interface ExecutiveSummaryProps {
   programs: Program[];
@@ -10,9 +9,6 @@ interface ExecutiveSummaryProps {
 }
 
 const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCounts, totalPrograms }) => {
-  const breakdown = getProgramBreakdown(programs);
-  const completionRate = Math.round((statusCounts.complete / totalPrograms) * 100);
-
   return (
     <div style={{
       backgroundColor: colors.white,
@@ -38,7 +34,6 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCou
         display: 'grid',
         gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))',
         gap: spacing.lg,
-        marginBottom: spacing.lg,
       }}>
         <div style={{
           textAlign: 'center',
@@ -50,7 +45,7 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCou
             fontSize: typography.fontSize['3xl'],
             fontWeight: typography.fontWeight.bold,
             fontFamily: typography.fontFamily.primary,
-            color: colors.primary[600],
+            color: colors.secondary[900],
             marginBottom: spacing.xs,
           }}>
             {totalPrograms}
@@ -74,10 +69,10 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCou
             fontSize: typography.fontSize['3xl'],
             fontWeight: typography.fontWeight.bold,
             fontFamily: typography.fontFamily.primary,
-            color: colors.success,
+            color: colors.primary[600],
             marginBottom: spacing.xs,
           }}>
-            {completionRate}%
+            {statusCounts.complete}
           </div>
           <div style={{
             fontSize: typography.fontSize.sm,
@@ -98,17 +93,17 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCou
             fontSize: typography.fontSize['3xl'],
             fontWeight: typography.fontWeight.bold,
             fontFamily: typography.fontFamily.primary,
-            color: colors.blue[600],
+            color: colors.primary[400],
             marginBottom: spacing.xs,
           }}>
-            {breakdown.byAgency.length + 1}
+            {statusCounts.partial}
           </div>
           <div style={{
             fontSize: typography.fontSize.sm,
             color: colors.text.secondary,
             fontFamily: typography.fontFamily.body,
           }}>
-            Federal Agencies
+            Partial Coverage
           </div>
         </div>
 
@@ -122,17 +117,17 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCou
             fontSize: typography.fontSize['3xl'],
             fontWeight: typography.fontWeight.bold,
             fontFamily: typography.fontFamily.primary,
-            color: colors.primary[600],
+            color: colors.blue[500],
             marginBottom: spacing.xs,
           }}>
-            {breakdown.totalStates}
+            {statusCounts.inProgress}
           </div>
           <div style={{
             fontSize: typography.fontSize.sm,
             color: colors.text.secondary,
             fontFamily: typography.fontFamily.body,
           }}>
-            States Covered
+            In Progress
           </div>
         </div>
       </div>
