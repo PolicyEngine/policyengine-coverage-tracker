@@ -78,7 +78,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     // Programs that apply to all states
     const universalStatePrograms = new Set([
       'snap', 'tanf', 'medicaid', 'wic', 'state_income_tax',
-      'social_security', 'ssi', 'medicare', 'eitc', 'ctc'
+      'social_security', 'ssi', 'medicare', 'eitc', 'ctc', 'federal_income_tax'
     ]);
 
     // Build matrix rows - using major programs
@@ -86,7 +86,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       // Include major federal programs
       ['eitc', 'ctc', 'snap', 'tanf', 'ssi', 'social_security', 'medicare', 'medicaid',
        'section_8', 'unemployment_compensation', 'wic', 'lifeline', 'acp',
-       'state_income_tax', 'salt_deduction'].includes(p.id) ||
+       'federal_income_tax', 'state_income_tax', 'salt_deduction'].includes(p.id) ||
       // Or programs with state implementations
       (p.stateImplementations && p.stateImplementations.length > 0) ||
       // Or state/local programs
@@ -291,15 +291,6 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                           fontSize: typography.fontSize.sm,
                           fontWeight: typography.fontWeight.semibold,
                         }}>{row.name}</span>
-                        {row.category && (
-                          <span style={{
-                            fontSize: typography.fontSize.xs,
-                            color: colors.text.secondary,
-                            fontWeight: typography.fontWeight.normal,
-                          }}>
-                            {row.category}
-                          </span>
-                        )}
                       </div>
                     </td>
                     {matrixData.jurisdictions.map(jurisdiction => {
@@ -409,15 +400,6 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                           fontSize: typography.fontSize.sm,
                           fontWeight: typography.fontWeight.semibold,
                         }}>{row.name}</span>
-                        {row.category && (
-                          <span style={{
-                            fontSize: typography.fontSize.xs,
-                            color: colors.text.secondary,
-                            fontWeight: typography.fontWeight.normal,
-                          }}>
-                            {row.category}
-                          </span>
-                        )}
                       </div>
                     </td>
                     {matrixData.jurisdictions.map(jurisdiction => {
@@ -527,15 +509,6 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                           fontSize: typography.fontSize.sm,
                           fontWeight: typography.fontWeight.semibold,
                         }}>{row.name}</span>
-                        {row.category && (
-                          <span style={{
-                            fontSize: typography.fontSize.xs,
-                            color: colors.text.secondary,
-                            fontWeight: typography.fontWeight.normal,
-                          }}>
-                            {row.category}
-                          </span>
-                        )}
                       </div>
                     </td>
                     {matrixData.jurisdictions.map(jurisdiction => {

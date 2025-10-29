@@ -277,7 +277,7 @@ function App() {
                 fontFamily: typography.fontFamily.primary,
               }}
             >
-              Overview Mode
+              Overview
             </button>
             <button
               onClick={() => setDisplayMode('developer')}
@@ -293,7 +293,7 @@ function App() {
                 fontFamily: typography.fontFamily.primary,
               }}
             >
-              Developer Mode
+              Program Details
             </button>
           </div>
         </div>
