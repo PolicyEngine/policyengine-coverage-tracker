@@ -160,7 +160,7 @@ export const programs: Program[] = [
     name: 'TANF',
     fullName: 'Temporary Assistance for Needy Families',
     agency: 'HHS',
-    status: 'partial',
+    status: 'inProgress',
     coverage: 'CA, CO, DC, IL, NY, MA, NC, NJ, MT, TX',
     stateImplementations: [
       {
