@@ -3,7 +3,7 @@ import './App.css';
 import FilterBar from './components/FilterBar';
 import ProgramCard from './components/ProgramCard';
 import ProgramGrid from './components/ProgramGrid';
-import CompactProgramGrid from './components/CompactProgramGrid';
+import MatrixView from './components/MatrixView';
 import ExecutiveSummary from './components/ExecutiveSummary';
 import { programs, getStatusCount } from './data/programs';
 import { CoverageStatus, Program } from './types/Program';
@@ -460,8 +460,8 @@ function App() {
               </p>
             </div>
           ) : displayMode === 'overview' ? (
-            // Compact grid view for Overview Mode
-            <CompactProgramGrid programs={filteredPrograms} />
+            // Matrix view for Overview Mode
+            <MatrixView programs={programs} />
           ) : (() => {
             // Separate state programs from local programs when in state-local mode with a specific state selected
             const shouldSeparate = filterMode === 'state-local' && selectedState !== 'All';
