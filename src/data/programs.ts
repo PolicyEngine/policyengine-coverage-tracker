@@ -387,7 +387,7 @@ export const programs: Program[] = [
     name: 'CCDF',
     fullName: 'Child Care and Development Fund',
     agency: 'HHS',
-    status: 'partial',
+    status: 'notStarted',
     coverage: 'CA, CO, IL, MA, DC, NC, TX',
     stateImplementations: [
       {
@@ -494,7 +494,7 @@ export const programs: Program[] = [
     name: 'LIHEAP',
     fullName: 'Low Income Home Energy Assistance Program',
     agency: 'HHS',
-    status: 'partial',
+    status: 'notStarted',
     coverage: 'OR, DC, Riverside County, MA, IL',
     stateImplementations: [
       {
@@ -564,8 +564,9 @@ export const programs: Program[] = [
     name: 'SSI State Supplement',
     fullName: 'SSI State Supplement',
     agency: 'SSA',
-    status: 'partial',
-    coverage: 'CA, CO, MA, IL',
+    status: 'notStarted',
+    coverage: 'CA, CO, MA, IL, NY, PA, NJ, NV, CT, MI, VT, RI, DE, HI',
+    notes: 'Only about 30 states have SSI state supplement programs',
     stateImplementations: [
       {
         state: 'CA',
@@ -614,6 +615,76 @@ export const programs: Program[] = [
           variables: `${GITHUB_BASE}/variables/gov/states/il/dhs/aabd`,
           tests: `${TESTS_BASE}/policy/baseline/gov/states/il/dhs/aabd`,
         }
+      },
+      {
+        state: 'NY',
+        status: 'notStarted',
+        name: 'New York SSP',
+        fullName: 'New York State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'PA',
+        status: 'notStarted',
+        name: 'Pennsylvania SSP',
+        fullName: 'Pennsylvania State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'NJ',
+        status: 'notStarted',
+        name: 'New Jersey SSP',
+        fullName: 'New Jersey State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'NV',
+        status: 'notStarted',
+        name: 'Nevada SSP',
+        fullName: 'Nevada State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'CT',
+        status: 'notStarted',
+        name: 'Connecticut SSP',
+        fullName: 'Connecticut State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'MI',
+        status: 'notStarted',
+        name: 'Michigan SSP',
+        fullName: 'Michigan State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'VT',
+        status: 'notStarted',
+        name: 'Vermont SSP',
+        fullName: 'Vermont State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'RI',
+        status: 'notStarted',
+        name: 'Rhode Island SSP',
+        fullName: 'Rhode Island State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'DE',
+        status: 'notStarted',
+        name: 'Delaware SSP',
+        fullName: 'Delaware State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'HI',
+        status: 'notStarted',
+        name: 'Hawaii SSP',
+        fullName: 'Hawaii State Supplementary Payment',
+        githubLinks: {}
       },
     ],
     githubLinks: {},

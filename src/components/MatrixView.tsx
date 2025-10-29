@@ -78,7 +78,8 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     // Programs that apply to all states
     const universalStatePrograms = new Set([
       'snap', 'tanf', 'medicaid', 'wic', 'state_income_tax',
-      'social_security', 'ssi', 'medicare', 'eitc', 'ctc'
+      'social_security', 'ssi', 'medicare', 'eitc', 'ctc',
+      'ccdf', 'liheap'
     ]);
 
     // Build matrix rows - using major programs
