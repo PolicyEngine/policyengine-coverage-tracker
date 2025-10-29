@@ -1,11 +1,12 @@
 import React from 'react';
 import { Program, CoverageStatus } from '../types/Program';
-import { statusColors, colors } from '../constants/colors';
+import { statusColors, colors, typography, spacing } from '../designTokens';
 
 interface ProgramCardProps {
   program: Program;
   selectedState?: string;
   onStateSelect?: (state: string) => void;
+  showTechnicalLinks?: boolean;
 }
 
 const getStatusIcon = (status: CoverageStatus) => {
@@ -22,15 +23,13 @@ const getStatusIcon = (status: CoverageStatus) => {
 };
 
 
-const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onStateSelect }) => {
+const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onStateSelect, showTechnicalLinks = true }) => {
   let displayStatus = program.status;
-  let isStateSpecificView = false;
 
   if (selectedState && selectedState !== 'All' && program.stateImplementations) {
     const stateImpl = program.stateImplementations.find(impl => impl.state === selectedState);
     if (stateImpl) {
       displayStatus = stateImpl.status;
-      isStateSpecificView = true;
     }
   }
 
@@ -39,36 +38,41 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
   return (
     <div
       style={{
-        backgroundColor: colors.WHITE,
-        border: `1px solid ${colors.LIGHT_GRAY}`,
-        borderRadius: '4px',
-        padding: '8px 12px',
-        marginBottom: '4px',
-        transition: 'all 0.1s ease',
+        backgroundColor: colors.white,
+        border: `1px solid ${colors.border.light}`,
+        borderRadius: spacing.radius.md,
+        padding: `${spacing.sm} ${spacing.md}`,
+        marginBottom: spacing.xs,
         cursor: 'pointer',
         display: 'flex',
         alignItems: 'center',
         justifyContent: 'space-between',
+        boxShadow: spacing.shadow.xs,
       }}
       onMouseEnter={(e) => {
-        e.currentTarget.style.backgroundColor = colors.BLUE_98;
+        e.currentTarget.style.backgroundColor = colors.background.secondary;
         e.currentTarget.style.borderColor = statusColor;
+        e.currentTarget.style.boxShadow = spacing.shadow.sm;
       }}
       onMouseLeave={(e) => {
-        e.currentTarget.style.backgroundColor = colors.WHITE;
-        e.currentTarget.style.borderColor = colors.LIGHT_GRAY;
+        e.currentTarget.style.backgroundColor = colors.white;
+        e.currentTarget.style.borderColor = colors.border.light;
+        e.currentTarget.style.boxShadow = spacing.shadow.xs;
       }}
     >
       {/* Left section - Program info */}
       <div style={{ display: 'flex', alignItems: 'center', flex: 1, minWidth: 0 }}>
-        <div style={{ flex: 1, minWidth: 0, marginRight: '12px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
-            <span style={{ fontSize: '10px', color: statusColor }}>{getStatusIcon(displayStatus)}</span>
+        <div style={{ flex: 1, minWidth: 0, marginRight: spacing.md }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+            <span style={{ fontSize: typography.fontSize.xs, color: statusColor }}>
+              {getStatusIcon(displayStatus)}
+            </span>
             <h3 style={{
               margin: 0,
-              color: colors.DARKEST_BLUE,
-              fontSize: '14px',
-              fontWeight: 600,
+              color: colors.secondary[900],
+              fontSize: typography.fontSize.sm,
+              fontWeight: typography.fontWeight.semibold,
+              fontFamily: typography.fontFamily.primary,
               whiteSpace: 'nowrap',
               overflow: 'hidden',
               textOverflow: 'ellipsis'
@@ -77,11 +81,12 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
             </h3>
             {program.stateImplementations && program.coverage && program.coverage !== 'US' && (
               <span style={{
-                color: colors.GRAY,
-                fontSize: '11px',
-                backgroundColor: colors.LIGHT_GRAY,
-                padding: '2px 4px',
-                borderRadius: '2px',
+                color: colors.gray[600],
+                fontSize: typography.fontSize.xs,
+                fontFamily: typography.fontFamily.body,
+                backgroundColor: colors.gray[100],
+                padding: `2px ${spacing.xs}`,
+                borderRadius: spacing.radius.xs,
                 whiteSpace: 'nowrap'
               }}>
                 {program.coverage}
@@ -92,30 +97,31 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
       </div>
 
       {/* Right section - Links or State options */}
-      <div style={{ display: 'flex', gap: '4px', alignItems: 'center' }}>
-        {program.stateImplementations && program.stateImplementations.length > 0 ? (
+      {showTechnicalLinks && (
+        <div style={{ display: 'flex', gap: spacing.xs, alignItems: 'center' }}>
+          {program.stateImplementations && program.stateImplementations.length > 0 ? (
           // Show state buttons for programs with state implementations
           program.stateImplementations.map((stateImpl) => (
             <button
               key={stateImpl.state}
               style={{
-                padding: '2px 6px',
-                backgroundColor: colors.TEAL_LIGHT,
-                color: colors.TEAL_PRESSED,
+                padding: `2px ${spacing.sm}`,
+                backgroundColor: colors.primary[50],
+                color: colors.primary[700],
                 border: 'none',
-                borderRadius: '3px',
-                fontSize: '11px',
-                fontWeight: 500,
-                transition: 'background-color 0.1s',
+                borderRadius: spacing.radius.sm,
+                fontSize: typography.fontSize.xs,
+                fontWeight: typography.fontWeight.medium,
+                fontFamily: typography.fontFamily.primary,
                 cursor: 'pointer',
               }}
               onMouseEnter={(e) => {
-                e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
-                e.currentTarget.style.color = colors.WHITE;
+                e.currentTarget.style.backgroundColor = colors.primary[400];
+                e.currentTarget.style.color = colors.white;
               }}
               onMouseLeave={(e) => {
-                e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
-                e.currentTarget.style.color = colors.TEAL_PRESSED;
+                e.currentTarget.style.backgroundColor = colors.primary[50];
+                e.currentTarget.style.color = colors.primary[700];
               }}
               onClick={(e) => {
                 e.stopPropagation();
@@ -136,20 +142,20 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  padding: '2px 6px',
-                  backgroundColor: colors.BLUE_98,
-                  color: colors.BLUE_PRIMARY,
+                  padding: `2px ${spacing.sm}`,
+                  backgroundColor: colors.blue[50],
+                  color: colors.blue[700],
                   textDecoration: 'none',
-                  borderRadius: '3px',
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  transition: 'background-color 0.1s',
+                  borderRadius: spacing.radius.sm,
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.medium,
+                  fontFamily: typography.fontFamily.primary,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                  e.currentTarget.style.backgroundColor = colors.blue[100];
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                  e.currentTarget.style.backgroundColor = colors.blue[50];
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -162,20 +168,20 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  padding: '2px 6px',
-                  backgroundColor: colors.BLUE_98,
-                  color: colors.BLUE_PRIMARY,
+                  padding: `2px ${spacing.sm}`,
+                  backgroundColor: colors.blue[50],
+                  color: colors.blue[700],
                   textDecoration: 'none',
-                  borderRadius: '3px',
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  transition: 'background-color 0.1s',
+                  borderRadius: spacing.radius.sm,
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.medium,
+                  fontFamily: typography.fontFamily.primary,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                  e.currentTarget.style.backgroundColor = colors.blue[100];
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                  e.currentTarget.style.backgroundColor = colors.blue[50];
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -188,20 +194,20 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  padding: '2px 6px',
-                  backgroundColor: colors.BLUE_98,
-                  color: colors.BLUE_PRIMARY,
+                  padding: `2px ${spacing.sm}`,
+                  backgroundColor: colors.blue[50],
+                  color: colors.blue[700],
                   textDecoration: 'none',
-                  borderRadius: '3px',
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  transition: 'background-color 0.1s',
+                  borderRadius: spacing.radius.sm,
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.medium,
+                  fontFamily: typography.fontFamily.primary,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                  e.currentTarget.style.backgroundColor = colors.blue[100];
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                  e.currentTarget.style.backgroundColor = colors.blue[50];
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -214,22 +220,20 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
                 target="_blank"
                 rel="noopener noreferrer"
                 style={{
-                  padding: '2px 6px',
-                  backgroundColor: colors.TEAL_LIGHT,
-                  color: colors.TEAL_PRESSED,
+                  padding: `2px ${spacing.sm}`,
+                  backgroundColor: colors.primary[50],
+                  color: colors.primary[700],
                   textDecoration: 'none',
-                  borderRadius: '3px',
-                  fontSize: '11px',
-                  fontWeight: 500,
-                  transition: 'background-color 0.1s',
+                  borderRadius: spacing.radius.sm,
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.medium,
+                  fontFamily: typography.fontFamily.primary,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
-                  e.currentTarget.style.color = colors.WHITE;
+                  e.currentTarget.style.backgroundColor = colors.primary[100];
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
-                  e.currentTarget.style.color = colors.TEAL_PRESSED;
+                  e.currentTarget.style.backgroundColor = colors.primary[50];
                 }}
                 onClick={(e) => e.stopPropagation()}
               >
@@ -238,7 +242,8 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
             )}
           </>
         )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
