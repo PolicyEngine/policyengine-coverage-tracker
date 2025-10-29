@@ -136,59 +136,6 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCou
           </div>
         </div>
       </div>
-
-      {/* Category Breakdown */}
-      <div>
-        <h3 style={{
-          margin: `0 0 ${spacing.md}`,
-          color: colors.secondary[900],
-          fontSize: typography.fontSize.lg,
-          fontWeight: typography.fontWeight.semibold,
-          fontFamily: typography.fontFamily.primary,
-        }}>
-          Coverage by Category
-        </h3>
-        <div style={{
-          display: 'grid',
-          gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))',
-          gap: spacing.md,
-        }}>
-          {breakdown.byCategory.map(({ name, count }) => (
-            <div
-              key={name}
-              style={{
-                display: 'flex',
-                justifyContent: 'space-between',
-                alignItems: 'center',
-                padding: `${spacing.sm} ${spacing.md}`,
-                backgroundColor: colors.gray[50],
-                borderRadius: spacing.radius.sm,
-                border: `1px solid ${colors.border.light}`,
-              }}
-            >
-              <span style={{
-                fontSize: typography.fontSize.sm,
-                fontWeight: typography.fontWeight.medium,
-                fontFamily: typography.fontFamily.body,
-                color: colors.text.primary,
-              }}>
-                {name}
-              </span>
-              <span style={{
-                fontSize: typography.fontSize.sm,
-                fontWeight: typography.fontWeight.bold,
-                fontFamily: typography.fontFamily.primary,
-                color: colors.primary[600],
-                backgroundColor: colors.primary[50],
-                padding: `2px ${spacing.sm}`,
-                borderRadius: spacing.radius.sm,
-              }}>
-                {count}
-              </span>
-            </div>
-          ))}
-        </div>
-      </div>
     </div>
   );
 };
