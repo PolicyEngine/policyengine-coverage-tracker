@@ -6,6 +6,7 @@ interface ProgramGridProps {
   programs: Program[];
   selectedState?: string;
   onStateSelect?: (state: string) => void;
+  showTechnicalLinks?: boolean;
 }
 
 const getStatusIcon = (status: CoverageStatus) => {
@@ -34,7 +35,7 @@ const getStatusLabel = (status: CoverageStatus) => {
   }
 };
 
-const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onStateSelect }) => {
+const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onStateSelect, showTechnicalLinks = true }) => {
   return (
     <div
       style={{
@@ -182,14 +183,15 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
             </div>
 
             {/* GitHub links or State options */}
-            <div style={{
-              display: 'flex',
-              flexWrap: 'wrap',
-              gap: '8px',
-              paddingTop: '12px',
-              borderTop: `1px solid ${colors.border.light}`,
-            }}>
-              {program.stateImplementations && program.stateImplementations.length > 0 ? (
+            {showTechnicalLinks && (
+              <div style={{
+                display: 'flex',
+                flexWrap: 'wrap',
+                gap: '8px',
+                paddingTop: '12px',
+                borderTop: `1px solid ${colors.border.light}`,
+              }}>
+                {program.stateImplementations && program.stateImplementations.length > 0 ? (
                 // Show state buttons or state-specific links for programs with state implementations
                 <>
                   {!isStateSpecificView ? (
@@ -476,7 +478,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                   )}
                 </>
               )}
-            </div>
+              </div>
+            )}
           </div>
         );
       })}

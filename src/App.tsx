@@ -3,7 +3,8 @@ import './App.css';
 import FilterBar from './components/FilterBar';
 import ProgramCard from './components/ProgramCard';
 import ProgramGrid from './components/ProgramGrid';
-import StatsOverview from './components/StatsOverview';
+import CompactProgramGrid from './components/CompactProgramGrid';
+import ExecutiveSummary from './components/ExecutiveSummary';
 import { programs, getStatusCount } from './data/programs';
 import { CoverageStatus, Program } from './types/Program';
 import { colors, typography, spacing } from './designTokens';
@@ -11,6 +12,7 @@ import { extractStatesFromPrograms } from './utils/extractStates';
 
 type ViewMode = 'grid' | 'list';
 type FilterMode = 'all' | 'federal' | 'state-local';
+type DisplayMode = 'overview' | 'developer';
 
 function App() {
   const [selectedStatus, setSelectedStatus] = useState<CoverageStatus | 'all'>('all');
@@ -19,6 +21,7 @@ function App() {
   const [selectedState, setSelectedState] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [displayMode, setDisplayMode] = useState<DisplayMode>('overview');
 
   const statusCounts = getStatusCount();
   const availableStates = extractStatesFromPrograms(programs);
@@ -229,23 +232,90 @@ function App() {
       </header>
 
       <main style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']} ${spacing['4xl']}` }}>
-        <StatsOverview statusCounts={statusCounts} totalPrograms={programs.length} />
+        {/* Executive Summary - sticky only in Developer Mode */}
+        <div style={{
+          position: displayMode === 'developer' ? 'sticky' : 'relative',
+          top: displayMode === 'developer' ? 0 : 'auto',
+          zIndex: displayMode === 'developer' ? 10 : 'auto',
+          backgroundColor: colors.background.secondary,
+          paddingTop: spacing.lg,
+          paddingBottom: spacing.md,
+        }}>
+          <ExecutiveSummary
+            programs={programs}
+            statusCounts={statusCounts}
+            totalPrograms={programs.length}
+          />
+        </div>
 
-        <FilterBar
-          selectedStatus={selectedStatus}
-          onStatusChange={setSelectedStatus}
-          filterMode={filterMode}
-          onFilterModeChange={setFilterMode}
-          selectedAgency={selectedAgency}
-          onAgencyChange={setSelectedAgency}
-          selectedState={selectedState}
-          onStateChange={setSelectedState}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          statusCounts={statusCounts}
-          totalPrograms={programs.length}
-          availableStates={availableStates}
-        />
+        {/* View Mode Toggle - now below the sticky summary */}
+        <div style={{
+          display: 'flex',
+          justifyContent: 'center',
+          marginBottom: spacing['2xl'],
+          marginTop: spacing.lg,
+        }}>
+          <div style={{
+            display: 'inline-flex',
+            backgroundColor: colors.white,
+            borderRadius: spacing.radius.md,
+            padding: '4px',
+            boxShadow: spacing.shadow.md,
+            border: `1px solid ${colors.border.light}`,
+          }}>
+            <button
+              onClick={() => setDisplayMode('overview')}
+              style={{
+                padding: `${spacing.md} ${spacing['2xl']}`,
+                border: 'none',
+                backgroundColor: displayMode === 'overview' ? colors.primary[600] : 'transparent',
+                color: displayMode === 'overview' ? colors.white : colors.text.secondary,
+                borderRadius: spacing.radius.sm,
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.semibold,
+                cursor: 'pointer',
+                fontFamily: typography.fontFamily.primary,
+              }}
+            >
+              Overview Mode
+            </button>
+            <button
+              onClick={() => setDisplayMode('developer')}
+              style={{
+                padding: `${spacing.md} ${spacing['2xl']}`,
+                border: 'none',
+                backgroundColor: displayMode === 'developer' ? colors.primary[600] : 'transparent',
+                color: displayMode === 'developer' ? colors.white : colors.text.secondary,
+                borderRadius: spacing.radius.sm,
+                fontSize: typography.fontSize.base,
+                fontWeight: typography.fontWeight.semibold,
+                cursor: 'pointer',
+                fontFamily: typography.fontFamily.primary,
+              }}
+            >
+              Developer Mode
+            </button>
+          </div>
+        </div>
+
+        {/* Only show filters in Developer Mode */}
+        {displayMode === 'developer' && (
+          <FilterBar
+            selectedStatus={selectedStatus}
+            onStatusChange={setSelectedStatus}
+            filterMode={filterMode}
+            onFilterModeChange={setFilterMode}
+            selectedAgency={selectedAgency}
+            onAgencyChange={setSelectedAgency}
+            selectedState={selectedState}
+            onStateChange={setSelectedState}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            statusCounts={statusCounts}
+            totalPrograms={programs.length}
+            availableStates={availableStates}
+          />
+        )}
 
         <div>
           <div
@@ -266,98 +336,102 @@ function App() {
               Programs ({filteredPrograms.length})
             </h2>
             <div style={{ display: 'flex', gap: spacing.md, alignItems: 'center' }}>
-              {/* View mode toggle */}
-              <div
-                style={{
-                  display: 'flex',
-                  backgroundColor: colors.white,
-                  borderRadius: spacing.radius.md,
-                  padding: '2px',
-                  boxShadow: spacing.shadow.sm,
-                }}
-              >
-                <button
-                  onClick={() => setViewMode('grid')}
+              {/* View mode toggle - only in Developer Mode */}
+              {displayMode === 'developer' && (
+                <div
                   style={{
-                    padding: `${spacing.sm} ${spacing.md}`,
-                    border: 'none',
-                    backgroundColor: viewMode === 'grid' ? colors.primary[600] : 'transparent',
-                    color: viewMode === 'grid' ? colors.white : colors.text.secondary,
-                    borderRadius: spacing.radius.sm,
-                    fontSize: typography.fontSize.sm,
-                    fontWeight: typography.fontWeight.medium,
-                    cursor: 'pointer',
                     display: 'flex',
-                    alignItems: 'center',
-                    gap: spacing.xs,
+                    backgroundColor: colors.white,
+                    borderRadius: spacing.radius.md,
+                    padding: '2px',
+                    boxShadow: spacing.shadow.sm,
                   }}
                 >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <rect x="1" y="1" width="6" height="6" />
-                    <rect x="9" y="1" width="6" height="6" />
-                    <rect x="1" y="9" width="6" height="6" />
-                    <rect x="9" y="9" width="6" height="6" />
-                  </svg>
-                  Grid
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  style={{
-                    padding: `${spacing.sm} ${spacing.md}`,
-                    border: 'none',
-                    backgroundColor: viewMode === 'list' ? colors.primary[600] : 'transparent',
-                    color: viewMode === 'list' ? colors.white : colors.text.secondary,
-                    borderRadius: spacing.radius.sm,
-                    fontSize: typography.fontSize.sm,
-                    fontWeight: typography.fontWeight.medium,
-                    cursor: 'pointer',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: spacing.xs,
-                  }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <rect x="1" y="2" width="14" height="2" />
-                    <rect x="1" y="7" width="14" height="2" />
-                    <rect x="1" y="12" width="14" height="2" />
-                  </svg>
-                  List
-                </button>
-              </div>
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    style={{
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      border: 'none',
+                      backgroundColor: viewMode === 'grid' ? colors.primary[600] : 'transparent',
+                      color: viewMode === 'grid' ? colors.white : colors.text.secondary,
+                      borderRadius: spacing.radius.sm,
+                      fontSize: typography.fontSize.sm,
+                      fontWeight: typography.fontWeight.medium,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: spacing.xs,
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <rect x="1" y="1" width="6" height="6" />
+                      <rect x="9" y="1" width="6" height="6" />
+                      <rect x="1" y="9" width="6" height="6" />
+                      <rect x="9" y="9" width="6" height="6" />
+                    </svg>
+                    Grid
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    style={{
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      border: 'none',
+                      backgroundColor: viewMode === 'list' ? colors.primary[600] : 'transparent',
+                      color: viewMode === 'list' ? colors.white : colors.text.secondary,
+                      borderRadius: spacing.radius.sm,
+                      fontSize: typography.fontSize.sm,
+                      fontWeight: typography.fontWeight.medium,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: spacing.xs,
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <rect x="1" y="2" width="14" height="2" />
+                      <rect x="1" y="7" width="14" height="2" />
+                      <rect x="1" y="12" width="14" height="2" />
+                    </svg>
+                    List
+                  </button>
+                </div>
+              )}
 
-              <a
-                href="https://github.com/PolicyEngine/policyengine-us"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  padding: `${spacing.md} ${spacing.xl}`,
-                  backgroundColor: colors.primary[600],
-                  color: colors.white,
-                  textDecoration: 'none',
-                  borderRadius: spacing.radius.md,
-                  fontSize: typography.fontSize.sm,
-                  fontWeight: typography.fontWeight.semibold,
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.primary[700];
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.primary[600];
-                }}
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 16 16"
-                  fill="currentColor"
-                  style={{ marginRight: '8px' }}
+              {displayMode === 'developer' && (
+                <a
+                  href="https://github.com/PolicyEngine/policyengine-us"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: `${spacing.md} ${spacing.xl}`,
+                    backgroundColor: colors.primary[600],
+                    color: colors.white,
+                    textDecoration: 'none',
+                    borderRadius: spacing.radius.md,
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.semibold,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.primary[700];
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.primary[600];
+                  }}
                 >
-                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-                </svg>
-                View on GitHub
-              </a>
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    style={{ marginRight: '8px' }}
+                  >
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                  </svg>
+                  View on GitHub
+                </a>
+              )}
             </div>
           </div>
 
@@ -385,6 +459,9 @@ function App() {
                 Try adjusting your search or filter criteria.
               </p>
             </div>
+          ) : displayMode === 'overview' ? (
+            // Compact grid view for Overview Mode
+            <CompactProgramGrid programs={filteredPrograms} />
           ) : (() => {
             // Separate state programs from local programs when in state-local mode with a specific state selected
             const shouldSeparate = filterMode === 'state-local' && selectedState !== 'All';
@@ -392,11 +469,11 @@ function App() {
             if (!shouldSeparate) {
               // Normal rendering without divider
               return viewMode === 'grid' ? (
-                <ProgramGrid programs={filteredPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                <ProgramGrid programs={filteredPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
               ) : (
                 <div>
                   {filteredPrograms.map((program) => (
-                    <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                    <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                   ))}
                 </div>
               );
@@ -420,11 +497,11 @@ function App() {
             if (!hasLocalPrograms) {
               // No local programs, render normally
               return viewMode === 'grid' ? (
-                <ProgramGrid programs={filteredPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                <ProgramGrid programs={filteredPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
               ) : (
                 <div>
                   {filteredPrograms.map((program) => (
-                    <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                    <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                   ))}
                 </div>
               );
@@ -448,11 +525,11 @@ function App() {
                       </h3>
                     </div>
                     {viewMode === 'grid' ? (
-                      <ProgramGrid programs={statePrograms} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                      <ProgramGrid programs={statePrograms} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                     ) : (
                       <div>
                         {statePrograms.map((program) => (
-                          <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                          <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                         ))}
                       </div>
                     )}
@@ -478,11 +555,11 @@ function App() {
 
                 {/* Local Programs Section */}
                 {viewMode === 'grid' ? (
-                  <ProgramGrid programs={localPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                  <ProgramGrid programs={localPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                 ) : (
                   <div>
                     {localPrograms.map((program) => (
-                      <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                      <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                     ))}
                   </div>
                 )}

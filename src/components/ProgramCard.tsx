@@ -6,6 +6,7 @@ interface ProgramCardProps {
   program: Program;
   selectedState?: string;
   onStateSelect?: (state: string) => void;
+  showTechnicalLinks?: boolean;
 }
 
 const getStatusIcon = (status: CoverageStatus) => {
@@ -22,7 +23,7 @@ const getStatusIcon = (status: CoverageStatus) => {
 };
 
 
-const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onStateSelect }) => {
+const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onStateSelect, showTechnicalLinks = true }) => {
   let displayStatus = program.status;
 
   if (selectedState && selectedState !== 'All' && program.stateImplementations) {
@@ -96,8 +97,9 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
       </div>
 
       {/* Right section - Links or State options */}
-      <div style={{ display: 'flex', gap: spacing.xs, alignItems: 'center' }}>
-        {program.stateImplementations && program.stateImplementations.length > 0 ? (
+      {showTechnicalLinks && (
+        <div style={{ display: 'flex', gap: spacing.xs, alignItems: 'center' }}>
+          {program.stateImplementations && program.stateImplementations.length > 0 ? (
           // Show state buttons for programs with state implementations
           program.stateImplementations.map((stateImpl) => (
             <button
@@ -240,7 +242,8 @@ const ProgramCard: React.FC<ProgramCardProps> = ({ program, selectedState, onSta
             )}
           </>
         )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
