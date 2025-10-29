@@ -33,16 +33,14 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCou
       {/* Key Metrics */}
       <div style={{
         display: 'flex',
-        gap: spacing.xl,
-        flexWrap: 'wrap',
+        gap: spacing.lg,
       }}>
         <div style={{
           textAlign: 'center',
           padding: spacing.lg,
           backgroundColor: colors.background.secondary,
           borderRadius: spacing.radius.md,
-          minWidth: '160px',
-          flex: '0 0 auto',
+          flex: '1',
         }}>
           <div style={{
             fontSize: typography.fontSize['3xl'],
@@ -67,8 +65,7 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCou
           padding: spacing.lg,
           backgroundColor: colors.background.secondary,
           borderRadius: spacing.radius.md,
-          minWidth: '160px',
-          flex: '0 0 auto',
+          flex: '1',
         }}>
           <div style={{
             fontSize: typography.fontSize['3xl'],
@@ -93,8 +90,7 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCou
           padding: spacing.lg,
           backgroundColor: colors.background.secondary,
           borderRadius: spacing.radius.md,
-          minWidth: '160px',
-          flex: '0 0 auto',
+          flex: '1',
         }}>
           <div style={{
             fontSize: typography.fontSize['3xl'],
@@ -119,8 +115,7 @@ const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCou
           padding: spacing.lg,
           backgroundColor: colors.background.secondary,
           borderRadius: spacing.radius.md,
-          minWidth: '160px',
-          flex: '0 0 auto',
+          flex: '1',
         }}>
           <div style={{
             fontSize: typography.fontSize['3xl'],
