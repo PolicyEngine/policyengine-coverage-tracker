@@ -1306,11 +1306,3 @@ export const getStatusCount = () => {
 
   return counts;
 };
-
-export const getAgencyPrograms = (agency: string) => {
-  return programs.filter((program) => program.agency === agency);
-};
-
-export const getCategoryPrograms = (category: string) => {
-  return programs.filter((program) => program.category === category);
-};
