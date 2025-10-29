@@ -50,6 +50,19 @@ interface MatrixData {
 }
 
 const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
+  const [expandedSections, setExpandedSections] = React.useState({
+    federal: true,
+    state: true,
+    local: true,
+  });
+
+  const toggleSection = (section: 'federal' | 'state' | 'local') => {
+    setExpandedSections(prev => ({
+      ...prev,
+      [section]: !prev[section],
+    }));
+  };
+
   const matrixData = useMemo<MatrixData>(() => {
     // All US states + DC
     const allStates = [
@@ -197,7 +210,10 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
             {/* Federal Programs Section */}
             {matrixData.federalRows.length > 0 && (
               <>
-                <tr>
+                <tr
+                  onClick={() => toggleSection('federal')}
+                  style={{ cursor: 'pointer' }}
+                >
                   <td style={{
                     position: 'sticky',
                     left: 0,
@@ -212,7 +228,17 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                     zIndex: 2,
                     minWidth: '220px',
                   }}>
-                    Federal Programs
+                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                      <span style={{
+                        fontSize: typography.fontSize.xs,
+                        transition: 'transform 0.2s ease',
+                        transform: expandedSections.federal ? 'rotate(90deg)' : 'rotate(0deg)',
+                        display: 'inline-block',
+                      }}>
+                        ▸
+                      </span>
+                      Federal Programs
+                    </div>
                   </td>
                   <td colSpan={matrixData.jurisdictions.length} style={{
                     padding: `${spacing.md} ${spacing.lg}`,
@@ -226,7 +252,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   }}>
                   </td>
                 </tr>
-                {matrixData.federalRows.map((row, idx) => (
+                {expandedSections.federal && matrixData.federalRows.map((row, idx) => (
                   <tr key={`federal-${idx}`} style={{
                     backgroundColor: idx % 2 === 0 ? colors.white : colors.background.secondary,
                   }}
@@ -302,7 +328,10 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
             {/* State Programs Section */}
             {matrixData.stateRows.length > 0 && (
               <>
-                <tr>
+                <tr
+                  onClick={() => toggleSection('state')}
+                  style={{ cursor: 'pointer' }}
+                >
                   <td style={{
                     position: 'sticky',
                     left: 0,
@@ -317,7 +346,17 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                     zIndex: 2,
                     minWidth: '220px',
                   }}>
-                    State Programs
+                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                      <span style={{
+                        fontSize: typography.fontSize.xs,
+                        transition: 'transform 0.2s ease',
+                        transform: expandedSections.state ? 'rotate(90deg)' : 'rotate(0deg)',
+                        display: 'inline-block',
+                      }}>
+                        ▸
+                      </span>
+                      State Programs
+                    </div>
                   </td>
                   <td colSpan={matrixData.jurisdictions.length} style={{
                     padding: `${spacing.md} ${spacing.lg}`,
@@ -331,7 +370,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   }}>
                   </td>
                 </tr>
-                {matrixData.stateRows.map((row, idx) => (
+                {expandedSections.state && matrixData.stateRows.map((row, idx) => (
                   <tr key={`state-${idx}`} style={{
                     backgroundColor: idx % 2 === 0 ? colors.white : colors.background.secondary,
                   }}
@@ -407,7 +446,10 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
             {/* Local Programs Section */}
             {matrixData.localRows.length > 0 && (
               <>
-                <tr>
+                <tr
+                  onClick={() => toggleSection('local')}
+                  style={{ cursor: 'pointer' }}
+                >
                   <td style={{
                     position: 'sticky',
                     left: 0,
@@ -422,7 +464,17 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                     zIndex: 2,
                     minWidth: '220px',
                   }}>
-                    Local Programs
+                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                      <span style={{
+                        fontSize: typography.fontSize.xs,
+                        transition: 'transform 0.2s ease',
+                        transform: expandedSections.local ? 'rotate(90deg)' : 'rotate(0deg)',
+                        display: 'inline-block',
+                      }}>
+                        ▸
+                      </span>
+                      Local Programs
+                    </div>
                   </td>
                   <td colSpan={matrixData.jurisdictions.length} style={{
                     padding: `${spacing.md} ${spacing.lg}`,
@@ -436,7 +488,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   }}>
                   </td>
                 </tr>
-                {matrixData.localRows.map((row, idx) => (
+                {expandedSections.local && matrixData.localRows.map((row, idx) => (
                   <tr key={`local-${idx}`} style={{
                     backgroundColor: idx % 2 === 0 ? colors.white : colors.background.secondary,
                   }}
