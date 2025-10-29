@@ -1,15 +1,15 @@
 {
   "files": {
     "main.css": "/policyengine-coverage-tracker/static/css/main.dec0173f.css",
-    "main.js": "/policyengine-coverage-tracker/static/js/main.1729fbd5.js",
+    "main.js": "/policyengine-coverage-tracker/static/js/main.0d32541d.js",
     "static/js/453.0fe7c5dd.chunk.js": "/policyengine-coverage-tracker/static/js/453.0fe7c5dd.chunk.js",
     "index.html": "/policyengine-coverage-tracker/index.html",
     "main.dec0173f.css.map": "/policyengine-coverage-tracker/static/css/main.dec0173f.css.map",
-    "main.1729fbd5.js.map": "/policyengine-coverage-tracker/static/js/main.1729fbd5.js.map",
+    "main.0d32541d.js.map": "/policyengine-coverage-tracker/static/js/main.0d32541d.js.map",
     "453.0fe7c5dd.chunk.js.map": "/policyengine-coverage-tracker/static/js/453.0fe7c5dd.chunk.js.map"
   },
   "entrypoints": [
     "static/css/main.dec0173f.css",
-    "static/js/main.1729fbd5.js"
+    "static/js/main.0d32541d.js"
   ]
 }

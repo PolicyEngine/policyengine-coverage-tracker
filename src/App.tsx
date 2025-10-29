@@ -231,72 +231,97 @@ function App() {
         </div>
       </header>
 
-      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']} ${spacing['4xl']}` }}>
-        {/* Executive Summary - sticky only in Developer Mode */}
-        <div style={{
-          position: displayMode === 'developer' ? 'sticky' : 'relative',
-          top: displayMode === 'developer' ? 0 : 'auto',
-          zIndex: displayMode === 'developer' ? 10 : 'auto',
-          backgroundColor: colors.background.secondary,
-          paddingTop: spacing.lg,
-          paddingBottom: spacing.md,
-        }}>
+      {/* Executive Summary Section */}
+      <div style={{ backgroundColor: colors.background.secondary, paddingTop: spacing.lg, paddingBottom: spacing['3xl'] }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']}` }}>
           <ExecutiveSummary
             programs={programs}
             statusCounts={statusCounts}
             totalPrograms={programs.length}
           />
         </div>
+      </div>
 
-        {/* View Mode Toggle - now below the sticky summary */}
+      {/* View Mode Toggle */}
+      <div style={{
+        backgroundColor: colors.background.secondary,
+        paddingBottom: spacing.xl,
+      }}>
         <div style={{
-          display: 'flex',
-          justifyContent: 'center',
-          marginBottom: spacing['2xl'],
-          marginTop: spacing.lg,
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: `0 ${spacing['2xl']}`,
         }}>
           <div style={{
-            display: 'inline-flex',
             backgroundColor: colors.white,
-            borderRadius: spacing.radius.md,
-            padding: '4px',
+            borderRadius: spacing.radius.lg,
             boxShadow: spacing.shadow.md,
             border: `1px solid ${colors.border.light}`,
+            borderBottom: `2px solid ${colors.gray[200]}`,
+            overflow: 'hidden',
+            display: 'flex',
+            gap: spacing.md,
+            padding: `0 ${spacing.lg}`,
           }}>
-            <button
-              onClick={() => setDisplayMode('overview')}
-              style={{
-                padding: `${spacing.md} ${spacing['2xl']}`,
-                border: 'none',
-                backgroundColor: displayMode === 'overview' ? colors.primary[600] : 'transparent',
-                color: displayMode === 'overview' ? colors.white : colors.text.secondary,
-                borderRadius: spacing.radius.sm,
-                fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.semibold,
-                cursor: 'pointer',
-                fontFamily: typography.fontFamily.primary,
-              }}
-            >
-              Overview
-            </button>
-            <button
-              onClick={() => setDisplayMode('developer')}
-              style={{
-                padding: `${spacing.md} ${spacing['2xl']}`,
-                border: 'none',
-                backgroundColor: displayMode === 'developer' ? colors.primary[600] : 'transparent',
-                color: displayMode === 'developer' ? colors.white : colors.text.secondary,
-                borderRadius: spacing.radius.sm,
-                fontSize: typography.fontSize.base,
-                fontWeight: typography.fontWeight.semibold,
-                cursor: 'pointer',
-                fontFamily: typography.fontFamily.primary,
-              }}
-            >
-              Program Details
-            </button>
+          <button
+            onClick={() => setDisplayMode('overview')}
+            style={{
+              padding: `${spacing.lg} ${spacing.xl}`,
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: displayMode === 'overview' ? colors.primary[600] : colors.text.secondary,
+              borderBottom: displayMode === 'overview' ? `3px solid ${colors.primary[600]}` : '3px solid transparent',
+              fontSize: typography.fontSize.base,
+              fontWeight: displayMode === 'overview' ? typography.fontWeight.bold : typography.fontWeight.medium,
+              cursor: 'pointer',
+              fontFamily: typography.fontFamily.primary,
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (displayMode !== 'overview') {
+                e.currentTarget.style.color = colors.primary[600];
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (displayMode !== 'overview') {
+                e.currentTarget.style.color = colors.text.secondary;
+              }
+            }}
+          >
+            Overview
+          </button>
+          <button
+            onClick={() => setDisplayMode('developer')}
+            style={{
+              padding: `${spacing.lg} ${spacing.xl}`,
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: displayMode === 'developer' ? colors.primary[600] : colors.text.secondary,
+              borderBottom: displayMode === 'developer' ? `3px solid ${colors.primary[600]}` : '3px solid transparent',
+              fontSize: typography.fontSize.base,
+              fontWeight: displayMode === 'developer' ? typography.fontWeight.bold : typography.fontWeight.medium,
+              cursor: 'pointer',
+              fontFamily: typography.fontFamily.primary,
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (displayMode !== 'developer') {
+                e.currentTarget.style.color = colors.primary[600];
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (displayMode !== 'developer') {
+                e.currentTarget.style.color = colors.text.secondary;
+              }
+            }}
+          >
+            Program Details
+          </button>
           </div>
         </div>
+      </div>
+
+      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']} ${spacing['4xl']}` }}>
 
         {/* Only show filters in Developer Mode */}
         {displayMode === 'developer' && (
@@ -318,26 +343,17 @@ function App() {
         )}
 
         <div>
-          <div
-            style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: spacing.lg,
-            }}
-          >
-            <h2 style={{
-              margin: 0,
-              color: colors.secondary[900],
-              fontSize: typography.fontSize['2xl'],
-              fontWeight: typography.fontWeight.semibold,
-              fontFamily: typography.fontFamily.primary
-            }}>
-              Programs ({filteredPrograms.length})
-            </h2>
-            <div style={{ display: 'flex', gap: spacing.md, alignItems: 'center' }}>
-              {/* View mode toggle - only in Developer Mode */}
-              {displayMode === 'developer' && (
+          {displayMode === 'developer' && (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                marginBottom: spacing.lg,
+              }}
+            >
+              <div style={{ display: 'flex', gap: spacing.md, alignItems: 'center' }}>
+                {/* View mode toggle */}
                 <div
                   style={{
                     display: 'flex',
@@ -395,9 +411,7 @@ function App() {
                     List
                   </button>
                 </div>
-              )}
 
-              {displayMode === 'developer' && (
                 <a
                   href="https://github.com/PolicyEngine/policyengine-us"
                   target="_blank"
@@ -431,9 +445,9 @@ function App() {
                   </svg>
                   View on GitHub
                 </a>
-              )}
+              </div>
             </div>
-          </div>
+          )}
 
           {filteredPrograms.length === 0 ? (
             <div
