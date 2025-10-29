@@ -1,6 +1,6 @@
 import React from 'react';
 import { CoverageStatus } from '../types/Program';
-import { statusColors, colors } from '../constants/colors';
+import { statusColors, colors } from '../designTokens';
 
 type FilterMode = 'all' | 'federal' | 'state-local';
 
@@ -59,7 +59,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
   ];
 
   return (
-    <div style={{ backgroundColor: colors.WHITE, padding: '24px', borderRadius: '8px', marginBottom: '24px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)' }}>
+    <div style={{ backgroundColor: colors.white, padding: '24px', borderRadius: '8px', marginBottom: '24px', boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)' }}>
       {/* Search bar - always visible */}
       <div style={{ marginBottom: '20px' }}>
         <input
@@ -72,17 +72,17 @@ const FilterBar: React.FC<FilterBarProps> = ({
             maxWidth: '400px',
             padding: '8px 14px',
             fontSize: '13px',
-            border: `2px solid ${colors.LIGHT_GRAY}`,
+            border: `2px solid ${colors.border.light}`,
             borderRadius: '6px',
             outline: 'none',
             transition: 'border-color 0.2s',
             fontFamily: 'inherit',
           }}
           onFocus={(e) => {
-            e.currentTarget.style.border = `2px solid ${colors.BLUE_PRIMARY}`;
+            e.currentTarget.style.border = `2px solid ${colors.blue[700]}`;
           }}
           onBlur={(e) => {
-            e.currentTarget.style.border = `2px solid ${colors.LIGHT_GRAY}`;
+            e.currentTarget.style.border = `2px solid ${colors.border.light}`;
           }}
         />
       </div>
@@ -97,22 +97,22 @@ const FilterBar: React.FC<FilterBarProps> = ({
           justifyContent: 'center',
           gap: '6px',
           padding: '8px 14px',
-          backgroundColor: colors.BLUE_98,
-          border: `1px solid ${colors.LIGHT_GRAY}`,
+          backgroundColor: colors.blue[50],
+          border: `1px solid ${colors.border.light}`,
           borderRadius: '6px',
           fontSize: '13px',
           fontWeight: 500,
-          color: colors.DARKEST_BLUE,
+          color: colors.secondary[900],
           cursor: 'pointer',
           transition: 'all 0.2s',
           whiteSpace: 'nowrap',
           fontFamily: 'inherit',
         }}
         onMouseEnter={(e) => {
-          e.currentTarget.style.backgroundColor = colors.BLUE_95;
+          e.currentTarget.style.backgroundColor = colors.blue[100];
         }}
         onMouseLeave={(e) => {
-          e.currentTarget.style.backgroundColor = colors.BLUE_98;
+          e.currentTarget.style.backgroundColor = colors.blue[50];
         }}
       >
         <span>Advanced Filters</span>
@@ -132,22 +132,22 @@ const FilterBar: React.FC<FilterBarProps> = ({
             }}
             style={{
               padding: '8px 14px',
-              backgroundColor: colors.TEAL_ACCENT,
-              border: `1px solid ${colors.TEAL_ACCENT}`,
+              backgroundColor: colors.primary[400],
+              border: `1px solid ${colors.primary[400]}`,
               borderRadius: '6px',
               fontSize: '13px',
               fontWeight: 500,
-              color: colors.WHITE,
+              color: colors.white,
               cursor: 'pointer',
               transition: 'all 0.2s',
               whiteSpace: 'nowrap',
               fontFamily: 'inherit',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.backgroundColor = colors.TEAL_PRESSED;
+              e.currentTarget.style.backgroundColor = colors.primary[700];
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
+              e.currentTarget.style.backgroundColor = colors.primary[400];
             }}
           >
             ✕ Reset Filters
@@ -160,13 +160,13 @@ const FilterBar: React.FC<FilterBarProps> = ({
         <div style={{ overflow: 'hidden', transition: 'all 0.3s ease' }}>
 
       <div style={{ marginBottom: '16px' }}>
-        <label style={{ display: 'block', marginBottom: '8px', color: colors.DARK_GRAY, fontSize: '14px', fontWeight: 500 }}>
+        <label style={{ display: 'block', marginBottom: '8px', color: colors.text.secondary, fontSize: '14px', fontWeight: 500 }}>
           Filter by Status
         </label>
         <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
           {statusOptions.map((option) => {
             const isSelected = selectedStatus === option.value;
-            const statusColor = option.value === 'all' ? colors.DARKEST_BLUE : statusColors[option.value as CoverageStatus];
+            const statusColor = option.value === 'all' ? colors.secondary[900] : statusColors[option.value as CoverageStatus];
 
             return (
               <button
@@ -174,9 +174,9 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 onClick={() => onStatusChange(option.value)}
                 style={{
                   padding: '8px 16px',
-                  border: isSelected ? `2px solid ${statusColor}` : `1px solid ${colors.LIGHT_GRAY}`,
-                  backgroundColor: isSelected ? `${statusColor}15` : colors.WHITE,
-                  color: isSelected ? statusColor : colors.DARK_GRAY,
+                  border: isSelected ? `2px solid ${statusColor}` : `1px solid ${colors.border.light}`,
+                  backgroundColor: isSelected ? `${statusColor}15` : colors.white,
+                  color: isSelected ? statusColor : colors.text.secondary,
                   borderRadius: '20px',
                   fontSize: '14px',
                   fontWeight: isSelected ? 600 : 400,
@@ -188,22 +188,22 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 }}
                 onMouseEnter={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.backgroundColor = colors.BLUE_98;
-                    e.currentTarget.style.borderColor = colors.BLUE_LIGHT;
+                    e.currentTarget.style.backgroundColor = colors.blue[50];
+                    e.currentTarget.style.borderColor = colors.blue[200];
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.backgroundColor = colors.WHITE;
-                    e.currentTarget.style.borderColor = colors.LIGHT_GRAY;
+                    e.currentTarget.style.backgroundColor = colors.white;
+                    e.currentTarget.style.borderColor = colors.border.light;
                   }
                 }}
               >
                 {option.label}
                 <span
                   style={{
-                    backgroundColor: isSelected ? statusColor : colors.MEDIUM_LIGHT_GRAY,
-                    color: colors.WHITE,
+                    backgroundColor: isSelected ? statusColor : colors.gray[400],
+                    color: colors.white,
                     padding: '2px 6px',
                     borderRadius: '10px',
                     fontSize: '12px',
@@ -219,15 +219,15 @@ const FilterBar: React.FC<FilterBarProps> = ({
       </div>
 
       <div style={{ marginBottom: '16px' }}>
-        <label style={{ display: 'block', marginBottom: '8px', color: colors.DARK_GRAY, fontSize: '14px', fontWeight: 500 }}>
+        <label style={{ display: 'block', marginBottom: '8px', color: colors.text.secondary, fontSize: '14px', fontWeight: 500 }}>
           Program Level
         </label>
         <div style={{ display: 'flex', gap: '12px', marginBottom: '16px' }}>
           {filterModeOptions.map((option) => {
             const isSelected = filterMode === option.value;
-            const modeColor = option.value === 'federal' ? colors.BLUE_PRIMARY :
-                            option.value === 'state-local' ? colors.TEAL_ACCENT :
-                            colors.DARKEST_BLUE;
+            const modeColor = option.value === 'federal' ? colors.blue[700] :
+                            option.value === 'state-local' ? colors.primary[400] :
+                            colors.secondary[900];
 
             return (
               <button
@@ -242,12 +242,12 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 }}
                 style={{
                   padding: '8px 20px',
-                  border: isSelected ? `2px solid ${modeColor}` : `1px solid ${colors.LIGHT_GRAY}`,
+                  border: isSelected ? `2px solid ${modeColor}` : `1px solid ${colors.border.light}`,
                   backgroundColor: isSelected ?
-                    (option.value === 'federal' ? colors.BLUE_95 :
-                     option.value === 'state-local' ? colors.TEAL_LIGHT :
-                     colors.LIGHT_GRAY) : colors.WHITE,
-                  color: isSelected ? modeColor : colors.DARK_GRAY,
+                    (option.value === 'federal' ? colors.blue[100] :
+                     option.value === 'state-local' ? colors.primary[50] :
+                     colors.border.light) : colors.white,
+                  color: isSelected ? modeColor : colors.text.secondary,
                   borderRadius: '8px',
                   fontSize: '14px',
                   fontWeight: isSelected ? 600 : 400,
@@ -257,14 +257,14 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 onMouseEnter={(e) => {
                   if (!isSelected) {
                     e.currentTarget.style.backgroundColor =
-                      option.value === 'federal' ? colors.BLUE_98 :
-                      option.value === 'state-local' ? colors.TEAL_LIGHT :
-                      colors.LIGHT_GRAY;
+                      option.value === 'federal' ? colors.blue[50] :
+                      option.value === 'state-local' ? colors.primary[50] :
+                      colors.border.light;
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (!isSelected) {
-                    e.currentTarget.style.backgroundColor = colors.WHITE;
+                    e.currentTarget.style.backgroundColor = colors.white;
                   }
                 }}
               >
@@ -277,7 +277,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         {/* Federal Agency Filter */}
         {filterMode === 'federal' && (
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', color: colors.DARK_GRAY, fontSize: '13px', fontWeight: 500 }}>
+            <label style={{ display: 'block', marginBottom: '8px', color: colors.text.secondary, fontSize: '13px', fontWeight: 500 }}>
               Select Federal Agency
             </label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -285,9 +285,9 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 onClick={() => onAgencyChange('All')}
                 style={{
                   padding: '6px 14px',
-                  border: selectedAgency === 'All' ? `2px solid ${colors.BLUE_PRIMARY}` : `1px solid ${colors.LIGHT_GRAY}`,
-                  backgroundColor: selectedAgency === 'All' ? colors.BLUE_95 : colors.WHITE,
-                  color: selectedAgency === 'All' ? colors.BLUE_PRIMARY : colors.DARK_GRAY,
+                  border: selectedAgency === 'All' ? `2px solid ${colors.blue[700]}` : `1px solid ${colors.border.light}`,
+                  backgroundColor: selectedAgency === 'All' ? colors.blue[100] : colors.white,
+                  color: selectedAgency === 'All' ? colors.blue[700] : colors.text.secondary,
                   borderRadius: '6px',
                   fontSize: '13px',
                   fontWeight: selectedAgency === 'All' ? 600 : 400,
@@ -296,14 +296,14 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 }}
                 onMouseEnter={(e) => {
                   if (selectedAgency !== 'All') {
-                    e.currentTarget.style.backgroundColor = colors.BLUE_98;
-                    e.currentTarget.style.borderColor = colors.BLUE_LIGHT;
+                    e.currentTarget.style.backgroundColor = colors.blue[50];
+                    e.currentTarget.style.borderColor = colors.blue[200];
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (selectedAgency !== 'All') {
-                    e.currentTarget.style.backgroundColor = colors.WHITE;
-                    e.currentTarget.style.borderColor = colors.LIGHT_GRAY;
+                    e.currentTarget.style.backgroundColor = colors.white;
+                    e.currentTarget.style.borderColor = colors.border.light;
                   }
                 }}
               >
@@ -318,9 +318,9 @@ const FilterBar: React.FC<FilterBarProps> = ({
                     onClick={() => onAgencyChange(agency)}
                     style={{
                       padding: '6px 14px',
-                      border: isSelected ? `2px solid ${colors.BLUE_PRIMARY}` : `1px solid ${colors.LIGHT_GRAY}`,
-                      backgroundColor: isSelected ? colors.BLUE_95 : colors.WHITE,
-                      color: isSelected ? colors.BLUE_PRIMARY : colors.DARK_GRAY,
+                      border: isSelected ? `2px solid ${colors.blue[700]}` : `1px solid ${colors.border.light}`,
+                      backgroundColor: isSelected ? colors.blue[100] : colors.white,
+                      color: isSelected ? colors.blue[700] : colors.text.secondary,
                       borderRadius: '6px',
                       fontSize: '13px',
                       fontWeight: isSelected ? 600 : 400,
@@ -329,14 +329,14 @@ const FilterBar: React.FC<FilterBarProps> = ({
                     }}
                     onMouseEnter={(e) => {
                       if (!isSelected) {
-                        e.currentTarget.style.backgroundColor = colors.BLUE_98;
-                        e.currentTarget.style.borderColor = colors.BLUE_LIGHT;
+                        e.currentTarget.style.backgroundColor = colors.blue[50];
+                        e.currentTarget.style.borderColor = colors.blue[200];
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (!isSelected) {
-                        e.currentTarget.style.backgroundColor = colors.WHITE;
-                        e.currentTarget.style.borderColor = colors.LIGHT_GRAY;
+                        e.currentTarget.style.backgroundColor = colors.white;
+                        e.currentTarget.style.borderColor = colors.border.light;
                       }
                     }}
                   >
@@ -351,7 +351,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         {/* State/Local Filter */}
         {filterMode === 'state-local' && availableStates.length > 0 && (
           <div>
-            <label style={{ display: 'block', marginBottom: '8px', color: colors.DARK_GRAY, fontSize: '13px', fontWeight: 500 }}>
+            <label style={{ display: 'block', marginBottom: '8px', color: colors.text.secondary, fontSize: '13px', fontWeight: 500 }}>
               Select State
             </label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
@@ -359,9 +359,9 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 onClick={() => onStateChange('All')}
                 style={{
                   padding: '6px 14px',
-                  border: selectedState === 'All' ? `2px solid ${colors.TEAL_ACCENT}` : `1px solid ${colors.LIGHT_GRAY}`,
-                  backgroundColor: selectedState === 'All' ? colors.TEAL_LIGHT : colors.WHITE,
-                  color: selectedState === 'All' ? colors.TEAL_PRESSED : colors.DARK_GRAY,
+                  border: selectedState === 'All' ? `2px solid ${colors.primary[400]}` : `1px solid ${colors.border.light}`,
+                  backgroundColor: selectedState === 'All' ? colors.primary[50] : colors.white,
+                  color: selectedState === 'All' ? colors.primary[700] : colors.text.secondary,
                   borderRadius: '6px',
                   fontSize: '13px',
                   fontWeight: selectedState === 'All' ? 600 : 400,
@@ -370,14 +370,14 @@ const FilterBar: React.FC<FilterBarProps> = ({
                 }}
                 onMouseEnter={(e) => {
                   if (selectedState !== 'All') {
-                    e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
-                    e.currentTarget.style.borderColor = colors.TEAL_ACCENT;
+                    e.currentTarget.style.backgroundColor = colors.primary[50];
+                    e.currentTarget.style.borderColor = colors.primary[400];
                   }
                 }}
                 onMouseLeave={(e) => {
                   if (selectedState !== 'All') {
-                    e.currentTarget.style.backgroundColor = colors.WHITE;
-                    e.currentTarget.style.borderColor = colors.LIGHT_GRAY;
+                    e.currentTarget.style.backgroundColor = colors.white;
+                    e.currentTarget.style.borderColor = colors.border.light;
                   }
                 }}
               >
@@ -392,9 +392,9 @@ const FilterBar: React.FC<FilterBarProps> = ({
                     onClick={() => onStateChange(state)}
                     style={{
                       padding: '6px 14px',
-                      border: isSelected ? `2px solid ${colors.TEAL_ACCENT}` : `1px solid ${colors.LIGHT_GRAY}`,
-                      backgroundColor: isSelected ? colors.TEAL_LIGHT : colors.WHITE,
-                      color: isSelected ? colors.TEAL_PRESSED : colors.DARK_GRAY,
+                      border: isSelected ? `2px solid ${colors.primary[400]}` : `1px solid ${colors.border.light}`,
+                      backgroundColor: isSelected ? colors.primary[50] : colors.white,
+                      color: isSelected ? colors.primary[700] : colors.text.secondary,
                       borderRadius: '6px',
                       fontSize: '13px',
                       fontWeight: isSelected ? 600 : 400,
@@ -403,14 +403,14 @@ const FilterBar: React.FC<FilterBarProps> = ({
                     }}
                     onMouseEnter={(e) => {
                       if (!isSelected) {
-                        e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
-                        e.currentTarget.style.borderColor = colors.TEAL_ACCENT;
+                        e.currentTarget.style.backgroundColor = colors.primary[50];
+                        e.currentTarget.style.borderColor = colors.primary[400];
                       }
                     }}
                     onMouseLeave={(e) => {
                       if (!isSelected) {
-                        e.currentTarget.style.backgroundColor = colors.WHITE;
-                        e.currentTarget.style.borderColor = colors.LIGHT_GRAY;
+                        e.currentTarget.style.backgroundColor = colors.white;
+                        e.currentTarget.style.borderColor = colors.border.light;
                       }
                     }}
                   >

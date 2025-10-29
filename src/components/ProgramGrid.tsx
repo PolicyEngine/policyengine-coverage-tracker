@@ -1,6 +1,6 @@
 import React from 'react';
 import { Program, CoverageStatus } from '../types/Program';
-import { statusColors, colors } from '../constants/colors';
+import { statusColors, colors } from '../designTokens';
 
 interface ProgramGridProps {
   programs: Program[];
@@ -64,8 +64,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
           <div
             key={program.id}
             style={{
-              backgroundColor: colors.WHITE,
-              border: `1px solid ${colors.LIGHT_GRAY}`,
+              backgroundColor: colors.white,
+              border: `1px solid ${colors.border.light}`,
               borderRadius: '8px',
               padding: '20px',
               boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
@@ -83,7 +83,7 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
             onMouseLeave={(e) => {
               e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.05)';
               e.currentTarget.style.transform = 'translateY(0)';
-              e.currentTarget.style.borderColor = colors.LIGHT_GRAY;
+              e.currentTarget.style.borderColor = colors.border.light;
             }}
           >
             {/* Header with name */}
@@ -91,7 +91,7 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
               <h3 style={{
                 margin: 0,
                 marginBottom: '8px',
-                color: colors.DARKEST_BLUE,
+                color: colors.secondary[900],
                 fontSize: '18px',
                 fontWeight: 600,
                 lineHeight: '1.3',
@@ -101,7 +101,7 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
               </h3>
               <p style={{
                 margin: '6px 0 0',
-                color: colors.GRAY,
+                color: colors.gray[500],
                 fontSize: '13px',
                 lineHeight: '1.4',
                 overflow: 'hidden',
@@ -117,8 +117,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                     display: 'inline-block',
                     padding: '3px 8px',
                     borderRadius: '12px',
-                    backgroundColor: colors.TEAL_LIGHT,
-                    color: colors.TEAL_PRESSED,
+                    backgroundColor: colors.primary[50],
+                    color: colors.primary[700],
                     fontSize: '11px',
                     fontWeight: 600,
                   }}>
@@ -132,7 +132,7 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
             {program.notes && (
               <p style={{
                 margin: '0 0 12px',
-                color: colors.DARK_GRAY,
+                color: colors.text.secondary,
                 fontSize: '11px',
                 fontStyle: 'italic',
                 lineHeight: '1.4',
@@ -169,8 +169,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                   style={{
                     padding: '3px 8px',
                     borderRadius: '12px',
-                    backgroundColor: colors.LIGHT_GRAY,
-                    color: colors.DARKEST_BLUE,
+                    backgroundColor: colors.border.light,
+                    color: colors.secondary[900],
                     fontSize: '12px',
                     fontWeight: 600,
                     whiteSpace: 'nowrap',
@@ -187,7 +187,7 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
               flexWrap: 'wrap',
               gap: '8px',
               paddingTop: '12px',
-              borderTop: `1px solid ${colors.LIGHT_GRAY}`,
+              borderTop: `1px solid ${colors.border.light}`,
             }}>
               {program.stateImplementations && program.stateImplementations.length > 0 ? (
                 // Show state buttons or state-specific links for programs with state implementations
@@ -202,8 +202,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                           minWidth: '60px',
                           textAlign: 'center',
                           padding: '6px',
-                          backgroundColor: colors.TEAL_LIGHT,
-                          color: colors.TEAL_PRESSED,
+                          backgroundColor: colors.primary[50],
+                          color: colors.primary[700],
                           border: 'none',
                           borderRadius: '4px',
                           fontSize: '12px',
@@ -212,12 +212,12 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                           cursor: 'pointer',
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
-                          e.currentTarget.style.color = colors.WHITE;
+                          e.currentTarget.style.backgroundColor = colors.primary[400];
+                          e.currentTarget.style.color = colors.white;
                         }}
                         onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
-                          e.currentTarget.style.color = colors.TEAL_PRESSED;
+                          e.currentTarget.style.backgroundColor = colors.primary[50];
+                          e.currentTarget.style.color = colors.primary[700];
                         }}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -246,8 +246,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                   flex: 1,
                                   textAlign: 'center',
                                   padding: '6px',
-                                  backgroundColor: colors.BLUE_98,
-                                  color: colors.BLUE_PRIMARY,
+                                  backgroundColor: colors.blue[50],
+                                  color: colors.blue[700],
                                   textDecoration: 'none',
                                   borderRadius: '4px',
                                   fontSize: '12px',
@@ -255,10 +255,10 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                   transition: 'background-color 0.2s',
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                                  e.currentTarget.style.backgroundColor = colors.blue[100];
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                                  e.currentTarget.style.backgroundColor = colors.blue[50];
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                               >
@@ -274,8 +274,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                   flex: 1,
                                   textAlign: 'center',
                                   padding: '6px',
-                                  backgroundColor: colors.BLUE_98,
-                                  color: colors.BLUE_PRIMARY,
+                                  backgroundColor: colors.blue[50],
+                                  color: colors.blue[700],
                                   textDecoration: 'none',
                                   borderRadius: '4px',
                                   fontSize: '12px',
@@ -283,10 +283,10 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                   transition: 'background-color 0.2s',
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                                  e.currentTarget.style.backgroundColor = colors.blue[100];
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                                  e.currentTarget.style.backgroundColor = colors.blue[50];
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                               >
@@ -302,8 +302,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                   flex: 1,
                                   textAlign: 'center',
                                   padding: '6px',
-                                  backgroundColor: colors.BLUE_98,
-                                  color: colors.BLUE_PRIMARY,
+                                  backgroundColor: colors.blue[50],
+                                  color: colors.blue[700],
                                   textDecoration: 'none',
                                   borderRadius: '4px',
                                   fontSize: '12px',
@@ -311,10 +311,10 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                   transition: 'background-color 0.2s',
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                                  e.currentTarget.style.backgroundColor = colors.blue[100];
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                                  e.currentTarget.style.backgroundColor = colors.blue[50];
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                               >
@@ -330,8 +330,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                   flex: '1 1 100%',
                                   textAlign: 'center',
                                   padding: '6px',
-                                  backgroundColor: colors.TEAL_LIGHT,
-                                  color: colors.TEAL_PRESSED,
+                                  backgroundColor: colors.primary[50],
+                                  color: colors.primary[700],
                                   textDecoration: 'none',
                                   borderRadius: '4px',
                                   fontSize: '12px',
@@ -339,12 +339,12 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                   transition: 'background-color 0.2s',
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
-                                  e.currentTarget.style.color = colors.WHITE;
+                                  e.currentTarget.style.backgroundColor = colors.primary[400];
+                                  e.currentTarget.style.color = colors.white;
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
-                                  e.currentTarget.style.color = colors.TEAL_PRESSED;
+                                  e.currentTarget.style.backgroundColor = colors.primary[50];
+                                  e.currentTarget.style.color = colors.primary[700];
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                               >
@@ -369,8 +369,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                         flex: 1,
                         textAlign: 'center',
                         padding: '6px',
-                        backgroundColor: colors.BLUE_98,
-                        color: colors.BLUE_PRIMARY,
+                        backgroundColor: colors.blue[50],
+                        color: colors.blue[700],
                         textDecoration: 'none',
                         borderRadius: '4px',
                         fontSize: '12px',
@@ -378,10 +378,10 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                         transition: 'background-color 0.2s',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                        e.currentTarget.style.backgroundColor = colors.blue[100];
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                        e.currentTarget.style.backgroundColor = colors.blue[50];
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -397,8 +397,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                         flex: 1,
                         textAlign: 'center',
                         padding: '6px',
-                        backgroundColor: colors.BLUE_98,
-                        color: colors.BLUE_PRIMARY,
+                        backgroundColor: colors.blue[50],
+                        color: colors.blue[700],
                         textDecoration: 'none',
                         borderRadius: '4px',
                         fontSize: '12px',
@@ -406,10 +406,10 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                         transition: 'background-color 0.2s',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                        e.currentTarget.style.backgroundColor = colors.blue[100];
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                        e.currentTarget.style.backgroundColor = colors.blue[50];
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -425,8 +425,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                         flex: 1,
                         textAlign: 'center',
                         padding: '6px',
-                        backgroundColor: colors.BLUE_98,
-                        color: colors.BLUE_PRIMARY,
+                        backgroundColor: colors.blue[50],
+                        color: colors.blue[700],
                         textDecoration: 'none',
                         borderRadius: '4px',
                         fontSize: '12px',
@@ -434,10 +434,10 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                         transition: 'background-color 0.2s',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = colors.BLUE_95;
+                        e.currentTarget.style.backgroundColor = colors.blue[100];
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = colors.BLUE_98;
+                        e.currentTarget.style.backgroundColor = colors.blue[50];
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -453,8 +453,8 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                         flex: '1 1 100%',
                         textAlign: 'center',
                         padding: '6px',
-                        backgroundColor: colors.TEAL_LIGHT,
-                        color: colors.TEAL_PRESSED,
+                        backgroundColor: colors.primary[50],
+                        color: colors.primary[700],
                         textDecoration: 'none',
                         borderRadius: '4px',
                         fontSize: '12px',
@@ -462,12 +462,12 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                         transition: 'background-color 0.2s',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = colors.TEAL_ACCENT;
-                        e.currentTarget.style.color = colors.WHITE;
+                        e.currentTarget.style.backgroundColor = colors.primary[400];
+                        e.currentTarget.style.color = colors.white;
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = colors.TEAL_LIGHT;
-                        e.currentTarget.style.color = colors.TEAL_PRESSED;
+                        e.currentTarget.style.backgroundColor = colors.primary[50];
+                        e.currentTarget.style.color = colors.primary[700];
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >

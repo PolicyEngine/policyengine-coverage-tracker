@@ -1,5 +1,5 @@
 import React from 'react';
-import { colors, statusColors } from '../constants/colors';
+import { colors, statusColors, typography, spacing } from '../designTokens';
 import { CoverageStatus } from '../types/Program';
 
 interface StatsOverviewProps {
@@ -12,7 +12,7 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ statusCounts, totalProgra
     {
       label: 'Total Programs',
       value: totalPrograms,
-      color: colors.DARKEST_BLUE,
+      color: colors.secondary[900],
     },
     {
       label: 'Complete',
@@ -32,24 +32,38 @@ const StatsOverview: React.FC<StatsOverviewProps> = ({ statusCounts, totalProgra
   ];
 
   return (
-    <div style={{ marginBottom: '32px' }}>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px' }}>
+    <div style={{ marginBottom: spacing['3xl'] }}>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: spacing.lg }}>
         {stats.map((stat) => (
           <div
             key={stat.label}
             style={{
-              backgroundColor: colors.WHITE,
-              padding: '20px',
-              borderRadius: '8px',
-              boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
+              backgroundColor: colors.white,
+              padding: spacing.xl,
+              borderRadius: spacing.radius.lg,
+              boxShadow: spacing.shadow.sm,
               borderLeft: `4px solid ${stat.color}`,
             }}
           >
             <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', textAlign: 'center', height: '80px' }}>
-              <div style={{ fontSize: '36px', fontWeight: 700, color: stat.color, marginBottom: '8px', lineHeight: 1 }}>
+              <div style={{
+                fontSize: typography.fontSize['4xl'],
+                fontWeight: typography.fontWeight.bold,
+                fontFamily: typography.fontFamily.primary,
+                color: stat.color,
+                marginBottom: spacing.sm,
+                lineHeight: 1
+              }}>
                 {stat.value}
               </div>
-              <div style={{ color: colors.DARK_GRAY, fontSize: '14px', fontWeight: 500, textTransform: 'uppercase', letterSpacing: '0.5px' }}>
+              <div style={{
+                color: colors.text.secondary,
+                fontSize: typography.fontSize.sm,
+                fontWeight: typography.fontWeight.medium,
+                fontFamily: typography.fontFamily.body,
+                textTransform: 'uppercase',
+                letterSpacing: '0.5px'
+              }}>
                 {stat.label}
               </div>
             </div>

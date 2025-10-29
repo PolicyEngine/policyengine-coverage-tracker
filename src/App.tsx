@@ -6,7 +6,7 @@ import ProgramGrid from './components/ProgramGrid';
 import StatsOverview from './components/StatsOverview';
 import { programs, getStatusCount } from './data/programs';
 import { CoverageStatus, Program } from './types/Program';
-import { colors } from './constants/colors';
+import { colors, typography, spacing } from './designTokens';
 import { extractStatesFromPrograms } from './utils/extractStates';
 
 type ViewMode = 'grid' | 'list';
@@ -186,17 +186,17 @@ function App() {
   }, [selectedStatus, filterMode, selectedAgency, selectedState, searchQuery]);
 
   return (
-    <div style={{ backgroundColor: colors.BLUE_98, minHeight: '100vh' }}>
+    <div style={{ backgroundColor: colors.background.secondary, minHeight: '100vh' }}>
       <header
         style={{
-          backgroundColor: colors.WHITE,
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-          padding: '24px 0',
-          marginBottom: '32px',
+          backgroundColor: colors.white,
+          boxShadow: spacing.shadow.sm,
+          padding: `${spacing['2xl']} 0`,
+          marginBottom: spacing['3xl'],
         }}
       >
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xl }}>
             <img
               src={`${process.env.PUBLIC_URL}/policyengine.png`}
               alt="PolicyEngine Logo"
@@ -206,10 +206,21 @@ function App() {
               }}
             />
             <div>
-              <h1 style={{ margin: 0, color: colors.DARKEST_BLUE, fontSize: '32px', fontWeight: 700 }}>
+              <h1 style={{
+                margin: 0,
+                color: colors.secondary[900],
+                fontSize: typography.fontSize['4xl'],
+                fontWeight: typography.fontWeight.bold,
+                fontFamily: typography.fontFamily.primary
+              }}>
                 PolicyEngine Coverage Tracker
               </h1>
-              <p style={{ margin: '8px 0 0', color: colors.DARK_GRAY, fontSize: '16px' }}>
+              <p style={{
+                margin: `${spacing.sm} 0 0`,
+                color: colors.text.secondary,
+                fontSize: typography.fontSize.base,
+                fontFamily: typography.fontFamily.body
+              }}>
                 Track the implementation status of government programs in PolicyEngine US
               </p>
             </div>
@@ -217,7 +228,7 @@ function App() {
         </div>
       </header>
 
-      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px 48px' }}>
+      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']} ${spacing['4xl']}` }}>
         <StatsOverview statusCounts={statusCounts} totalPrograms={programs.length} />
 
         <FilterBar
@@ -242,38 +253,43 @@ function App() {
               display: 'flex',
               justifyContent: 'space-between',
               alignItems: 'center',
-              marginBottom: '16px',
+              marginBottom: spacing.lg,
             }}
           >
-            <h2 style={{ margin: 0, color: colors.DARKEST_BLUE, fontSize: '24px' }}>
+            <h2 style={{
+              margin: 0,
+              color: colors.secondary[900],
+              fontSize: typography.fontSize['2xl'],
+              fontWeight: typography.fontWeight.semibold,
+              fontFamily: typography.fontFamily.primary
+            }}>
               Programs ({filteredPrograms.length})
             </h2>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
+            <div style={{ display: 'flex', gap: spacing.md, alignItems: 'center' }}>
               {/* View mode toggle */}
               <div
                 style={{
                   display: 'flex',
-                  backgroundColor: colors.WHITE,
-                  borderRadius: '6px',
+                  backgroundColor: colors.white,
+                  borderRadius: spacing.radius.md,
                   padding: '2px',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
+                  boxShadow: spacing.shadow.sm,
                 }}
               >
                 <button
                   onClick={() => setViewMode('grid')}
                   style={{
-                    padding: '6px 12px',
+                    padding: `${spacing.sm} ${spacing.md}`,
                     border: 'none',
-                    backgroundColor: viewMode === 'grid' ? colors.BLUE_PRIMARY : 'transparent',
-                    color: viewMode === 'grid' ? colors.WHITE : colors.DARK_GRAY,
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    fontWeight: 500,
+                    backgroundColor: viewMode === 'grid' ? colors.primary[600] : 'transparent',
+                    color: viewMode === 'grid' ? colors.white : colors.text.secondary,
+                    borderRadius: spacing.radius.sm,
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.medium,
                     cursor: 'pointer',
-                    transition: 'all 0.2s',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px',
+                    gap: spacing.xs,
                   }}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
@@ -287,18 +303,17 @@ function App() {
                 <button
                   onClick={() => setViewMode('list')}
                   style={{
-                    padding: '6px 12px',
+                    padding: `${spacing.sm} ${spacing.md}`,
                     border: 'none',
-                    backgroundColor: viewMode === 'list' ? colors.BLUE_PRIMARY : 'transparent',
-                    color: viewMode === 'list' ? colors.WHITE : colors.DARK_GRAY,
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    fontWeight: 500,
+                    backgroundColor: viewMode === 'list' ? colors.primary[600] : 'transparent',
+                    color: viewMode === 'list' ? colors.white : colors.text.secondary,
+                    borderRadius: spacing.radius.sm,
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.medium,
                     cursor: 'pointer',
-                    transition: 'all 0.2s',
                     display: 'flex',
                     alignItems: 'center',
-                    gap: '4px',
+                    gap: spacing.xs,
                   }}
                 >
                   <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
@@ -317,20 +332,19 @@ function App() {
                 style={{
                   display: 'inline-flex',
                   alignItems: 'center',
-                  padding: '10px 20px',
-                  backgroundColor: colors.BLUE_PRIMARY,
-                  color: colors.WHITE,
+                  padding: `${spacing.md} ${spacing.xl}`,
+                  backgroundColor: colors.primary[600],
+                  color: colors.white,
                   textDecoration: 'none',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  transition: 'background-color 0.2s',
+                  borderRadius: spacing.radius.md,
+                  fontSize: typography.fontSize.sm,
+                  fontWeight: typography.fontWeight.semibold,
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.DARK_BLUE_HOVER;
+                  e.currentTarget.style.backgroundColor = colors.primary[700];
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.BLUE_PRIMARY;
+                  e.currentTarget.style.backgroundColor = colors.primary[600];
                 }}
               >
                 <svg
@@ -350,15 +364,24 @@ function App() {
           {filteredPrograms.length === 0 ? (
             <div
               style={{
-                backgroundColor: colors.WHITE,
-                padding: '48px',
-                borderRadius: '8px',
+                backgroundColor: colors.white,
+                padding: spacing['4xl'],
+                borderRadius: spacing.radius.lg,
                 textAlign: 'center',
-                color: colors.DARK_GRAY,
+                color: colors.text.secondary,
+                boxShadow: spacing.shadow.xs,
               }}
             >
-              <p style={{ fontSize: '18px', margin: 0 }}>No programs found matching your filters.</p>
-              <p style={{ fontSize: '14px', marginTop: '8px' }}>
+              <p style={{
+                fontSize: typography.fontSize.lg,
+                margin: 0,
+                fontFamily: typography.fontFamily.body
+              }}>No programs found matching your filters.</p>
+              <p style={{
+                fontSize: typography.fontSize.sm,
+                marginTop: spacing.sm,
+                fontFamily: typography.fontFamily.body
+              }}>
                 Try adjusting your search or filter criteria.
               </p>
             </div>
@@ -413,12 +436,13 @@ function App() {
                 {/* State Programs Section */}
                 {statePrograms.length > 0 && (
                   <>
-                    <div style={{ marginBottom: '12px' }}>
+                    <div style={{ marginBottom: spacing.md }}>
                       <h3 style={{
                         margin: 0,
-                        color: colors.DARKEST_BLUE,
-                        fontSize: '18px',
-                        fontWeight: 600
+                        color: colors.secondary[900],
+                        fontSize: typography.fontSize.lg,
+                        fontWeight: typography.fontWeight.semibold,
+                        fontFamily: typography.fontFamily.primary
                       }}>
                         State Programs ({statePrograms.length})
                       </h3>
@@ -437,15 +461,16 @@ function App() {
 
                 {/* Divider */}
                 <div style={{
-                  margin: '32px 0',
-                  padding: '16px 0',
-                  borderTop: `2px solid ${colors.LIGHT_GRAY}`,
+                  margin: `${spacing['3xl']} 0`,
+                  padding: `${spacing.lg} 0`,
+                  borderTop: `2px solid ${colors.border.light}`,
                 }}>
                   <h3 style={{
                     margin: 0,
-                    color: colors.DARKEST_BLUE,
-                    fontSize: '18px',
-                    fontWeight: 600
+                    color: colors.secondary[900],
+                    fontSize: typography.fontSize.lg,
+                    fontWeight: typography.fontWeight.semibold,
+                    fontFamily: typography.fontFamily.primary
                   }}>
                     Local Programs ({localPrograms.length})
                   </h3>
@@ -469,22 +494,41 @@ function App() {
 
       <footer
         style={{
-          backgroundColor: colors.DARKEST_BLUE,
-          color: colors.WHITE,
-          padding: '32px 0',
-          marginTop: '64px',
+          backgroundColor: colors.secondary[900],
+          color: colors.white,
+          padding: `${spacing['3xl']} 0`,
+          marginTop: spacing['5xl'],
         }}
       >
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
-          <p style={{ margin: '0 0 8px', fontSize: '14px' }}>
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: `0 ${spacing['2xl']}`,
+          textAlign: 'center'
+        }}>
+          <p style={{
+            margin: `0 0 ${spacing.sm}`,
+            fontSize: typography.fontSize.sm,
+            fontFamily: typography.fontFamily.body
+          }}>
             © {new Date().getFullYear()} PolicyEngine. All rights reserved.
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginTop: '16px' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: spacing['2xl'],
+            marginTop: spacing.lg
+          }}>
             <a
               href="https://policyengine.org"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: colors.BLUE_LIGHT, textDecoration: 'none', fontSize: '14px' }}
+              style={{
+                color: colors.primary[200],
+                textDecoration: 'none',
+                fontSize: typography.fontSize.sm,
+                fontFamily: typography.fontFamily.body
+              }}
             >
               PolicyEngine.org
             </a>
@@ -492,7 +536,12 @@ function App() {
               href="https://github.com/PolicyEngine"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: colors.BLUE_LIGHT, textDecoration: 'none', fontSize: '14px' }}
+              style={{
+                color: colors.primary[200],
+                textDecoration: 'none',
+                fontSize: typography.fontSize.sm,
+                fontFamily: typography.fontFamily.body
+              }}
             >
               GitHub
             </a>
@@ -500,7 +549,12 @@ function App() {
               href="https://twitter.com/ThePolicyEngine"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: colors.BLUE_LIGHT, textDecoration: 'none', fontSize: '14px' }}
+              style={{
+                color: colors.primary[200],
+                textDecoration: 'none',
+                fontSize: typography.fontSize.sm,
+                fontFamily: typography.fontFamily.body
+              }}
             >
               Twitter
             </a>
