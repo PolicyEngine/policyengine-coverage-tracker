@@ -85,12 +85,12 @@ export const programs: Program[] = [
   },
   {
     id: 'school_meals',
-    name: 'School Meals',
+    name: 'Free and Reduced School Meals',
     fullName: 'Free and reduced price school meals',
     agency: 'USDA',
-    status: 'partial',
+    status: 'complete',
     coverage: 'US',
-    notes: 'Nationwide rules; needs states with universal coverage',
+    notes: 'Nationwide rules',
     variable: 'free_school_meals',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/usda/school_meals`,
@@ -109,7 +109,7 @@ export const programs: Program[] = [
   },
   {
     id: 'csfp',
-    name: 'CSFP',
+    name: 'Commodity Supplemental Food Program',
     fullName: 'Commodity Supplemental Food Program',
     agency: 'USDA',
     status: 'complete',

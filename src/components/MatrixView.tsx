@@ -79,16 +79,21 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     const universalStatePrograms = new Set([
       'snap', 'tanf', 'medicaid', 'wic', 'state_income_tax',
       'medicare', 'eitc', 'ctc',
-      'ccdf', 'liheap', 'aca_subsidies'
+      'ccdf', 'liheap', 'aca_subsidies',
+      'payroll_taxes', 'school_meals', 'csfp', 'chip'
     ]);
 
     // Build matrix rows - using major programs in specified order
     const programOrder = [
       'federal_income_tax',
       'state_income_tax',
+      'payroll_taxes',
+      'ira_tax_credits',
       'snap',
       'summer_ebt',
       'wic',
+      'school_meals',
+      'csfp',
       'tanf',
       'ccdf',
       'liheap',
@@ -99,9 +104,12 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       'lifeline',
       'medicare',
       'medicaid',
+      'chip',
       'aca_subsidies',
       'section_8',
       'pell_grant',
+      'head_start',
+      'clean_vehicle_credits',
     ];
 
     const majorPrograms = programs.filter(p =>
