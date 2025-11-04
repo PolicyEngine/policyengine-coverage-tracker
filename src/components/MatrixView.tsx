@@ -101,9 +101,11 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       let level: 'federal' | 'state' | 'local' = 'federal';
       if (program.agency === 'Local') {
         level = 'local';
-      } else if (program.id === 'state_income_tax' || program.agency === 'State' || (program.coverage && program.coverage.length === 2 && program.coverage !== 'US')) {
+      } else if (program.agency === 'State' || (program.coverage && program.coverage.length === 2 && program.coverage !== 'US')) {
+        // State-specific programs (not State Income Tax, which applies to all states)
         level = 'state';
       }
+      // State Income Tax applies to all states, so it stays at federal level
 
       // Special handling for income taxes
       if (program.id === 'federal_income_tax') {
@@ -176,6 +178,16 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     const stateRows = rows.filter(r => r.level === 'state');
     const localRows = rows.filter(r => r.level === 'local');
 
+    // Sort state and local rows by their applicable jurisdiction
+    const sortByJurisdiction = (a: MatrixRow, b: MatrixRow) => {
+      const aJurisdiction = Array.from(a.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
+      const bJurisdiction = Array.from(b.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
+      return aJurisdiction.localeCompare(bJurisdiction);
+    };
+
+    stateRows.sort(sortByJurisdiction);
+    localRows.sort(sortByJurisdiction);
+
     return { rows, jurisdictions, federalRows, stateRows, localRows };
   }, [programs]);
 
@@ -187,389 +199,366 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       border: `1px solid ${colors.border.light}`,
       overflow: 'hidden',
     }}>
-      <div style={{
-        overflowX: 'auto',
-        maxHeight: '70vh',
-      }}>
-        <table style={{
-          width: '100%',
-          borderCollapse: 'separate',
-          borderSpacing: 0,
-          fontSize: typography.fontSize.sm,
-          fontFamily: typography.fontFamily.body,
+      {/* Federal Programs Section with horizontal scroll */}
+      {matrixData.federalRows.length > 0 && (
+        <div style={{
+          overflowX: 'auto',
+          maxHeight: '50vh',
+          overflowY: 'auto',
         }}>
-          <thead style={{
-            position: 'sticky',
-            top: 0,
-            zIndex: 3,
+          <table style={{
+            width: '100%',
+            borderCollapse: 'separate',
+            borderSpacing: 0,
+            fontSize: typography.fontSize.sm,
+            fontFamily: typography.fontFamily.body,
           }}>
-            <tr>
-              <th style={{
-                position: 'sticky',
-                left: 0,
-                backgroundColor: colors.primary[600],
-                color: colors.white,
-                padding: `${spacing.md} ${spacing.lg}`,
-                textAlign: 'left',
-                fontWeight: typography.fontWeight.bold,
-                fontSize: typography.fontSize.base,
-                fontFamily: typography.fontFamily.primary,
-                borderRight: `2px solid ${colors.primary[700]}`,
-                zIndex: 4,
-                minWidth: '220px',
-                boxShadow: spacing.shadow.sm,
-              }}>
-                Program
-              </th>
-              {matrixData.jurisdictions.map(jurisdiction => (
-                <th key={jurisdiction} style={{
-                  padding: `${spacing.sm} ${spacing.xs}`,
-                  textAlign: 'center',
-                  fontWeight: typography.fontWeight.bold,
-                  fontSize: typography.fontSize.xs,
-                  fontFamily: typography.fontFamily.primary,
-                  minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                  maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+            <thead style={{
+              position: 'sticky',
+              top: 0,
+              zIndex: 3,
+            }}>
+              <tr>
+                <th style={{
+                  position: 'sticky',
+                  left: 0,
                   backgroundColor: colors.primary[600],
                   color: colors.white,
-                  borderRight: jurisdiction !== matrixData.jurisdictions[matrixData.jurisdictions.length - 1]
-                    ? `1px solid ${colors.primary[700]}`
-                    : 'none',
+                  padding: `${spacing.md} ${spacing.lg}`,
+                  textAlign: 'left',
+                  fontWeight: typography.fontWeight.bold,
+                  fontSize: typography.fontSize.base,
+                  fontFamily: typography.fontFamily.primary,
+                  borderRight: `2px solid ${colors.primary[700]}`,
+                  zIndex: 4,
+                  minWidth: '220px',
+                  boxShadow: spacing.shadow.sm,
                 }}>
-                  {jurisdiction}
+                  Program
                 </th>
+                {matrixData.jurisdictions.map(jurisdiction => (
+                  <th key={jurisdiction} style={{
+                    padding: `${spacing.sm} ${spacing.xs}`,
+                    textAlign: 'center',
+                    fontWeight: typography.fontWeight.bold,
+                    fontSize: typography.fontSize.xs,
+                    fontFamily: typography.fontFamily.primary,
+                    minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+                    maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+                    backgroundColor: colors.primary[600],
+                    color: colors.white,
+                    borderRight: jurisdiction !== matrixData.jurisdictions[matrixData.jurisdictions.length - 1]
+                      ? `1px solid ${colors.primary[700]}`
+                      : 'none',
+                  }}>
+                    {jurisdiction}
+                  </th>
+                ))}
+              </tr>
+            </thead>
+            <tbody>
+              <tr
+                onClick={() => toggleSection('federal')}
+                style={{ cursor: 'pointer' }}
+              >
+                <td style={{
+                  position: 'sticky',
+                  left: 0,
+                  padding: `${spacing.md} ${spacing.lg}`,
+                  fontWeight: typography.fontWeight.bold,
+                  fontSize: typography.fontSize.sm,
+                  color: colors.white,
+                  backgroundColor: colors.primary[700],
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  fontFamily: typography.fontFamily.primary,
+                  zIndex: 2,
+                  minWidth: '220px',
+                }}>
+                  <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                    <span style={{
+                      fontSize: typography.fontSize.xs,
+                      transition: 'transform 0.2s ease',
+                      transform: expandedSections.federal ? 'rotate(90deg)' : 'rotate(0deg)',
+                      display: 'inline-block',
+                    }}>
+                      ▸
+                    </span>
+                    Federal Programs
+                  </div>
+                </td>
+                <td colSpan={matrixData.jurisdictions.length} style={{
+                  padding: `${spacing.md} ${spacing.lg}`,
+                  fontWeight: typography.fontWeight.bold,
+                  fontSize: typography.fontSize.sm,
+                  color: colors.white,
+                  backgroundColor: colors.primary[700],
+                  letterSpacing: '0.5px',
+                  textTransform: 'uppercase',
+                  fontFamily: typography.fontFamily.primary,
+                }}>
+                </td>
+              </tr>
+              {expandedSections.federal && matrixData.federalRows.map((row, idx) => (
+                <tr key={`federal-${idx}`} style={{
+                  backgroundColor: idx % 2 === 0 ? colors.white : colors.background.secondary,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = colors.primary[50];
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = idx % 2 === 0 ? colors.white : colors.background.secondary;
+                }}
+                >
+                  <td style={{
+                    position: 'sticky',
+                    left: 0,
+                    backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
+                    padding: `${spacing.md} ${spacing.lg}`,
+                    fontWeight: typography.fontWeight.medium,
+                    borderRight: `2px solid ${colors.gray[200]}`,
+                    borderBottom: `1px solid ${colors.gray[200]}`,
+                    zIndex: 1,
+                    boxShadow: spacing.shadow.xs,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.primary[50];
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = idx % 2 === 0 ? colors.white : colors.gray[50];
+                  }}
+                  >
+                    <div style={{
+                      display: 'flex',
+                      flexDirection: 'column',
+                      gap: spacing.xs,
+                    }}>
+                      <span style={{
+                        color: colors.secondary[900],
+                        fontSize: typography.fontSize.sm,
+                        fontWeight: typography.fontWeight.semibold,
+                      }}>{row.name}</span>
+                    </div>
+                  </td>
+                  {matrixData.jurisdictions.map(jurisdiction => {
+                    const status = row.jurisdictions.get(jurisdiction) || null;
+                    return (
+                      <td key={jurisdiction} style={{
+                        padding: `${spacing.sm} 2px`,
+                        textAlign: 'center',
+                        borderBottom: `1px solid ${colors.gray[200]}`,
+                        borderRight: `1px solid ${colors.gray[100]}`,
+                        color: getStatusColor(status),
+                        fontSize: typography.fontSize.base,
+                        backgroundColor: status ? undefined : colors.gray[50],
+                        minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+                        maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+                      }}>
+                        {getStatusIcon(status)}
+                      </td>
+                    );
+                  })}
+                </tr>
               ))}
-            </tr>
-          </thead>
-          <tbody>
-            {/* Federal Programs Section */}
-            {matrixData.federalRows.length > 0 && (
-              <>
-                <tr
-                  onClick={() => toggleSection('federal')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <td style={{
-                    position: 'sticky',
-                    left: 0,
-                    padding: `${spacing.md} ${spacing.lg}`,
-                    fontWeight: typography.fontWeight.bold,
-                    fontSize: typography.fontSize.sm,
-                    color: colors.white,
-                    backgroundColor: colors.primary[700],
-                    letterSpacing: '0.5px',
-                    textTransform: 'uppercase',
-                    fontFamily: typography.fontFamily.primary,
-                    zIndex: 2,
-                    minWidth: '220px',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-                      <span style={{
-                        fontSize: typography.fontSize.xs,
-                        transition: 'transform 0.2s ease',
-                        transform: expandedSections.federal ? 'rotate(90deg)' : 'rotate(0deg)',
-                        display: 'inline-block',
-                      }}>
-                        ▸
-                      </span>
-                      Federal Programs
-                    </div>
-                  </td>
-                  <td colSpan={matrixData.jurisdictions.length} style={{
-                    padding: `${spacing.md} ${spacing.lg}`,
-                    fontWeight: typography.fontWeight.bold,
-                    fontSize: typography.fontSize.sm,
-                    color: colors.white,
-                    backgroundColor: colors.primary[700],
-                    letterSpacing: '0.5px',
-                    textTransform: 'uppercase',
-                    fontFamily: typography.fontFamily.primary,
-                  }}>
-                  </td>
-                </tr>
-                {expandedSections.federal && matrixData.federalRows.map((row, idx) => (
-                  <tr key={`federal-${idx}`} style={{
-                    backgroundColor: idx % 2 === 0 ? colors.white : colors.background.secondary,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = colors.primary[50];
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = idx % 2 === 0 ? colors.white : colors.background.secondary;
-                  }}
-                  >
-                    <td style={{
-                      position: 'sticky',
-                      left: 0,
-                      backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
-                      padding: `${spacing.md} ${spacing.lg}`,
-                      fontWeight: typography.fontWeight.medium,
-                      borderRight: `2px solid ${colors.gray[200]}`,
-                      borderBottom: `1px solid ${colors.gray[200]}`,
-                      zIndex: 1,
-                      boxShadow: spacing.shadow.xs,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.primary[50];
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = idx % 2 === 0 ? colors.white : colors.gray[50];
-                    }}
-                    >
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: spacing.xs,
-                      }}>
-                        <span style={{
-                          color: colors.secondary[900],
-                          fontSize: typography.fontSize.sm,
-                          fontWeight: typography.fontWeight.semibold,
-                        }}>{row.name}</span>
-                      </div>
-                    </td>
-                    {matrixData.jurisdictions.map(jurisdiction => {
-                      const status = row.jurisdictions.get(jurisdiction) || null;
-                      return (
-                        <td key={jurisdiction} style={{
-                          padding: `${spacing.sm} 2px`,
-                          textAlign: 'center',
-                          borderBottom: `1px solid ${colors.gray[200]}`,
-                          borderRight: `1px solid ${colors.gray[100]}`,
-                          color: getStatusColor(status),
-                          fontSize: typography.fontSize.base,
-                          backgroundColor: status ? undefined : colors.gray[50],
-                          minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                          maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                        }}>
-                          {getStatusIcon(status)}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </>
-            )}
+            </tbody>
+          </table>
+        </div>
+      )}
 
-            {/* State Programs Section */}
-            {matrixData.stateRows.length > 0 && (
-              <>
-                <tr
-                  onClick={() => toggleSection('state')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <td style={{
-                    position: 'sticky',
-                    left: 0,
-                    padding: `${spacing.md} ${spacing.lg}`,
-                    fontWeight: typography.fontWeight.bold,
-                    fontSize: typography.fontSize.sm,
-                    color: colors.white,
-                    backgroundColor: colors.primary[600],
-                    letterSpacing: '0.5px',
-                    textTransform: 'uppercase',
-                    fontFamily: typography.fontFamily.primary,
-                    zIndex: 2,
-                    minWidth: '220px',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-                      <span style={{
-                        fontSize: typography.fontSize.xs,
-                        transition: 'transform 0.2s ease',
-                        transform: expandedSections.state ? 'rotate(90deg)' : 'rotate(0deg)',
-                        display: 'inline-block',
-                      }}>
-                        ▸
-                      </span>
-                      State Programs
-                    </div>
-                  </td>
-                  <td colSpan={matrixData.jurisdictions.length} style={{
-                    padding: `${spacing.md} ${spacing.lg}`,
-                    fontWeight: typography.fontWeight.bold,
-                    fontSize: typography.fontSize.sm,
-                    color: colors.white,
-                    backgroundColor: colors.primary[600],
-                    letterSpacing: '0.5px',
-                    textTransform: 'uppercase',
-                    fontFamily: typography.fontFamily.primary,
-                  }}>
-                  </td>
-                </tr>
-                {expandedSections.state && matrixData.stateRows.map((row, idx) => (
-                  <tr key={`state-${idx}`} style={{
-                    backgroundColor: idx % 2 === 0 ? colors.white : colors.background.secondary,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = colors.primary[50];
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = idx % 2 === 0 ? colors.white : colors.background.secondary;
-                  }}
-                  >
-                    <td style={{
-                      position: 'sticky',
-                      left: 0,
-                      backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
-                      padding: `${spacing.md} ${spacing.lg}`,
-                      fontWeight: typography.fontWeight.medium,
-                      borderRight: `2px solid ${colors.gray[200]}`,
-                      borderBottom: `1px solid ${colors.gray[200]}`,
-                      zIndex: 1,
-                      boxShadow: spacing.shadow.xs,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.primary[50];
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = idx % 2 === 0 ? colors.white : colors.gray[50];
-                    }}
-                    >
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: spacing.xs,
-                      }}>
-                        <span style={{
-                          color: colors.secondary[900],
-                          fontSize: typography.fontSize.sm,
-                          fontWeight: typography.fontWeight.semibold,
-                        }}>{row.name}</span>
-                      </div>
-                    </td>
-                    {matrixData.jurisdictions.map(jurisdiction => {
-                      const status = row.jurisdictions.get(jurisdiction) || null;
-                      return (
-                        <td key={jurisdiction} style={{
-                          padding: `${spacing.sm} 2px`,
-                          textAlign: 'center',
-                          borderBottom: `1px solid ${colors.gray[200]}`,
-                          borderRight: `1px solid ${colors.gray[100]}`,
-                          color: getStatusColor(status),
-                          fontSize: typography.fontSize.base,
-                          backgroundColor: status ? undefined : colors.gray[50],
-                          minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                          maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                        }}>
-                          {getStatusIcon(status)}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </>
-            )}
+      {/* State and Local Programs - No horizontal scroll */}
+      <div style={{
+        maxHeight: '50vh',
+        overflowY: 'auto',
+      }}>
+        {/* State Programs Section - Compact List */}
+        {matrixData.stateRows.length > 0 && (
+          <div>
+            <div
+              onClick={() => toggleSection('state')}
+              style={{
+                cursor: 'pointer',
+                padding: `${spacing.md} ${spacing.lg}`,
+                fontWeight: typography.fontWeight.bold,
+                fontSize: typography.fontSize.sm,
+                color: colors.white,
+                backgroundColor: colors.primary[600],
+                letterSpacing: '0.5px',
+                textTransform: 'uppercase',
+                fontFamily: typography.fontFamily.primary,
+                borderTop: `2px solid ${colors.gray[300]}`,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                <span style={{
+                  fontSize: typography.fontSize.xs,
+                  transition: 'transform 0.2s ease',
+                  transform: expandedSections.state ? 'rotate(90deg)' : 'rotate(0deg)',
+                  display: 'inline-block',
+                }}>
+                  ▸
+                </span>
+                State Programs
+              </div>
+            </div>
+            {expandedSections.state && (
+              <div style={{
+                padding: spacing.lg,
+                backgroundColor: colors.white,
+              }}>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                  gap: spacing.md,
+                }}>
+                  {matrixData.stateRows.map((row, idx) => {
+                    // Get the state/jurisdiction this program applies to
+                    const applicableJurisdiction = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
+                    const status = row.jurisdictions.get(applicableJurisdiction) || null;
 
-            {/* Local Programs Section */}
-            {matrixData.localRows.length > 0 && (
-              <>
-                <tr
-                  onClick={() => toggleSection('local')}
-                  style={{ cursor: 'pointer' }}
-                >
-                  <td style={{
-                    position: 'sticky',
-                    left: 0,
-                    padding: `${spacing.md} ${spacing.lg}`,
-                    fontWeight: typography.fontWeight.bold,
-                    fontSize: typography.fontSize.sm,
-                    color: colors.white,
-                    backgroundColor: colors.secondary[700],
-                    letterSpacing: '0.5px',
-                    textTransform: 'uppercase',
-                    fontFamily: typography.fontFamily.primary,
-                    zIndex: 2,
-                    minWidth: '220px',
-                  }}>
-                    <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-                      <span style={{
-                        fontSize: typography.fontSize.xs,
-                        transition: 'transform 0.2s ease',
-                        transform: expandedSections.local ? 'rotate(90deg)' : 'rotate(0deg)',
-                        display: 'inline-block',
-                      }}>
-                        ▸
-                      </span>
-                      Local Programs
-                    </div>
-                  </td>
-                  <td colSpan={matrixData.jurisdictions.length} style={{
-                    padding: `${spacing.md} ${spacing.lg}`,
-                    fontWeight: typography.fontWeight.bold,
-                    fontSize: typography.fontSize.sm,
-                    color: colors.white,
-                    backgroundColor: colors.secondary[700],
-                    letterSpacing: '0.5px',
-                    textTransform: 'uppercase',
-                    fontFamily: typography.fontFamily.primary,
-                  }}>
-                  </td>
-                </tr>
-                {expandedSections.local && matrixData.localRows.map((row, idx) => (
-                  <tr key={`local-${idx}`} style={{
-                    backgroundColor: idx % 2 === 0 ? colors.white : colors.background.secondary,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = colors.primary[50];
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = idx % 2 === 0 ? colors.white : colors.background.secondary;
-                  }}
-                  >
-                    <td style={{
-                      position: 'sticky',
-                      left: 0,
-                      backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
-                      padding: `${spacing.md} ${spacing.lg}`,
-                      fontWeight: typography.fontWeight.medium,
-                      borderRight: `2px solid ${colors.gray[200]}`,
-                      borderBottom: `1px solid ${colors.gray[200]}`,
-                      zIndex: 1,
-                      boxShadow: spacing.shadow.xs,
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.backgroundColor = colors.primary[50];
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.backgroundColor = idx % 2 === 0 ? colors.white : colors.gray[50];
-                    }}
-                    >
-                      <div style={{
-                        display: 'flex',
-                        flexDirection: 'column',
-                        gap: spacing.xs,
-                      }}>
-                        <span style={{
-                          color: colors.secondary[900],
-                          fontSize: typography.fontSize.sm,
-                          fontWeight: typography.fontWeight.semibold,
-                        }}>{row.name}</span>
-                      </div>
-                    </td>
-                    {matrixData.jurisdictions.map(jurisdiction => {
-                      const status = row.jurisdictions.get(jurisdiction) || null;
-                      return (
-                        <td key={jurisdiction} style={{
-                          padding: `${spacing.sm} 2px`,
-                          textAlign: 'center',
-                          borderBottom: `1px solid ${colors.gray[200]}`,
-                          borderRight: `1px solid ${colors.gray[100]}`,
+                    return (
+                      <div
+                        key={`state-${idx}`}
+                        style={{
+                          padding: spacing.md,
+                          backgroundColor: colors.gray[50],
+                          borderRadius: spacing.radius.md,
+                          border: `1px solid ${colors.gray[200]}`,
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          transition: 'all 0.2s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = colors.primary[50];
+                          e.currentTarget.style.borderColor = colors.primary[300];
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = colors.gray[50];
+                          e.currentTarget.style.borderColor = colors.gray[200];
+                        }}
+                      >
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs, flex: 1 }}>
+                          <span style={{
+                            color: colors.secondary[900],
+                            fontSize: typography.fontSize.sm,
+                            fontWeight: typography.fontWeight.semibold,
+                          }}>{row.name}</span>
+                          <span style={{
+                            color: colors.text.secondary,
+                            fontSize: typography.fontSize.xs,
+                            fontWeight: typography.fontWeight.medium,
+                          }}>{applicableJurisdiction}</span>
+                        </div>
+                        <div style={{
+                          fontSize: typography.fontSize.xl,
                           color: getStatusColor(status),
-                          fontSize: typography.fontSize.base,
-                          backgroundColor: status ? undefined : colors.gray[50],
-                          minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                          maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+                          marginLeft: spacing.md,
                         }}>
                           {getStatusIcon(status)}
-                        </td>
-                      );
-                    })}
-                  </tr>
-                ))}
-              </>
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
             )}
-          </tbody>
-        </table>
+          </div>
+        )}
+
+        {/* Local Programs Section - Compact List */}
+        {matrixData.localRows.length > 0 && (
+          <div>
+            <div
+              onClick={() => toggleSection('local')}
+              style={{
+                cursor: 'pointer',
+                padding: `${spacing.md} ${spacing.lg}`,
+                fontWeight: typography.fontWeight.bold,
+                fontSize: typography.fontSize.sm,
+                color: colors.white,
+                backgroundColor: colors.secondary[700],
+                letterSpacing: '0.5px',
+                textTransform: 'uppercase',
+                fontFamily: typography.fontFamily.primary,
+                borderTop: `2px solid ${colors.gray[300]}`,
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+                <span style={{
+                  fontSize: typography.fontSize.xs,
+                  transition: 'transform 0.2s ease',
+                  transform: expandedSections.local ? 'rotate(90deg)' : 'rotate(0deg)',
+                  display: 'inline-block',
+                }}>
+                  ▸
+                </span>
+                Local Programs
+              </div>
+            </div>
+            {expandedSections.local && (
+              <div style={{
+                padding: spacing.lg,
+                backgroundColor: colors.white,
+              }}>
+                <div style={{
+                  display: 'grid',
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                  gap: spacing.md,
+                }}>
+                  {matrixData.localRows.map((row, idx) => {
+                    // Get the state/jurisdiction this program applies to
+                    const applicableJurisdiction = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
+                    const status = row.jurisdictions.get(applicableJurisdiction) || null;
+
+                    return (
+                      <div
+                        key={`local-${idx}`}
+                        style={{
+                          padding: spacing.md,
+                          backgroundColor: colors.gray[50],
+                          borderRadius: spacing.radius.md,
+                          border: `1px solid ${colors.gray[200]}`,
+                          display: 'flex',
+                          justifyContent: 'space-between',
+                          alignItems: 'center',
+                          transition: 'all 0.2s ease',
+                        }}
+                        onMouseEnter={(e) => {
+                          e.currentTarget.style.backgroundColor = colors.primary[50];
+                          e.currentTarget.style.borderColor = colors.primary[300];
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.backgroundColor = colors.gray[50];
+                          e.currentTarget.style.borderColor = colors.gray[200];
+                        }}
+                      >
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs, flex: 1 }}>
+                          <span style={{
+                            color: colors.secondary[900],
+                            fontSize: typography.fontSize.sm,
+                            fontWeight: typography.fontWeight.semibold,
+                          }}>{row.name}</span>
+                          <span style={{
+                            color: colors.text.secondary,
+                            fontSize: typography.fontSize.xs,
+                            fontWeight: typography.fontWeight.medium,
+                          }}>{applicableJurisdiction}</span>
+                        </div>
+                        <div style={{
+                          fontSize: typography.fontSize.xl,
+                          color: getStatusColor(status),
+                          marginLeft: spacing.md,
+                        }}>
+                          {getStatusIcon(status)}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       {/* Legend */}
