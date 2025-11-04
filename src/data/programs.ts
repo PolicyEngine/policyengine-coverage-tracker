@@ -753,7 +753,7 @@ export const programs: Program[] = [
   },
   {
     id: 'acp',
-    name: 'ACP',
+    name: 'Affordable Connectivity Program',
     fullName: 'Affordable Connectivity Program',
     agency: 'FCC',
     status: 'complete',
@@ -1301,7 +1301,38 @@ export const getStatusCount = () => {
   };
 
   programs.forEach((program) => {
-    counts[program.status]++;
+    // State and local programs count by their status
+    if (program.agency === 'State' || program.agency === 'Local') {
+      counts[program.status]++;
+      return;
+    }
+
+    // Federal programs: analyze based on jurisdiction coverage
+    if (program.id === 'tanf') {
+      // TANF counts as 1 partial coverage program (mix of implemented/missing states)
+      counts.partial++;
+    } else if (program.stateImplementations && program.stateImplementations.length > 0) {
+      // Federal program with state implementations
+      const statuses = new Set<string>();
+      program.stateImplementations.forEach((impl) => {
+        statuses.add(impl.status);
+      });
+
+      // Determine overall status based on mix
+      if (statuses.has('inProgress')) {
+        counts.inProgress++;
+      } else if (statuses.has('partial')) {
+        counts.partial++;
+      } else if (statuses.has('complete')) {
+        counts.complete++;
+      } else if (statuses.has('notStarted')) {
+        counts.notStarted++;
+      }
+    } else {
+      // Simple federal program (no state variation) or programs with uniform status
+      // These only have checkmark in federal column or all states
+      counts[program.status]++;
+    }
   });
 
   return counts;

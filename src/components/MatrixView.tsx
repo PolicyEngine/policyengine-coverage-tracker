@@ -78,21 +78,57 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     // Programs that apply to all states
     const universalStatePrograms = new Set([
       'snap', 'tanf', 'medicaid', 'wic', 'state_income_tax',
-      'social_security', 'ssi', 'medicare', 'eitc', 'ctc',
-      'ccdf', 'liheap'
+      'medicare', 'eitc', 'ctc',
+      'ccdf', 'liheap', 'aca_subsidies'
     ]);
 
-    // Build matrix rows - using major programs
+    // Build matrix rows - using major programs in specified order
+    const programOrder = [
+      'federal_income_tax',
+      'state_income_tax',
+      'snap',
+      'summer_ebt',
+      'wic',
+      'tanf',
+      'ccdf',
+      'liheap',
+      'acp',
+      'ssi',
+      'social_security',
+      'ssi_state_supplement',
+      'lifeline',
+      'medicare',
+      'medicaid',
+      'aca_subsidies',
+      'section_8',
+      'pell_grant',
+    ];
+
     const majorPrograms = programs.filter(p =>
-      // Include major federal programs
-      ['eitc', 'ctc', 'snap', 'tanf', 'ssi', 'social_security', 'medicare', 'medicaid',
-       'section_8', 'unemployment_compensation', 'wic', 'lifeline', 'acp',
-       'federal_income_tax', 'state_income_tax', 'salt_deduction'].includes(p.id) ||
+      // Include programs in our order list
+      programOrder.includes(p.id) ||
       // Or programs with state implementations
       (p.stateImplementations && p.stateImplementations.length > 0) ||
       // Or state/local programs
       p.agency === 'State' || p.agency === 'Local'
     );
+
+    // Sort by the specified order
+    majorPrograms.sort((a, b) => {
+      const aIndex = programOrder.indexOf(a.id);
+      const bIndex = programOrder.indexOf(b.id);
+
+      // If both are in the order list, sort by order
+      if (aIndex !== -1 && bIndex !== -1) {
+        return aIndex - bIndex;
+      }
+      // If only a is in the order list, it comes first
+      if (aIndex !== -1) return -1;
+      // If only b is in the order list, it comes first
+      if (bIndex !== -1) return 1;
+      // Otherwise maintain original order
+      return 0;
+    });
 
     const rows = majorPrograms.map(program => {
       const jurisdictionMap = new Map<string, CoverageStatus | null>();
