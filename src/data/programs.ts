@@ -85,12 +85,12 @@ export const programs: Program[] = [
   },
   {
     id: 'school_meals',
-    name: 'School Meals',
+    name: 'Free and Reduced School Meals',
     fullName: 'Free and reduced price school meals',
     agency: 'USDA',
-    status: 'partial',
+    status: 'complete',
     coverage: 'US',
-    notes: 'Nationwide rules; needs states with universal coverage',
+    notes: 'Nationwide rules',
     variable: 'free_school_meals',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/usda/school_meals`,
@@ -106,6 +106,36 @@ export const programs: Program[] = [
     status: 'inProgress',
     coverage: 'US',
     githubLinks: {},
+  },
+  {
+    id: 'csfp',
+    name: 'Commodity Supplemental Food Program',
+    fullName: 'Commodity Supplemental Food Program',
+    agency: 'USDA',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'csfp',
+    notes: 'Provides nutritious foods to low-income pregnant/postpartum women, infants, children, and seniors',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/usda/csfp`,
+      variables: `${GITHUB_BASE}/variables/gov/usda/csfp`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/usda/csfp`,
+    },
+  },
+  {
+    id: 'fdpir',
+    name: 'FDPIR',
+    fullName: 'Food Distribution Program on Indian Reservations',
+    agency: 'USDA',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'fdpir',
+    notes: 'USDA foods to low-income households on Indian reservations and to Native American families',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/usda/fdpir`,
+      variables: `${GITHUB_BASE}/variables/gov/usda/fdpir`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/usda/fdpir`,
+    },
   },
 
   // HHS Programs
@@ -160,8 +190,8 @@ export const programs: Program[] = [
     name: 'TANF',
     fullName: 'Temporary Assistance for Needy Families',
     agency: 'HHS',
-    status: 'partial',
-    coverage: 'CA, CO, DC, IL, NY, MA, NC, NJ, MT, TX',
+    status: 'inProgress',
+    coverage: 'CA, CO, DC, IL, NY, MA, NC, NJ, MT, TX, WA, AZ, OK, MO, PA, MD',
     stateImplementations: [
       {
         state: 'CA',
@@ -273,6 +303,78 @@ export const programs: Program[] = [
           tests: `${TESTS_BASE}/policy/baseline/gov/states/tx/tanf`,
         }
       },
+      {
+        state: 'WA',
+        status: 'complete',
+        name: 'Washington TANF',
+        fullName: 'WorkFirst',
+        variable: 'wa_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/wa/dshs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/wa/dshs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/wa/dshs/tanf`,
+        }
+      },
+      {
+        state: 'AZ',
+        status: 'partial',
+        name: 'Arizona TANF',
+        fullName: 'Arizona Temporary Assistance for Needy Families',
+        notes: 'Eligibility implemented',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/az/hhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/az/hhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/az/hhs/tanf`,
+        }
+      },
+      {
+        state: 'OK',
+        status: 'complete',
+        name: 'Oklahoma TANF',
+        fullName: 'Oklahoma Temporary Assistance for Needy Families',
+        variable: 'ok_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ok/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ok/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ok/tanf`,
+        }
+      },
+      {
+        state: 'MO',
+        status: 'complete',
+        name: 'Missouri TANF',
+        fullName: 'Missouri Temporary Assistance',
+        variable: 'mo_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/mo/dss/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/mo/dss/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/mo/dss/tanf`,
+        }
+      },
+      {
+        state: 'PA',
+        status: 'complete',
+        name: 'Pennsylvania TANF',
+        fullName: 'Pennsylvania Temporary Assistance for Needy Families',
+        variable: 'pa_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/pa/dhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/pa/dhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/pa/dhs/tanf`,
+        }
+      },
+      {
+        state: 'MD',
+        status: 'partial',
+        name: 'Maryland TANF',
+        fullName: 'Maryland Temporary Cash Assistance',
+        notes: 'Implementation in progress',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/md`,
+          variables: `${GITHUB_BASE}/variables/gov/states/md`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/md`,
+        }
+      },
     ],
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/hhs/tanf`,
@@ -285,7 +387,7 @@ export const programs: Program[] = [
     name: 'CCDF',
     fullName: 'Child Care and Development Fund',
     agency: 'HHS',
-    status: 'partial',
+    status: 'notStarted',
     coverage: 'CA, CO, IL, MA, DC, NC, TX',
     stateImplementations: [
       {
@@ -392,7 +494,7 @@ export const programs: Program[] = [
     name: 'LIHEAP',
     fullName: 'Low Income Home Energy Assistance Program',
     agency: 'HHS',
-    status: 'partial',
+    status: 'notStarted',
     coverage: 'OR, DC, Riverside County, MA, IL',
     stateImplementations: [
       {
@@ -462,8 +564,9 @@ export const programs: Program[] = [
     name: 'SSI State Supplement',
     fullName: 'SSI State Supplement',
     agency: 'SSA',
-    status: 'partial',
-    coverage: 'CA, CO, MA, IL',
+    status: 'notStarted',
+    coverage: 'CA, CO, MA, IL, NY, PA, NJ, NV, CT, MI, VT, RI, DE, HI',
+    notes: 'Only about 30 states have SSI state supplement programs',
     stateImplementations: [
       {
         state: 'CA',
@@ -513,8 +616,108 @@ export const programs: Program[] = [
           tests: `${TESTS_BASE}/policy/baseline/gov/states/il/dhs/aabd`,
         }
       },
+      {
+        state: 'NY',
+        status: 'notStarted',
+        name: 'New York SSP',
+        fullName: 'New York State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'PA',
+        status: 'notStarted',
+        name: 'Pennsylvania SSP',
+        fullName: 'Pennsylvania State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'NJ',
+        status: 'notStarted',
+        name: 'New Jersey SSP',
+        fullName: 'New Jersey State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'NV',
+        status: 'notStarted',
+        name: 'Nevada SSP',
+        fullName: 'Nevada State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'CT',
+        status: 'notStarted',
+        name: 'Connecticut SSP',
+        fullName: 'Connecticut State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'MI',
+        status: 'notStarted',
+        name: 'Michigan SSP',
+        fullName: 'Michigan State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'VT',
+        status: 'notStarted',
+        name: 'Vermont SSP',
+        fullName: 'Vermont State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'RI',
+        status: 'notStarted',
+        name: 'Rhode Island SSP',
+        fullName: 'Rhode Island State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'DE',
+        status: 'notStarted',
+        name: 'Delaware SSP',
+        fullName: 'Delaware State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'HI',
+        status: 'notStarted',
+        name: 'Hawaii SSP',
+        fullName: 'Hawaii State Supplementary Payment',
+        githubLinks: {}
+      },
     ],
     githubLinks: {},
+  },
+  {
+    id: 'social_security',
+    name: 'Social Security',
+    fullName: 'Social Security (Retirement, Disability, Survivors)',
+    agency: 'SSA',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'social_security',
+    notes: 'Includes retirement, disability (SSDI), survivors, and dependent benefits',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/ssa/ss`,
+      variables: `${GITHUB_BASE}/variables/gov/ssa/ss`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/ssa/ss`,
+    },
+  },
+  {
+    id: 'medicare',
+    name: 'Medicare',
+    fullName: 'Medicare',
+    agency: 'HHS',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'is_medicare_eligible',
+    notes: 'Federal health insurance program for people 65+, younger with disabilities, and those with ESRD',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/hhs/medicare`,
+      variables: `${GITHUB_BASE}/variables/gov/hhs/medicare`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/hhs/medicare`,
+    },
   },
 
   // HUD Programs
@@ -537,7 +740,7 @@ export const programs: Program[] = [
   {
     id: 'lifeline',
     name: 'Lifeline',
-    fullName: '',
+    fullName: 'Lifeline Program',
     agency: 'FCC',
     status: 'complete',
     coverage: 'US',
@@ -546,6 +749,21 @@ export const programs: Program[] = [
       parameters: `${GITHUB_BASE}/parameters/gov/fcc/lifeline`,
       variables: `${GITHUB_BASE}/variables/gov/fcc/lifeline`,
       tests: `${TESTS_BASE}/policy/baseline/gov/fcc/lifeline`,
+    },
+  },
+  {
+    id: 'acp',
+    name: 'Affordable Connectivity Program',
+    fullName: 'Affordable Connectivity Program',
+    agency: 'FCC',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'acp',
+    notes: 'Provides discount on internet service for eligible households',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/fcc/acp`,
+      variables: `${GITHUB_BASE}/variables/gov/fcc/acp`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/fcc/acp`,
     },
   },
 
@@ -565,6 +783,67 @@ export const programs: Program[] = [
     },
   },
 
+  // Federal Tax Credits
+  {
+    id: 'education_tax_credits',
+    name: 'Education Tax Credits',
+    fullName: 'Education Tax Credits (American Opportunity Credit, Lifetime Learning Credit)',
+    category: 'Education',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'american_opportunity_credit',
+    notes: 'Includes American Opportunity Credit and Lifetime Learning Credit',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/irs/credits/education`,
+      variables: `${GITHUB_BASE}/variables/gov/irs/credits/education`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/irs/credits/education`,
+    },
+  },
+  {
+    id: 'clean_vehicle_credits',
+    name: 'Clean Vehicle Credits',
+    fullName: 'Clean Vehicle Tax Credits (New and Used)',
+    category: 'Energy',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'clean_vehicle_credit',
+    notes: 'Includes new clean vehicle credit and previously owned clean vehicle credit',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/irs/credits/clean_vehicle`,
+      variables: `${GITHUB_BASE}/variables/gov/irs/credits/clean_vehicle`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/irs/credits/clean_vehicle`,
+    },
+  },
+  {
+    id: 'elderly_disabled_credit',
+    name: 'Elderly and Disabled Credit',
+    fullName: 'Credit for the Elderly or Disabled',
+    category: 'Tax Credits',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'elderly_disabled_credit',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/irs/credits/elderly_and_disabled`,
+      variables: `${GITHUB_BASE}/variables/gov/irs/credits/elderly_and_disabled`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/irs/credits/elderly_and_disabled`,
+    },
+  },
+  {
+    id: 'residential_clean_energy_credit',
+    name: 'Residential Clean Energy Credit',
+    fullName: 'Residential Clean Energy Credit',
+    category: 'Energy',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'residential_clean_energy_credit',
+    notes: 'Credit for solar, wind, geothermal, and fuel cell property',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/irs/credits/residential_clean_energy`,
+      variables: `${GITHUB_BASE}/variables/gov/irs/credits/residential_clean_energy`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/irs/credits/residential_clean_energy`,
+    },
+  },
+
   // IRA Programs
   {
     id: 'ira_tax_credits',
@@ -574,11 +853,42 @@ export const programs: Program[] = [
     status: 'complete',
     coverage: 'US',
     variable: 'energy_efficient_home_improvement_credit',
-    notes: 'High efficiency electric home rebate, residential efficiency electrification rebate',
+    notes: 'Energy Efficient Home Improvement Credit',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/irs/credits`,
       variables: `${GITHUB_BASE}/variables/gov/irs/credits`,
       tests: `${TESTS_BASE}/policy/baseline/gov/irs/credits`,
+    },
+  },
+  {
+    id: 'doe_high_efficiency_rebate',
+    name: 'DOE High Efficiency Rebate',
+    fullName: 'High Efficiency Electric Home Rebate (HOMES Rebate)',
+    agency: 'DOE',
+    category: 'Energy',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'high_efficiency_electric_home_rebate',
+    notes: 'Rebates for heat pumps, water heaters, electric stoves, insulation, wiring, electrical panels',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/doe/high_efficiency_electric_home_rebate`,
+      variables: `${GITHUB_BASE}/variables/gov/doe/high_efficiency_electric_home_rebate`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/doe/high_efficiency_electric_home_rebate`,
+    },
+  },
+  {
+    id: 'doe_efficiency_rebate',
+    name: 'DOE Efficiency Rebate',
+    fullName: 'Residential Efficiency and Electrification Rebate',
+    agency: 'DOE',
+    category: 'Energy',
+    status: 'complete',
+    coverage: 'US',
+    variable: 'residential_efficiency_electrification_rebate',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/doe/residential_efficiency_electrification_rebate`,
+      variables: `${GITHUB_BASE}/variables/gov/doe/residential_efficiency_electrification_rebate`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/doe/residential_efficiency_electrification_rebate`,
     },
   },
 
@@ -924,6 +1234,51 @@ export const programs: Program[] = [
       tests: `${TESTS_BASE}/policy/baseline/gov/local/ca/ala/ga`,
     },
   },
+  {
+    id: 'nyc_income_tax',
+    name: 'NYC Income Tax',
+    fullName: 'New York City Income Tax',
+    agency: 'Local',
+    status: 'complete',
+    coverage: 'New York City',
+    variable: 'nyc_income_tax',
+    notes: 'Local income tax for NYC residents',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/local/ny/nyc/tax/income`,
+      variables: `${GITHUB_BASE}/variables/gov/local/ny/nyc/tax/income`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/local/ny/nyc/tax/income`,
+    },
+  },
+  {
+    id: 'sf_wftc',
+    name: 'San Francisco WFTC',
+    fullName: 'San Francisco Working Families Tax Credit',
+    agency: 'Local',
+    status: 'complete',
+    coverage: 'San Francisco',
+    variable: 'sf_wftc',
+    notes: 'Local supplement to state and federal EITC',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/local/ca/sf/wftc`,
+      variables: `${GITHUB_BASE}/variables/gov/local/ca/sf/wftc`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/local/ca/sf/wftc`,
+    },
+  },
+  {
+    id: 'montgomery_county_eitc',
+    name: 'Montgomery County EITC',
+    fullName: 'Montgomery County Earned Income Tax Credit',
+    agency: 'Local',
+    status: 'complete',
+    coverage: 'Montgomery County, MD',
+    variable: 'md_montgomery_eitc_refundable',
+    notes: 'Refundable local EITC supplement',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/local/md/montgomery/tax/income/credits/eitc/refundable`,
+      variables: `${GITHUB_BASE}/variables/gov/local/md/montgomery/tax/income/credits/eitc/refundable`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/local/md/montgomery/tax/income/credits/eitc/refundable`,
+    },
+  },
 
   // Other Programs
   {
@@ -946,16 +1301,39 @@ export const getStatusCount = () => {
   };
 
   programs.forEach((program) => {
-    counts[program.status]++;
+    // State and local programs count by their status
+    if (program.agency === 'State' || program.agency === 'Local') {
+      counts[program.status]++;
+      return;
+    }
+
+    // Federal programs: analyze based on jurisdiction coverage
+    if (program.id === 'tanf') {
+      // TANF counts as 1 partial coverage program (mix of implemented/missing states)
+      counts.partial++;
+    } else if (program.stateImplementations && program.stateImplementations.length > 0) {
+      // Federal program with state implementations
+      const statuses = new Set<string>();
+      program.stateImplementations.forEach((impl) => {
+        statuses.add(impl.status);
+      });
+
+      // Determine overall status based on mix
+      if (statuses.has('inProgress')) {
+        counts.inProgress++;
+      } else if (statuses.has('partial')) {
+        counts.partial++;
+      } else if (statuses.has('complete')) {
+        counts.complete++;
+      } else if (statuses.has('notStarted')) {
+        counts.notStarted++;
+      }
+    } else {
+      // Simple federal program (no state variation) or programs with uniform status
+      // These only have checkmark in federal column or all states
+      counts[program.status]++;
+    }
   });
 
   return counts;
-};
-
-export const getAgencyPrograms = (agency: string) => {
-  return programs.filter((program) => program.agency === agency);
-};
-
-export const getCategoryPrograms = (category: string) => {
-  return programs.filter((program) => program.category === category);
 };

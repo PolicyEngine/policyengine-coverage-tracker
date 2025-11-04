@@ -3,14 +3,16 @@ import './App.css';
 import FilterBar from './components/FilterBar';
 import ProgramCard from './components/ProgramCard';
 import ProgramGrid from './components/ProgramGrid';
-import StatsOverview from './components/StatsOverview';
+import MatrixView from './components/MatrixView';
+import ExecutiveSummary from './components/ExecutiveSummary';
 import { programs, getStatusCount } from './data/programs';
 import { CoverageStatus, Program } from './types/Program';
-import { colors } from './constants/colors';
+import { colors, typography, spacing } from './designTokens';
 import { extractStatesFromPrograms } from './utils/extractStates';
 
 type ViewMode = 'grid' | 'list';
 type FilterMode = 'all' | 'federal' | 'state-local';
+type DisplayMode = 'overview' | 'developer';
 
 function App() {
   const [selectedStatus, setSelectedStatus] = useState<CoverageStatus | 'all'>('all');
@@ -19,6 +21,7 @@ function App() {
   const [selectedState, setSelectedState] = useState<string>('All');
   const [searchQuery, setSearchQuery] = useState<string>('');
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
+  const [displayMode, setDisplayMode] = useState<DisplayMode>('overview');
 
   const statusCounts = getStatusCount();
   const availableStates = extractStatesFromPrograms(programs);
@@ -150,13 +153,14 @@ function App() {
           // For regular programs, check coverage
           if (!program.coverage) return false;
 
-          // Check for local county programs first
+          // Check for local county/city programs first
           if (selectedState === 'CA') {
             if (program.coverage.includes('Los Angeles County') ||
                 program.coverage.includes('Riverside County') ||
                 program.coverage.includes('Alameda County') ||
                 program.coverage === 'Los Angeles' ||
-                program.coverage === 'Riverside County') {
+                program.coverage === 'Riverside County' ||
+                program.coverage.includes('San Francisco')) {
               return true;
             }
           }
@@ -166,6 +170,14 @@ function App() {
           }
 
           if (selectedState === 'IL' && program.coverage.includes('Chicago')) {
+            return true;
+          }
+
+          if (selectedState === 'NY' && program.coverage.includes('New York City')) {
+            return true;
+          }
+
+          if (selectedState === 'MD' && program.coverage.includes('Montgomery County')) {
             return true;
           }
 
@@ -186,17 +198,17 @@ function App() {
   }, [selectedStatus, filterMode, selectedAgency, selectedState, searchQuery]);
 
   return (
-    <div style={{ backgroundColor: colors.BLUE_98, minHeight: '100vh' }}>
+    <div style={{ backgroundColor: colors.background.secondary, minHeight: '100vh' }}>
       <header
         style={{
-          backgroundColor: colors.WHITE,
-          boxShadow: '0 2px 4px rgba(0, 0, 0, 0.05)',
-          padding: '24px 0',
-          marginBottom: '32px',
+          backgroundColor: colors.white,
+          boxShadow: spacing.shadow.sm,
+          padding: `${spacing['2xl']} 0`,
+          marginBottom: spacing['3xl'],
         }}
       >
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px' }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '20px' }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xl }}>
             <img
               src={`${process.env.PUBLIC_URL}/policyengine.png`}
               alt="PolicyEngine Logo"
@@ -206,10 +218,21 @@ function App() {
               }}
             />
             <div>
-              <h1 style={{ margin: 0, color: colors.DARKEST_BLUE, fontSize: '32px', fontWeight: 700 }}>
+              <h1 style={{
+                margin: 0,
+                color: colors.secondary[900],
+                fontSize: typography.fontSize['4xl'],
+                fontWeight: typography.fontWeight.bold,
+                fontFamily: typography.fontFamily.primary
+              }}>
                 PolicyEngine Coverage Tracker
               </h1>
-              <p style={{ margin: '8px 0 0', color: colors.DARK_GRAY, fontSize: '16px' }}>
+              <p style={{
+                margin: `${spacing.sm} 0 0`,
+                color: colors.text.secondary,
+                fontSize: typography.fontSize.base,
+                fontFamily: typography.fontFamily.body
+              }}>
                 Track the implementation status of government programs in PolicyEngine US
               </p>
             </div>
@@ -217,151 +240,251 @@ function App() {
         </div>
       </header>
 
-      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px 48px' }}>
-        <StatsOverview statusCounts={statusCounts} totalPrograms={programs.length} />
+      {/* Executive Summary Section */}
+      <div style={{ backgroundColor: colors.background.secondary, paddingTop: spacing.lg, paddingBottom: spacing['3xl'] }}>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']}` }}>
+          <ExecutiveSummary
+            programs={programs}
+            statusCounts={statusCounts}
+            totalPrograms={programs.length}
+          />
+        </div>
+      </div>
 
-        <FilterBar
-          selectedStatus={selectedStatus}
-          onStatusChange={setSelectedStatus}
-          filterMode={filterMode}
-          onFilterModeChange={setFilterMode}
-          selectedAgency={selectedAgency}
-          onAgencyChange={setSelectedAgency}
-          selectedState={selectedState}
-          onStateChange={setSelectedState}
-          searchQuery={searchQuery}
-          onSearchChange={setSearchQuery}
-          statusCounts={statusCounts}
-          totalPrograms={programs.length}
-          availableStates={availableStates}
-        />
-
-        <div>
-          <div
+      {/* View Mode Toggle */}
+      <div style={{
+        backgroundColor: colors.background.secondary,
+        paddingBottom: spacing.xl,
+      }}>
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: `0 ${spacing['2xl']}`,
+        }}>
+          <div style={{
+            backgroundColor: colors.white,
+            borderRadius: spacing.radius.lg,
+            boxShadow: spacing.shadow.md,
+            border: `1px solid ${colors.border.light}`,
+            borderBottom: `2px solid ${colors.gray[200]}`,
+            overflow: 'hidden',
+            display: 'flex',
+            gap: spacing.md,
+            padding: `0 ${spacing.lg}`,
+          }}>
+          <button
+            onClick={() => setDisplayMode('overview')}
             style={{
-              display: 'flex',
-              justifyContent: 'space-between',
-              alignItems: 'center',
-              marginBottom: '16px',
+              padding: `${spacing.lg} ${spacing.xl}`,
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: displayMode === 'overview' ? colors.primary[600] : colors.text.secondary,
+              borderBottom: displayMode === 'overview' ? `3px solid ${colors.primary[600]}` : '3px solid transparent',
+              fontSize: typography.fontSize.base,
+              fontWeight: displayMode === 'overview' ? typography.fontWeight.bold : typography.fontWeight.medium,
+              cursor: 'pointer',
+              fontFamily: typography.fontFamily.primary,
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (displayMode !== 'overview') {
+                e.currentTarget.style.color = colors.primary[600];
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (displayMode !== 'overview') {
+                e.currentTarget.style.color = colors.text.secondary;
+              }
             }}
           >
-            <h2 style={{ margin: 0, color: colors.DARKEST_BLUE, fontSize: '24px' }}>
-              Programs ({filteredPrograms.length})
-            </h2>
-            <div style={{ display: 'flex', gap: '12px', alignItems: 'center' }}>
-              {/* View mode toggle */}
-              <div
-                style={{
-                  display: 'flex',
-                  backgroundColor: colors.WHITE,
-                  borderRadius: '6px',
-                  padding: '2px',
-                  boxShadow: '0 1px 3px rgba(0, 0, 0, 0.1)',
-                }}
-              >
-                <button
-                  onClick={() => setViewMode('grid')}
-                  style={{
-                    padding: '6px 12px',
-                    border: 'none',
-                    backgroundColor: viewMode === 'grid' ? colors.BLUE_PRIMARY : 'transparent',
-                    color: viewMode === 'grid' ? colors.WHITE : colors.DARK_GRAY,
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                  }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <rect x="1" y="1" width="6" height="6" />
-                    <rect x="9" y="1" width="6" height="6" />
-                    <rect x="1" y="9" width="6" height="6" />
-                    <rect x="9" y="9" width="6" height="6" />
-                  </svg>
-                  Grid
-                </button>
-                <button
-                  onClick={() => setViewMode('list')}
-                  style={{
-                    padding: '6px 12px',
-                    border: 'none',
-                    backgroundColor: viewMode === 'list' ? colors.BLUE_PRIMARY : 'transparent',
-                    color: viewMode === 'list' ? colors.WHITE : colors.DARK_GRAY,
-                    borderRadius: '4px',
-                    fontSize: '14px',
-                    fontWeight: 500,
-                    cursor: 'pointer',
-                    transition: 'all 0.2s',
-                    display: 'flex',
-                    alignItems: 'center',
-                    gap: '4px',
-                  }}
-                >
-                  <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                    <rect x="1" y="2" width="14" height="2" />
-                    <rect x="1" y="7" width="14" height="2" />
-                    <rect x="1" y="12" width="14" height="2" />
-                  </svg>
-                  List
-                </button>
-              </div>
-
-              <a
-                href="https://github.com/PolicyEngine/policyengine-us"
-                target="_blank"
-                rel="noopener noreferrer"
-                style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  padding: '10px 20px',
-                  backgroundColor: colors.BLUE_PRIMARY,
-                  color: colors.WHITE,
-                  textDecoration: 'none',
-                  borderRadius: '6px',
-                  fontSize: '14px',
-                  fontWeight: 600,
-                  transition: 'background-color 0.2s',
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.DARK_BLUE_HOVER;
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.BLUE_PRIMARY;
-                }}
-              >
-                <svg
-                  width="20"
-                  height="20"
-                  viewBox="0 0 16 16"
-                  fill="currentColor"
-                  style={{ marginRight: '8px' }}
-                >
-                  <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
-                </svg>
-                View on GitHub
-              </a>
-            </div>
+            Overview
+          </button>
+          <button
+            onClick={() => setDisplayMode('developer')}
+            style={{
+              padding: `${spacing.lg} ${spacing.xl}`,
+              border: 'none',
+              backgroundColor: 'transparent',
+              color: displayMode === 'developer' ? colors.primary[600] : colors.text.secondary,
+              borderBottom: displayMode === 'developer' ? `3px solid ${colors.primary[600]}` : '3px solid transparent',
+              fontSize: typography.fontSize.base,
+              fontWeight: displayMode === 'developer' ? typography.fontWeight.bold : typography.fontWeight.medium,
+              cursor: 'pointer',
+              fontFamily: typography.fontFamily.primary,
+              transition: 'all 0.2s ease',
+            }}
+            onMouseEnter={(e) => {
+              if (displayMode !== 'developer') {
+                e.currentTarget.style.color = colors.primary[600];
+              }
+            }}
+            onMouseLeave={(e) => {
+              if (displayMode !== 'developer') {
+                e.currentTarget.style.color = colors.text.secondary;
+              }
+            }}
+          >
+            Program Details
+          </button>
           </div>
+        </div>
+      </div>
+
+      <main style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']} ${spacing['4xl']}` }}>
+
+        {/* Only show filters in Developer Mode */}
+        {displayMode === 'developer' && (
+          <FilterBar
+            selectedStatus={selectedStatus}
+            onStatusChange={setSelectedStatus}
+            filterMode={filterMode}
+            onFilterModeChange={setFilterMode}
+            selectedAgency={selectedAgency}
+            onAgencyChange={setSelectedAgency}
+            selectedState={selectedState}
+            onStateChange={setSelectedState}
+            searchQuery={searchQuery}
+            onSearchChange={setSearchQuery}
+            statusCounts={statusCounts}
+            totalPrograms={programs.length}
+            availableStates={availableStates}
+          />
+        )}
+
+        <div>
+          {displayMode === 'developer' && (
+            <div
+              style={{
+                display: 'flex',
+                justifyContent: 'flex-end',
+                alignItems: 'center',
+                marginBottom: spacing.lg,
+              }}
+            >
+              <div style={{ display: 'flex', gap: spacing.md, alignItems: 'center' }}>
+                {/* View mode toggle */}
+                <div
+                  style={{
+                    display: 'flex',
+                    backgroundColor: colors.white,
+                    borderRadius: spacing.radius.md,
+                    padding: '2px',
+                    boxShadow: spacing.shadow.sm,
+                  }}
+                >
+                  <button
+                    onClick={() => setViewMode('grid')}
+                    style={{
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      border: 'none',
+                      backgroundColor: viewMode === 'grid' ? colors.primary[600] : 'transparent',
+                      color: viewMode === 'grid' ? colors.white : colors.text.secondary,
+                      borderRadius: spacing.radius.sm,
+                      fontSize: typography.fontSize.sm,
+                      fontWeight: typography.fontWeight.medium,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: spacing.xs,
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <rect x="1" y="1" width="6" height="6" />
+                      <rect x="9" y="1" width="6" height="6" />
+                      <rect x="1" y="9" width="6" height="6" />
+                      <rect x="9" y="9" width="6" height="6" />
+                    </svg>
+                    Grid
+                  </button>
+                  <button
+                    onClick={() => setViewMode('list')}
+                    style={{
+                      padding: `${spacing.sm} ${spacing.md}`,
+                      border: 'none',
+                      backgroundColor: viewMode === 'list' ? colors.primary[600] : 'transparent',
+                      color: viewMode === 'list' ? colors.white : colors.text.secondary,
+                      borderRadius: spacing.radius.sm,
+                      fontSize: typography.fontSize.sm,
+                      fontWeight: typography.fontWeight.medium,
+                      cursor: 'pointer',
+                      display: 'flex',
+                      alignItems: 'center',
+                      gap: spacing.xs,
+                    }}
+                  >
+                    <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
+                      <rect x="1" y="2" width="14" height="2" />
+                      <rect x="1" y="7" width="14" height="2" />
+                      <rect x="1" y="12" width="14" height="2" />
+                    </svg>
+                    List
+                  </button>
+                </div>
+
+                <a
+                  href="https://github.com/PolicyEngine/policyengine-us"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  style={{
+                    display: 'inline-flex',
+                    alignItems: 'center',
+                    padding: `${spacing.md} ${spacing.xl}`,
+                    backgroundColor: colors.primary[600],
+                    color: colors.white,
+                    textDecoration: 'none',
+                    borderRadius: spacing.radius.md,
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.semibold,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.primary[700];
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.primary[600];
+                  }}
+                >
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 16 16"
+                    fill="currentColor"
+                    style={{ marginRight: '8px' }}
+                  >
+                    <path d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.013 8.013 0 0016 8c0-4.42-3.58-8-8-8z" />
+                  </svg>
+                  View on GitHub
+                </a>
+              </div>
+            </div>
+          )}
 
           {filteredPrograms.length === 0 ? (
             <div
               style={{
-                backgroundColor: colors.WHITE,
-                padding: '48px',
-                borderRadius: '8px',
+                backgroundColor: colors.white,
+                padding: spacing['4xl'],
+                borderRadius: spacing.radius.lg,
                 textAlign: 'center',
-                color: colors.DARK_GRAY,
+                color: colors.text.secondary,
+                boxShadow: spacing.shadow.xs,
               }}
             >
-              <p style={{ fontSize: '18px', margin: 0 }}>No programs found matching your filters.</p>
-              <p style={{ fontSize: '14px', marginTop: '8px' }}>
+              <p style={{
+                fontSize: typography.fontSize.lg,
+                margin: 0,
+                fontFamily: typography.fontFamily.body
+              }}>No programs found matching your filters.</p>
+              <p style={{
+                fontSize: typography.fontSize.sm,
+                marginTop: spacing.sm,
+                fontFamily: typography.fontFamily.body
+              }}>
                 Try adjusting your search or filter criteria.
               </p>
             </div>
+          ) : displayMode === 'overview' ? (
+            // Matrix view for Overview Mode
+            <MatrixView programs={programs} />
           ) : (() => {
             // Separate state programs from local programs when in state-local mode with a specific state selected
             const shouldSeparate = filterMode === 'state-local' && selectedState !== 'All';
@@ -369,11 +492,11 @@ function App() {
             if (!shouldSeparate) {
               // Normal rendering without divider
               return viewMode === 'grid' ? (
-                <ProgramGrid programs={filteredPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                <ProgramGrid programs={filteredPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
               ) : (
                 <div>
                   {filteredPrograms.map((program) => (
-                    <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                    <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                   ))}
                 </div>
               );
@@ -397,11 +520,11 @@ function App() {
             if (!hasLocalPrograms) {
               // No local programs, render normally
               return viewMode === 'grid' ? (
-                <ProgramGrid programs={filteredPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                <ProgramGrid programs={filteredPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
               ) : (
                 <div>
                   {filteredPrograms.map((program) => (
-                    <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                    <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                   ))}
                 </div>
               );
@@ -413,22 +536,23 @@ function App() {
                 {/* State Programs Section */}
                 {statePrograms.length > 0 && (
                   <>
-                    <div style={{ marginBottom: '12px' }}>
+                    <div style={{ marginBottom: spacing.md }}>
                       <h3 style={{
                         margin: 0,
-                        color: colors.DARKEST_BLUE,
-                        fontSize: '18px',
-                        fontWeight: 600
+                        color: colors.secondary[900],
+                        fontSize: typography.fontSize.lg,
+                        fontWeight: typography.fontWeight.semibold,
+                        fontFamily: typography.fontFamily.primary
                       }}>
                         State Programs ({statePrograms.length})
                       </h3>
                     </div>
                     {viewMode === 'grid' ? (
-                      <ProgramGrid programs={statePrograms} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                      <ProgramGrid programs={statePrograms} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                     ) : (
                       <div>
                         {statePrograms.map((program) => (
-                          <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                          <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                         ))}
                       </div>
                     )}
@@ -437,15 +561,16 @@ function App() {
 
                 {/* Divider */}
                 <div style={{
-                  margin: '32px 0',
-                  padding: '16px 0',
-                  borderTop: `2px solid ${colors.LIGHT_GRAY}`,
+                  margin: `${spacing['3xl']} 0`,
+                  padding: `${spacing.lg} 0`,
+                  borderTop: `2px solid ${colors.border.light}`,
                 }}>
                   <h3 style={{
                     margin: 0,
-                    color: colors.DARKEST_BLUE,
-                    fontSize: '18px',
-                    fontWeight: 600
+                    color: colors.secondary[900],
+                    fontSize: typography.fontSize.lg,
+                    fontWeight: typography.fontWeight.semibold,
+                    fontFamily: typography.fontFamily.primary
                   }}>
                     Local Programs ({localPrograms.length})
                   </h3>
@@ -453,11 +578,11 @@ function App() {
 
                 {/* Local Programs Section */}
                 {viewMode === 'grid' ? (
-                  <ProgramGrid programs={localPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                  <ProgramGrid programs={localPrograms} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                 ) : (
                   <div>
                     {localPrograms.map((program) => (
-                      <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} />
+                      <ProgramCard key={program.id} program={program} selectedState={selectedState} onStateSelect={handleStateSelect} showTechnicalLinks={displayMode === 'developer'} />
                     ))}
                   </div>
                 )}
@@ -469,22 +594,41 @@ function App() {
 
       <footer
         style={{
-          backgroundColor: colors.DARKEST_BLUE,
-          color: colors.WHITE,
-          padding: '32px 0',
-          marginTop: '64px',
+          backgroundColor: colors.secondary[900],
+          color: colors.white,
+          padding: `${spacing['3xl']} 0`,
+          marginTop: spacing['5xl'],
         }}
       >
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: '0 24px', textAlign: 'center' }}>
-          <p style={{ margin: '0 0 8px', fontSize: '14px' }}>
+        <div style={{
+          maxWidth: '1400px',
+          margin: '0 auto',
+          padding: `0 ${spacing['2xl']}`,
+          textAlign: 'center'
+        }}>
+          <p style={{
+            margin: `0 0 ${spacing.sm}`,
+            fontSize: typography.fontSize.sm,
+            fontFamily: typography.fontFamily.body
+          }}>
             © {new Date().getFullYear()} PolicyEngine. All rights reserved.
           </p>
-          <div style={{ display: 'flex', justifyContent: 'center', gap: '24px', marginTop: '16px' }}>
+          <div style={{
+            display: 'flex',
+            justifyContent: 'center',
+            gap: spacing['2xl'],
+            marginTop: spacing.lg
+          }}>
             <a
               href="https://policyengine.org"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: colors.BLUE_LIGHT, textDecoration: 'none', fontSize: '14px' }}
+              style={{
+                color: colors.primary[200],
+                textDecoration: 'none',
+                fontSize: typography.fontSize.sm,
+                fontFamily: typography.fontFamily.body
+              }}
             >
               PolicyEngine.org
             </a>
@@ -492,7 +636,12 @@ function App() {
               href="https://github.com/PolicyEngine"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: colors.BLUE_LIGHT, textDecoration: 'none', fontSize: '14px' }}
+              style={{
+                color: colors.primary[200],
+                textDecoration: 'none',
+                fontSize: typography.fontSize.sm,
+                fontFamily: typography.fontFamily.body
+              }}
             >
               GitHub
             </a>
@@ -500,7 +649,12 @@ function App() {
               href="https://twitter.com/ThePolicyEngine"
               target="_blank"
               rel="noopener noreferrer"
-              style={{ color: colors.BLUE_LIGHT, textDecoration: 'none', fontSize: '14px' }}
+              style={{
+                color: colors.primary[200],
+                textDecoration: 'none',
+                fontSize: typography.fontSize.sm,
+                fontFamily: typography.fontFamily.body
+              }}
             >
               Twitter
             </a>
