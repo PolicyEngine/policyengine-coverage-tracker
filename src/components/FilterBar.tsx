@@ -1,5 +1,6 @@
 import React from 'react';
 import { CoverageStatus } from '../types/Program';
+import { Country } from '../types/Country';
 import { statusColors, colors } from '../designTokens';
 
 type FilterMode = 'all' | 'federal' | 'state-local';
@@ -18,6 +19,7 @@ interface FilterBarProps {
   statusCounts: Record<CoverageStatus, number>;
   totalPrograms: number;
   availableStates: string[];
+  country: Country;
 }
 
 const FilterBar: React.FC<FilterBarProps> = ({
@@ -34,9 +36,10 @@ const FilterBar: React.FC<FilterBarProps> = ({
   statusCounts,
   totalPrograms,
   availableStates,
+  country,
 }) => {
   const [isExpanded, setIsExpanded] = React.useState(false);
-  const federalAgencies = ['USDA', 'HHS', 'SSA', 'IRS', 'HUD', 'ED', 'DOL', 'FCC', 'ACA'];
+  const federalAgencies = country.agencies;
 
   // Check if any filters are active (not in reset state)
   const filtersActive = selectedStatus !== 'all' ||
@@ -54,8 +57,8 @@ const FilterBar: React.FC<FilterBarProps> = ({
 
   const filterModeOptions: Array<{ value: FilterMode; label: string }> = [
     { value: 'all', label: 'All Programs' },
-    { value: 'federal', label: 'Federal Agencies' },
-    { value: 'state-local', label: 'State & Local' },
+    { value: 'federal', label: `${country.federalLabel} Agencies` },
+    { value: 'state-local', label: `${country.regionalLabel} & Local` },
   ];
 
   return (
@@ -278,7 +281,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         {filterMode === 'federal' && (
           <div>
             <label style={{ display: 'block', marginBottom: '8px', color: colors.text.secondary, fontSize: '13px', fontWeight: 500 }}>
-              Select Federal Agency
+              Select {country.federalLabel} Agency
             </label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               <button
@@ -352,7 +355,7 @@ const FilterBar: React.FC<FilterBarProps> = ({
         {filterMode === 'state-local' && availableStates.length > 0 && (
           <div>
             <label style={{ display: 'block', marginBottom: '8px', color: colors.text.secondary, fontSize: '13px', fontWeight: 500 }}>
-              Select State
+              Select {country.regionalLabel}
             </label>
             <div style={{ display: 'flex', gap: '8px', flexWrap: 'wrap' }}>
               <button

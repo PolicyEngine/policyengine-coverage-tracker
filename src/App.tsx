@@ -5,7 +5,9 @@ import ProgramCard from './components/ProgramCard';
 import ProgramGrid from './components/ProgramGrid';
 import MatrixView from './components/MatrixView';
 import ExecutiveSummary from './components/ExecutiveSummary';
-import { programs, getStatusCount } from './data/programs';
+import CountrySelector from './components/CountrySelector';
+import { getProgramsForCountry, getStatusCountForCountry } from './data/countries';
+import { CountryCode, COUNTRIES } from './types/Country';
 import { CoverageStatus, Program } from './types/Program';
 import { colors, typography, spacing } from './designTokens';
 import { extractStatesFromPrograms } from './utils/extractStates';
@@ -15,6 +17,7 @@ type FilterMode = 'all' | 'federal' | 'state-local';
 type DisplayMode = 'overview' | 'developer';
 
 function App() {
+  const [selectedCountry, setSelectedCountry] = useState<CountryCode>('us');
   const [selectedStatus, setSelectedStatus] = useState<CoverageStatus | 'all'>('all');
   const [filterMode, setFilterMode] = useState<FilterMode>('all');
   const [selectedAgency, setSelectedAgency] = useState<string>('All');
@@ -23,8 +26,10 @@ function App() {
   const [viewMode, setViewMode] = useState<ViewMode>('grid');
   const [displayMode, setDisplayMode] = useState<DisplayMode>('overview');
 
-  const statusCounts = getStatusCount();
+  const programs = getProgramsForCountry(selectedCountry);
+  const statusCounts = getStatusCountForCountry(selectedCountry);
   const availableStates = extractStatesFromPrograms(programs);
+  const currentCountry = COUNTRIES[selectedCountry];
 
   const handleStateSelect = (state: string) => {
     setFilterMode('state-local');
@@ -195,7 +200,7 @@ function App() {
     // If filterMode is 'all', show all programs without level filtering
 
     return filtered;
-  }, [selectedStatus, filterMode, selectedAgency, selectedState, searchQuery]);
+  }, [programs, selectedStatus, filterMode, selectedAgency, selectedState, searchQuery]);
 
   return (
     <div style={{ backgroundColor: colors.background.secondary, minHeight: '100vh' }}>
@@ -208,34 +213,40 @@ function App() {
         }}
       >
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']}` }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xl }}>
-            <img
-              src={`${process.env.PUBLIC_URL}/policyengine.png`}
-              alt="PolicyEngine Logo"
-              style={{
-                height: '50px',
-                width: 'auto'
-              }}
-            />
-            <div>
-              <h1 style={{
-                margin: 0,
-                color: colors.secondary[900],
-                fontSize: typography.fontSize['4xl'],
-                fontWeight: typography.fontWeight.bold,
-                fontFamily: typography.fontFamily.primary
-              }}>
-                PolicyEngine Coverage Tracker
-              </h1>
-              <p style={{
-                margin: `${spacing.sm} 0 0`,
-                color: colors.text.secondary,
-                fontSize: typography.fontSize.base,
-                fontFamily: typography.fontFamily.body
-              }}>
-                Track the implementation status of government programs in PolicyEngine US
-              </p>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: spacing.xl }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xl }}>
+              <img
+                src={`${process.env.PUBLIC_URL}/policyengine.png`}
+                alt="PolicyEngine Logo"
+                style={{
+                  height: '50px',
+                  width: 'auto'
+                }}
+              />
+              <div>
+                <h1 style={{
+                  margin: 0,
+                  color: colors.secondary[900],
+                  fontSize: typography.fontSize['4xl'],
+                  fontWeight: typography.fontWeight.bold,
+                  fontFamily: typography.fontFamily.primary
+                }}>
+                  PolicyEngine Coverage Tracker
+                </h1>
+                <p style={{
+                  margin: `${spacing.sm} 0 0`,
+                  color: colors.text.secondary,
+                  fontSize: typography.fontSize.base,
+                  fontFamily: typography.fontFamily.body
+                }}>
+                  Track the implementation status of government programs in PolicyEngine {currentCountry.name}
+                </p>
+              </div>
             </div>
+            <CountrySelector
+              selectedCountry={selectedCountry}
+              onCountryChange={setSelectedCountry}
+            />
           </div>
         </div>
       </header>
@@ -348,6 +359,7 @@ function App() {
             statusCounts={statusCounts}
             totalPrograms={programs.length}
             availableStates={availableStates}
+            country={currentCountry}
           />
         )}
 
@@ -484,7 +496,7 @@ function App() {
             </div>
           ) : displayMode === 'overview' ? (
             // Matrix view for Overview Mode
-            <MatrixView programs={programs} />
+            <MatrixView programs={programs} country={currentCountry} />
           ) : (() => {
             // Separate state programs from local programs when in state-local mode with a specific state selected
             const shouldSeparate = filterMode === 'state-local' && selectedState !== 'All';
@@ -544,7 +556,7 @@ function App() {
                         fontWeight: typography.fontWeight.semibold,
                         fontFamily: typography.fontFamily.primary
                       }}>
-                        State Programs ({statePrograms.length})
+                        {currentCountry.regionalLabel} Programs ({statePrograms.length})
                       </h3>
                     </div>
                     {viewMode === 'grid' ? (
