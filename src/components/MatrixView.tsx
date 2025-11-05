@@ -398,8 +398,6 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       {matrixData.federalRows.length > 0 && (
         <div style={{
           overflowX: 'auto',
-          maxHeight: '48vh',
-          overflowY: 'auto',
         }}>
           <table style={{
             width: '100%',
