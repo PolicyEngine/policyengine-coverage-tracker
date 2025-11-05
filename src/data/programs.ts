@@ -387,7 +387,7 @@ export const programs: Program[] = [
     name: 'CCDF',
     fullName: 'Child Care and Development Fund',
     agency: 'HHS',
-    status: 'notStarted',
+    status: 'partial',
     coverage: 'CA, CO, IL, MA, DC, NC, TX',
     stateImplementations: [
       {
@@ -494,7 +494,7 @@ export const programs: Program[] = [
     name: 'LIHEAP',
     fullName: 'Low Income Home Energy Assistance Program',
     agency: 'HHS',
-    status: 'notStarted',
+    status: 'partial',
     coverage: 'OR, DC, Riverside County, MA, IL',
     stateImplementations: [
       {
@@ -564,7 +564,7 @@ export const programs: Program[] = [
     name: 'SSI State Supplement',
     fullName: 'SSI State Supplement',
     agency: 'SSA',
-    status: 'notStarted',
+    status: 'partial',
     coverage: 'CA, CO, MA, IL, NY, PA, NJ, NV, CT, MI, VT, RI, DE, HI',
     notes: 'Only about 30 states have SSI state supplement programs',
     stateImplementations: [
@@ -815,20 +815,6 @@ export const programs: Program[] = [
     },
   },
   {
-    id: 'elderly_disabled_credit',
-    name: 'Elderly and Disabled Credit',
-    fullName: 'Credit for the Elderly or Disabled',
-    category: 'Tax Credits',
-    status: 'complete',
-    coverage: 'US',
-    variable: 'elderly_disabled_credit',
-    githubLinks: {
-      parameters: `${GITHUB_BASE}/parameters/gov/irs/credits/elderly_and_disabled`,
-      variables: `${GITHUB_BASE}/variables/gov/irs/credits/elderly_and_disabled`,
-      tests: `${TESTS_BASE}/policy/baseline/gov/irs/credits/elderly_and_disabled`,
-    },
-  },
-  {
     id: 'residential_clean_energy_credit',
     name: 'Residential Clean Energy Credit',
     fullName: 'Residential Clean Energy Credit',
@@ -1061,6 +1047,20 @@ export const programs: Program[] = [
       parameters: `${GITHUB_BASE}/parameters/gov/states/ma/dot/mbta`,
       variables: `${GITHUB_BASE}/variables/gov/states/ma/dot/mbta`,
       tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/dot/mbta`,
+    },
+  },
+  {
+    id: 'ma_eaedc',
+    name: 'Massachusetts EAEDC',
+    fullName: 'Emergency Aid to the Elderly, Disabled, and Children',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'MA',
+    variable: 'ma_eaedc',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/ma/dta/tcap/eaedc`,
+      variables: `${GITHUB_BASE}/variables/gov/states/ma/dta/tcap/eaedc`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/dta/tcap/eaedc`,
     },
   },
   {

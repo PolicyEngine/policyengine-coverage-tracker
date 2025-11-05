@@ -63,6 +63,73 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     }));
   };
 
+  // Helper function to render program columns grouped by state
+  const renderProgramColumns = (rows: MatrixRow[], headerColor: string, keyPrefix: string) => {
+    const programsByState = new Map<string, MatrixRow[]>();
+    rows.forEach(row => {
+      const state = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
+      if (!programsByState.has(state)) {
+        programsByState.set(state, []);
+      }
+      programsByState.get(state)?.push(row);
+    });
+
+    return Array.from(programsByState.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([state, programs]) => (
+      <div key={`${keyPrefix}-col-${state}`} style={{ minWidth: '250px' }}>
+        <div style={{
+          backgroundColor: headerColor,
+          color: colors.white,
+          padding: spacing.sm,
+          fontWeight: typography.fontWeight.bold,
+          fontSize: typography.fontSize.sm,
+          textAlign: 'center',
+          fontFamily: typography.fontFamily.primary,
+          borderRadius: `${spacing.radius.md} ${spacing.radius.md} 0 0`,
+        }}>
+          {state}
+        </div>
+        <div style={{
+          border: `1px solid ${colors.gray[200]}`,
+          borderTop: 'none',
+          borderRadius: `0 0 ${spacing.radius.md} ${spacing.radius.md}`,
+        }}>
+          {programs.map((row, idx) => {
+            const status = row.jurisdictions.get(state) || null;
+            return (
+              <div
+                key={`${keyPrefix}-${state}-prog-${idx}`}
+                style={{
+                  padding: spacing.sm,
+                  borderBottom: idx < programs.length - 1 ? `1px solid ${colors.gray[200]}` : 'none',
+                  backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: spacing.sm,
+                }}
+              >
+                <span style={{
+                  fontSize: typography.fontSize.sm,
+                  color: colors.secondary[900],
+                  fontWeight: typography.fontWeight.medium,
+                  flex: 1,
+                }}>
+                  {row.name}
+                </span>
+                <span style={{
+                  fontSize: typography.fontSize.base,
+                  color: getStatusColor(status),
+                }}>
+                  {getStatusIcon(status)}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    ));
+  };
+
   const matrixData = useMemo<MatrixData>(() => {
     // All US states + DC
     const allStates = [
@@ -160,6 +227,15 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         allStates.forEach(state => {
           jurisdictionMap.set(state, program.status);
         });
+      } else if (program.id === 'ssi_state_supplement') {
+        // SSI State Supplement does NOT apply at federal level, only states with implementations
+        // Leave Federal column as null (will show as Not Applicable)
+        // Process state implementations
+        if (program.stateImplementations) {
+          program.stateImplementations.forEach(impl => {
+            jurisdictionMap.set(impl.state, impl.status);
+          });
+        }
       } else {
         // Federal status for other programs
         if (!program.stateImplementations || program.agency !== 'State') {
@@ -178,7 +254,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
               stateCode = 'CA';
             } else if (program.coverage.includes('New York')) {
               stateCode = 'NY';
-            } else if (program.coverage.includes('Texas') || program.coverage.includes('Dallas')) {
+            } else if (program.coverage.includes('Texas') || program.coverage.includes('Dallas') || program.coverage.includes('Harris')) {
               stateCode = 'TX';
             } else if (program.coverage.includes('Illinois') || program.coverage.includes('Chicago')) {
               stateCode = 'IL';
@@ -243,11 +319,83 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       border: `1px solid ${colors.border.light}`,
       overflow: 'hidden',
     }}>
+      {/* Legend - Sticky at top */}
+      <div style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        padding: `${spacing.sm} ${spacing.md}`,
+        backgroundColor: colors.white,
+        borderBottom: `1px solid ${colors.gray[200]}`,
+        display: 'flex',
+        gap: spacing.md,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+      }}>
+        <div style={{
+          fontSize: '10px',
+          fontWeight: typography.fontWeight.bold,
+          color: colors.secondary[900],
+          textTransform: 'uppercase',
+          letterSpacing: '0.5px',
+          fontFamily: typography.fontFamily.primary,
+        }}>
+          Legend:
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <span style={{ fontSize: typography.fontSize.base, color: colors.primary[600] }}>✓</span>
+          <span style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.text.primary,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.body,
+          }}>Complete</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <span style={{ fontSize: typography.fontSize.base, color: colors.primary[400] }}>◐</span>
+          <span style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.text.primary,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.body,
+          }}>Partial</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <span style={{ fontSize: typography.fontSize.base, color: colors.blue[500] }}>⟳</span>
+          <span style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.text.primary,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.body,
+          }}>In Progress</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <span style={{ fontSize: typography.fontSize.base, color: colors.gray[400] }}>○</span>
+          <span style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.text.primary,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.body,
+          }}>Not Started</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <span style={{ fontSize: typography.fontSize.base, color: colors.gray[300] }}>-</span>
+          <span style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.text.primary,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.body,
+          }}>Not Applicable</span>
+        </div>
+      </div>
+
       {/* Federal Programs Section with horizontal scroll */}
       {matrixData.federalRows.length > 0 && (
         <div style={{
           overflowX: 'auto',
-          maxHeight: '50vh',
+          maxHeight: '48vh',
           overflowY: 'auto',
         }}>
           <table style={{
@@ -409,13 +557,12 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         </div>
       )}
 
-      {/* State and Local Programs - No horizontal scroll */}
-      <div style={{
-        maxHeight: '50vh',
-        overflowY: 'auto',
-      }}>
-        {/* State Programs Section - Compact List */}
-        {matrixData.stateRows.length > 0 && (
+      {/* State Programs Section - Compact List with independent scroll */}
+      {matrixData.stateRows.length > 0 && (
+        <div style={{
+          maxHeight: '50vh',
+          overflowY: 'auto',
+        }}>
           <div>
             <div
               onClick={() => toggleSection('state')}
@@ -451,66 +598,23 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
               }}>
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                  gridTemplateColumns: 'repeat(5, 1fr)',
                   gap: spacing.md,
                 }}>
-                  {matrixData.stateRows.map((row, idx) => {
-                    // Get the state/jurisdiction this program applies to
-                    const applicableJurisdiction = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
-                    const status = row.jurisdictions.get(applicableJurisdiction) || null;
-
-                    return (
-                      <div
-                        key={`state-${idx}`}
-                        style={{
-                          padding: spacing.md,
-                          backgroundColor: colors.gray[50],
-                          borderRadius: spacing.radius.md,
-                          border: `1px solid ${colors.gray[200]}`,
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          transition: 'all 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.primary[50];
-                          e.currentTarget.style.borderColor = colors.primary[300];
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.gray[50];
-                          e.currentTarget.style.borderColor = colors.gray[200];
-                        }}
-                      >
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs, flex: 1 }}>
-                          <span style={{
-                            color: colors.secondary[900],
-                            fontSize: typography.fontSize.sm,
-                            fontWeight: typography.fontWeight.semibold,
-                          }}>{row.name}</span>
-                          <span style={{
-                            color: colors.text.secondary,
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: typography.fontWeight.medium,
-                          }}>{applicableJurisdiction}</span>
-                        </div>
-                        <div style={{
-                          fontSize: typography.fontSize.xl,
-                          color: getStatusColor(status),
-                          marginLeft: spacing.md,
-                        }}>
-                          {getStatusIcon(status)}
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {renderProgramColumns(matrixData.stateRows, colors.primary[600], 'state')}
                 </div>
               </div>
             )}
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Local Programs Section - Compact List */}
-        {matrixData.localRows.length > 0 && (
+      {/* Local Programs Section - Compact List with independent scroll */}
+      {matrixData.localRows.length > 0 && (
+        <div style={{
+          maxHeight: '50vh',
+          overflowY: 'auto',
+        }}>
           <div>
             <div
               onClick={() => toggleSection('local')}
@@ -546,132 +650,16 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
               }}>
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                  gridTemplateColumns: 'repeat(5, 1fr)',
                   gap: spacing.md,
                 }}>
-                  {matrixData.localRows.map((row, idx) => {
-                    // Get the state/jurisdiction this program applies to
-                    const applicableJurisdiction = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
-                    const status = row.jurisdictions.get(applicableJurisdiction) || null;
-
-                    return (
-                      <div
-                        key={`local-${idx}`}
-                        style={{
-                          padding: spacing.md,
-                          backgroundColor: colors.gray[50],
-                          borderRadius: spacing.radius.md,
-                          border: `1px solid ${colors.gray[200]}`,
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          transition: 'all 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.primary[50];
-                          e.currentTarget.style.borderColor = colors.primary[300];
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.gray[50];
-                          e.currentTarget.style.borderColor = colors.gray[200];
-                        }}
-                      >
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs, flex: 1 }}>
-                          <span style={{
-                            color: colors.secondary[900],
-                            fontSize: typography.fontSize.sm,
-                            fontWeight: typography.fontWeight.semibold,
-                          }}>{row.name}</span>
-                          <span style={{
-                            color: colors.text.secondary,
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: typography.fontWeight.medium,
-                          }}>{applicableJurisdiction}</span>
-                        </div>
-                        <div style={{
-                          fontSize: typography.fontSize.xl,
-                          color: getStatusColor(status),
-                          marginLeft: spacing.md,
-                        }}>
-                          {getStatusIcon(status)}
-                        </div>
-                      </div>
-                    );
-                  })}
+                  {renderProgramColumns(matrixData.localRows, colors.secondary[700], 'local')}
                 </div>
               </div>
             )}
           </div>
-        )}
-      </div>
-
-      {/* Legend */}
-      <div style={{
-        padding: spacing.xl,
-        backgroundColor: colors.gray[50],
-        borderTop: `2px solid ${colors.gray[200]}`,
-        display: 'flex',
-        gap: spacing['2xl'],
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-      }}>
-        <div style={{
-          fontSize: typography.fontSize.xs,
-          fontWeight: typography.fontWeight.bold,
-          color: colors.secondary[900],
-          textTransform: 'uppercase',
-          letterSpacing: '0.5px',
-          fontFamily: typography.fontFamily.primary,
-        }}>
-          Legend:
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span style={{ fontSize: typography.fontSize.xl, color: colors.primary[600] }}>✓</span>
-          <span style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.primary,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
-          }}>Complete</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span style={{ fontSize: typography.fontSize.xl, color: colors.primary[400] }}>◐</span>
-          <span style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.primary,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
-          }}>Partial</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span style={{ fontSize: typography.fontSize.xl, color: colors.blue[500] }}>⟳</span>
-          <span style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.primary,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
-          }}>In Progress</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span style={{ fontSize: typography.fontSize.xl, color: colors.gray[400] }}>○</span>
-          <span style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.primary,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
-          }}>Not Started</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span style={{ fontSize: typography.fontSize.xl, color: colors.gray[300] }}>-</span>
-          <span style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.primary,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
-          }}>Not Applicable</span>
-        </div>
-      </div>
+      )}
     </div>
   );
 };
