@@ -430,7 +430,7 @@ export const programs: Program[] = [
       },
       {
         state: 'MA',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Massachusetts CCFA',
         fullName: 'Massachusetts Child Care Financial Assistance',
         githubLinks: {},
@@ -530,7 +530,7 @@ export const programs: Program[] = [
       },
       {
         state: 'IL',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Illinois LIHEAP',
         fullName: 'Illinois Low Income Home Energy Assistance Program',
         variable: 'il_liheap',
@@ -565,8 +565,8 @@ export const programs: Program[] = [
     fullName: 'SSI State Supplement',
     agency: 'SSA',
     status: 'partial',
-    coverage: 'CA, CO, MA, IL, NY, PA, NJ, NV, CT, MI, VT, RI, DE, HI',
-    notes: 'Only about 30 states have SSI state supplement programs',
+    coverage: 'All states except AZ, AR, TN, MS, WV, ND',
+    notes: 'SSI State Supplement programs exist in 45 states plus DC',
     stateImplementations: [
       {
         state: 'CA',
@@ -684,6 +684,223 @@ export const programs: Program[] = [
         status: 'notStarted',
         name: 'Hawaii SSP',
         fullName: 'Hawaii State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'AL',
+        status: 'notStarted',
+        name: 'Alabama SSP',
+        fullName: 'Alabama State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'AK',
+        status: 'notStarted',
+        name: 'Alaska SSP',
+        fullName: 'Alaska State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'DC',
+        status: 'notStarted',
+        name: 'DC SSP',
+        fullName: 'District of Columbia State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'FL',
+        status: 'notStarted',
+        name: 'Florida SSP',
+        fullName: 'Florida State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'GA',
+        status: 'notStarted',
+        name: 'Georgia SSP',
+        fullName: 'Georgia State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'ID',
+        status: 'notStarted',
+        name: 'Idaho SSP',
+        fullName: 'Idaho State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'IN',
+        status: 'notStarted',
+        name: 'Indiana SSP',
+        fullName: 'Indiana State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'IA',
+        status: 'notStarted',
+        name: 'Iowa SSP',
+        fullName: 'Iowa State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'KS',
+        status: 'notStarted',
+        name: 'Kansas SSP',
+        fullName: 'Kansas State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'KY',
+        status: 'notStarted',
+        name: 'Kentucky SSP',
+        fullName: 'Kentucky State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'LA',
+        status: 'notStarted',
+        name: 'Louisiana SSP',
+        fullName: 'Louisiana State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'ME',
+        status: 'notStarted',
+        name: 'Maine SSP',
+        fullName: 'Maine State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'MD',
+        status: 'notStarted',
+        name: 'Maryland SSP',
+        fullName: 'Maryland State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'MN',
+        status: 'notStarted',
+        name: 'Minnesota SSP',
+        fullName: 'Minnesota State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'MO',
+        status: 'notStarted',
+        name: 'Missouri SSP',
+        fullName: 'Missouri State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'MT',
+        status: 'notStarted',
+        name: 'Montana SSP',
+        fullName: 'Montana State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'NE',
+        status: 'notStarted',
+        name: 'Nebraska SSP',
+        fullName: 'Nebraska State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'NH',
+        status: 'notStarted',
+        name: 'New Hampshire SSP',
+        fullName: 'New Hampshire State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'NM',
+        status: 'notStarted',
+        name: 'New Mexico SSP',
+        fullName: 'New Mexico State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'NC',
+        status: 'notStarted',
+        name: 'North Carolina SSP',
+        fullName: 'North Carolina State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'OH',
+        status: 'notStarted',
+        name: 'Ohio SSP',
+        fullName: 'Ohio State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'OK',
+        status: 'notStarted',
+        name: 'Oklahoma SSP',
+        fullName: 'Oklahoma State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'OR',
+        status: 'notStarted',
+        name: 'Oregon SSP',
+        fullName: 'Oregon State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'SC',
+        status: 'notStarted',
+        name: 'South Carolina SSP',
+        fullName: 'South Carolina State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'SD',
+        status: 'notStarted',
+        name: 'South Dakota SSP',
+        fullName: 'South Dakota State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'TX',
+        status: 'notStarted',
+        name: 'Texas SSP',
+        fullName: 'Texas State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'UT',
+        status: 'notStarted',
+        name: 'Utah SSP',
+        fullName: 'Utah State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'VA',
+        status: 'notStarted',
+        name: 'Virginia SSP',
+        fullName: 'Virginia State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'WA',
+        status: 'notStarted',
+        name: 'Washington SSP',
+        fullName: 'Washington State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'WI',
+        status: 'notStarted',
+        name: 'Wisconsin SSP',
+        fullName: 'Wisconsin State Supplementary Payment',
+        githubLinks: {}
+      },
+      {
+        state: 'WY',
+        status: 'notStarted',
+        name: 'Wyoming SSP',
+        fullName: 'Wyoming State Supplementary Payment',
         githubLinks: {}
       },
     ],
