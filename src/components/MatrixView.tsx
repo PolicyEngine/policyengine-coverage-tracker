@@ -529,61 +529,80 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 padding: spacing.lg,
                 backgroundColor: colors.white,
               }}>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                  gap: spacing.md,
-                }}>
-                  {matrixData.stateRows.map((row, idx) => {
-                    // Get the state/jurisdiction this program applies to
-                    const applicableJurisdiction = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
-                    const status = row.jurisdictions.get(applicableJurisdiction) || null;
+                {(() => {
+                  // Group programs by state
+                  const programsByState = new Map<string, typeof matrixData.stateRows>();
+                  matrixData.stateRows.forEach(row => {
+                    const state = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
+                    if (!programsByState.has(state)) {
+                      programsByState.set(state, []);
+                    }
+                    programsByState.get(state)?.push(row);
+                  });
 
-                    return (
-                      <div
-                        key={`state-${idx}`}
-                        style={{
-                          padding: spacing.md,
-                          backgroundColor: colors.gray[50],
-                          borderRadius: spacing.radius.md,
-                          border: `1px solid ${colors.gray[200]}`,
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          transition: 'all 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.primary[50];
-                          e.currentTarget.style.borderColor = colors.primary[300];
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.gray[50];
-                          e.currentTarget.style.borderColor = colors.gray[200];
-                        }}
-                      >
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs, flex: 1 }}>
-                          <span style={{
-                            color: colors.secondary[900],
-                            fontSize: typography.fontSize.sm,
-                            fontWeight: typography.fontWeight.semibold,
-                          }}>{row.name}</span>
-                          <span style={{
-                            color: colors.text.secondary,
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: typography.fontWeight.medium,
-                          }}>{applicableJurisdiction}</span>
-                        </div>
-                        <div style={{
-                          fontSize: typography.fontSize.xl,
-                          color: getStatusColor(status),
-                          marginLeft: spacing.md,
-                        }}>
-                          {getStatusIcon(status)}
-                        </div>
+                  return Array.from(programsByState.entries()).map(([state, programs], stateIdx) => (
+                    <div key={`state-group-${state}`} style={{
+                      marginBottom: stateIdx < programsByState.size - 1 ? spacing['2xl'] : 0,
+                      paddingBottom: stateIdx < programsByState.size - 1 ? spacing.xl : 0,
+                      borderBottom: stateIdx < programsByState.size - 1 ? `2px solid ${colors.gray[200]}` : 'none',
+                    }}>
+                      <h3 style={{
+                        fontSize: typography.fontSize.sm,
+                        fontWeight: typography.fontWeight.bold,
+                        color: colors.secondary[900],
+                        marginBottom: spacing.sm,
+                        fontFamily: typography.fontFamily.primary,
+                      }}>{state}</h3>
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                        gap: spacing.md,
+                      }}>
+                        {programs.map((row, idx) => {
+                          const status = row.jurisdictions.get(state) || null;
+                          return (
+                            <div
+                              key={`state-${state}-${idx}`}
+                              style={{
+                                padding: spacing.md,
+                                backgroundColor: colors.gray[50],
+                                borderRadius: spacing.radius.md,
+                                border: `1px solid ${colors.gray[200]}`,
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                transition: 'all 0.2s ease',
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = colors.primary[50];
+                                e.currentTarget.style.borderColor = colors.primary[300];
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = colors.gray[50];
+                                e.currentTarget.style.borderColor = colors.gray[200];
+                              }}
+                            >
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs, flex: 1 }}>
+                                <span style={{
+                                  color: colors.secondary[900],
+                                  fontSize: typography.fontSize.sm,
+                                  fontWeight: typography.fontWeight.semibold,
+                                }}>{row.name}</span>
+                              </div>
+                              <div style={{
+                                fontSize: typography.fontSize.xl,
+                                color: getStatusColor(status),
+                                marginLeft: spacing.md,
+                              }}>
+                                {getStatusIcon(status)}
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  ));
+                })()}
               </div>
             )}
           </div>
@@ -629,61 +648,80 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 padding: spacing.lg,
                 backgroundColor: colors.white,
               }}>
-                <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
-                  gap: spacing.md,
-                }}>
-                  {matrixData.localRows.map((row, idx) => {
-                    // Get the state/jurisdiction this program applies to
-                    const applicableJurisdiction = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
-                    const status = row.jurisdictions.get(applicableJurisdiction) || null;
+                {(() => {
+                  // Group programs by state
+                  const programsByState = new Map<string, typeof matrixData.localRows>();
+                  matrixData.localRows.forEach(row => {
+                    const state = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
+                    if (!programsByState.has(state)) {
+                      programsByState.set(state, []);
+                    }
+                    programsByState.get(state)?.push(row);
+                  });
 
-                    return (
-                      <div
-                        key={`local-${idx}`}
-                        style={{
-                          padding: spacing.md,
-                          backgroundColor: colors.gray[50],
-                          borderRadius: spacing.radius.md,
-                          border: `1px solid ${colors.gray[200]}`,
-                          display: 'flex',
-                          justifyContent: 'space-between',
-                          alignItems: 'center',
-                          transition: 'all 0.2s ease',
-                        }}
-                        onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.primary[50];
-                          e.currentTarget.style.borderColor = colors.primary[300];
-                        }}
-                        onMouseLeave={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.gray[50];
-                          e.currentTarget.style.borderColor = colors.gray[200];
-                        }}
-                      >
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs, flex: 1 }}>
-                          <span style={{
-                            color: colors.secondary[900],
-                            fontSize: typography.fontSize.sm,
-                            fontWeight: typography.fontWeight.semibold,
-                          }}>{row.name}</span>
-                          <span style={{
-                            color: colors.text.secondary,
-                            fontSize: typography.fontSize.xs,
-                            fontWeight: typography.fontWeight.medium,
-                          }}>{applicableJurisdiction}</span>
-                        </div>
-                        <div style={{
-                          fontSize: typography.fontSize.xl,
-                          color: getStatusColor(status),
-                          marginLeft: spacing.md,
-                        }}>
-                          {getStatusIcon(status)}
-                        </div>
+                  return Array.from(programsByState.entries()).map(([state, programs], stateIdx) => (
+                    <div key={`local-group-${state}`} style={{
+                      marginBottom: stateIdx < programsByState.size - 1 ? spacing['2xl'] : 0,
+                      paddingBottom: stateIdx < programsByState.size - 1 ? spacing.xl : 0,
+                      borderBottom: stateIdx < programsByState.size - 1 ? `2px solid ${colors.gray[200]}` : 'none',
+                    }}>
+                      <h3 style={{
+                        fontSize: typography.fontSize.sm,
+                        fontWeight: typography.fontWeight.bold,
+                        color: colors.secondary[900],
+                        marginBottom: spacing.sm,
+                        fontFamily: typography.fontFamily.primary,
+                      }}>{state}</h3>
+                      <div style={{
+                        display: 'grid',
+                        gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))',
+                        gap: spacing.md,
+                      }}>
+                        {programs.map((row, idx) => {
+                          const status = row.jurisdictions.get(state) || null;
+                          return (
+                            <div
+                              key={`local-${state}-${idx}`}
+                              style={{
+                                padding: spacing.md,
+                                backgroundColor: colors.gray[50],
+                                borderRadius: spacing.radius.md,
+                                border: `1px solid ${colors.gray[200]}`,
+                                display: 'flex',
+                                justifyContent: 'space-between',
+                                alignItems: 'center',
+                                transition: 'all 0.2s ease',
+                              }}
+                              onMouseEnter={(e) => {
+                                e.currentTarget.style.backgroundColor = colors.primary[50];
+                                e.currentTarget.style.borderColor = colors.primary[300];
+                              }}
+                              onMouseLeave={(e) => {
+                                e.currentTarget.style.backgroundColor = colors.gray[50];
+                                e.currentTarget.style.borderColor = colors.gray[200];
+                              }}
+                            >
+                              <div style={{ display: 'flex', flexDirection: 'column', gap: spacing.xs, flex: 1 }}>
+                                <span style={{
+                                  color: colors.secondary[900],
+                                  fontSize: typography.fontSize.sm,
+                                  fontWeight: typography.fontWeight.semibold,
+                                }}>{row.name}</span>
+                              </div>
+                              <div style={{
+                                fontSize: typography.fontSize.xl,
+                                color: getStatusColor(status),
+                                marginLeft: spacing.md,
+                              }}>
+                                {getStatusIcon(status)}
+                              </div>
+                            </div>
+                          );
+                        })}
                       </div>
-                    );
-                  })}
-                </div>
+                    </div>
+                  ));
+                })()}
               </div>
             )}
           </div>
