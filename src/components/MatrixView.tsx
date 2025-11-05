@@ -490,13 +490,12 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         </div>
       )}
 
-      {/* State and Local Programs - No horizontal scroll */}
-      <div style={{
-        maxHeight: '50vh',
-        overflowY: 'auto',
-      }}>
-        {/* State Programs Section - Compact List */}
-        {matrixData.stateRows.length > 0 && (
+      {/* State Programs Section - Compact List with independent scroll */}
+      {matrixData.stateRows.length > 0 && (
+        <div style={{
+          maxHeight: '50vh',
+          overflowY: 'auto',
+        }}>
           <div>
             <div
               onClick={() => toggleSection('state')}
@@ -588,10 +587,15 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
               </div>
             )}
           </div>
-        )}
+        </div>
+      )}
 
-        {/* Local Programs Section - Compact List */}
-        {matrixData.localRows.length > 0 && (
+      {/* Local Programs Section - Compact List with independent scroll */}
+      {matrixData.localRows.length > 0 && (
+        <div style={{
+          maxHeight: '50vh',
+          overflowY: 'auto',
+        }}>
           <div>
             <div
               onClick={() => toggleSection('local')}
@@ -683,8 +687,8 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
               </div>
             )}
           </div>
-        )}
-      </div>
+        </div>
+      )}
     </div>
   );
 };
