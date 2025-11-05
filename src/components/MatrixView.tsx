@@ -63,12 +63,17 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     state: true,
     local: true,
   });
+  const [selectedState, setSelectedState] = React.useState<string | null>(null);
 
   const toggleSection = (section: 'federal' | 'state' | 'local') => {
     setExpandedSections(prev => ({
       ...prev,
       [section]: !prev[section],
     }));
+  };
+
+  const handleStateClick = (state: string) => {
+    setSelectedState(prev => prev === state ? null : state);
   };
 
   // Helper function to render program columns grouped by state
@@ -443,20 +448,26 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   Program
                 </th>
                 {matrixData.jurisdictions.map(jurisdiction => (
-                  <th key={jurisdiction} style={{
-                    padding: `${spacing.sm} ${spacing.xs}`,
-                    textAlign: 'center',
-                    fontWeight: typography.fontWeight.bold,
-                    fontSize: typography.fontSize.xs,
-                    fontFamily: typography.fontFamily.primary,
-                    minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                    maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                    backgroundColor: colors.primary[600],
-                    color: colors.white,
-                    borderRight: jurisdiction !== matrixData.jurisdictions[matrixData.jurisdictions.length - 1]
-                      ? `1px solid ${colors.primary[700]}`
-                      : 'none',
-                  }}>
+                  <th
+                    key={jurisdiction}
+                    onClick={() => jurisdiction !== 'Federal' && handleStateClick(jurisdiction)}
+                    style={{
+                      padding: `${spacing.sm} ${spacing.xs}`,
+                      textAlign: 'center',
+                      fontWeight: typography.fontWeight.bold,
+                      fontSize: typography.fontSize.xs,
+                      fontFamily: typography.fontFamily.primary,
+                      minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+                      maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+                      backgroundColor: selectedState === jurisdiction ? colors.primary[800] : colors.primary[600],
+                      color: colors.white,
+                      borderRight: jurisdiction !== matrixData.jurisdictions[matrixData.jurisdictions.length - 1]
+                        ? `1px solid ${colors.primary[700]}`
+                        : 'none',
+                      cursor: jurisdiction !== 'Federal' ? 'pointer' : 'default',
+                      transition: 'background-color 0.2s ease',
+                    }}
+                  >
                     {jurisdiction}
                   </th>
                 ))}
@@ -505,21 +516,39 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 }}>
                 </td>
               </tr>
-              {expandedSections.federal && matrixData.federalRows.map((row, idx) => (
+              {expandedSections.federal && matrixData.federalRows.map((row, idx) => {
+                // Check if this is a federal-only program (only has Federal jurisdiction)
+                const isFederalOnly = row.jurisdictions.size === 1 && row.jurisdictions.has('Federal');
+                const isFederalComplete = row.jurisdictions.get('Federal') === 'complete';
+
+                // Highlight row if:
+                // 1. Selected state has this program complete, OR
+                // 2. It's a federal-only program that is complete
+                const isRowHighlighted = selectedState && (
+                  row.jurisdictions.get(selectedState) === 'complete' ||
+                  (isFederalOnly && isFederalComplete)
+                );
+                return (
                 <tr key={`federal-${idx}`} style={{
-                  backgroundColor: idx % 2 === 0 ? colors.white : colors.background.secondary,
+                  backgroundColor: isRowHighlighted
+                    ? colors.primary[100]
+                    : idx % 2 === 0 ? colors.white : colors.background.secondary,
                 }}
                 onMouseEnter={(e) => {
                   e.currentTarget.style.backgroundColor = colors.primary[50];
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = idx % 2 === 0 ? colors.white : colors.background.secondary;
+                  e.currentTarget.style.backgroundColor = isRowHighlighted
+                    ? colors.primary[100]
+                    : idx % 2 === 0 ? colors.white : colors.background.secondary;
                 }}
                 >
                   <td style={{
                     position: 'sticky',
                     left: 0,
-                    backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
+                    backgroundColor: isRowHighlighted
+                      ? colors.primary[100]
+                      : idx % 2 === 0 ? colors.white : colors.gray[50],
                     padding: `${spacing.md} ${spacing.lg}`,
                     fontWeight: typography.fontWeight.medium,
                     borderRight: `2px solid ${colors.gray[200]}`,
@@ -531,7 +560,9 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                     e.currentTarget.style.backgroundColor = colors.primary[50];
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = idx % 2 === 0 ? colors.white : colors.gray[50];
+                    e.currentTarget.style.backgroundColor = isRowHighlighted
+                      ? colors.primary[100]
+                      : idx % 2 === 0 ? colors.white : colors.gray[50];
                   }}
                   >
                     <div style={{
@@ -548,6 +579,16 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   </td>
                   {matrixData.jurisdictions.map(jurisdiction => {
                     const status = row.jurisdictions.get(jurisdiction) || null;
+                    const isColumnHighlighted = selectedState === jurisdiction;
+                    const isCellComplete = status === 'complete';
+                    let cellBackground = getCellBackground(status);
+                    if (!cellBackground && !status) {
+                      cellBackground = colors.gray[50];
+                    }
+                    // Only highlight if column is selected AND cell is complete
+                    if (isColumnHighlighted && isCellComplete && !cellBackground) {
+                      cellBackground = colors.primary[200];
+                    }
                     return (
                       <td key={jurisdiction} style={{
                         padding: `${spacing.sm} 2px`,
@@ -556,16 +597,18 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                         borderRight: `1px solid ${colors.gray[100]}`,
                         color: getStatusColor(status),
                         fontSize: typography.fontSize.base,
-                        background: getCellBackground(status) || (status ? undefined : colors.gray[50]),
+                        background: cellBackground,
                         minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
                         maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+                        transition: 'background-color 0.2s ease',
                       }}>
                         {getStatusIcon(status)}
                       </td>
                     );
                   })}
                 </tr>
-              ))}
+                );
+              })}
             </tbody>
           </table>
         </div>
