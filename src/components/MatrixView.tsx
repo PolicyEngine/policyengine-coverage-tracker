@@ -63,6 +63,73 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     }));
   };
 
+  // Helper function to render program columns grouped by state
+  const renderProgramColumns = (rows: MatrixRow[], headerColor: string, keyPrefix: string) => {
+    const programsByState = new Map<string, MatrixRow[]>();
+    rows.forEach(row => {
+      const state = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
+      if (!programsByState.has(state)) {
+        programsByState.set(state, []);
+      }
+      programsByState.get(state)?.push(row);
+    });
+
+    return Array.from(programsByState.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([state, programs]) => (
+      <div key={`${keyPrefix}-col-${state}`} style={{ minWidth: '250px' }}>
+        <div style={{
+          backgroundColor: headerColor,
+          color: colors.white,
+          padding: spacing.sm,
+          fontWeight: typography.fontWeight.bold,
+          fontSize: typography.fontSize.sm,
+          textAlign: 'center',
+          fontFamily: typography.fontFamily.primary,
+          borderRadius: `${spacing.radius.md} ${spacing.radius.md} 0 0`,
+        }}>
+          {state}
+        </div>
+        <div style={{
+          border: `1px solid ${colors.gray[200]}`,
+          borderTop: 'none',
+          borderRadius: `0 0 ${spacing.radius.md} ${spacing.radius.md}`,
+        }}>
+          {programs.map((row, idx) => {
+            const status = row.jurisdictions.get(state) || null;
+            return (
+              <div
+                key={`${keyPrefix}-${state}-prog-${idx}`}
+                style={{
+                  padding: spacing.sm,
+                  borderBottom: idx < programs.length - 1 ? `1px solid ${colors.gray[200]}` : 'none',
+                  backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  gap: spacing.sm,
+                }}
+              >
+                <span style={{
+                  fontSize: typography.fontSize.sm,
+                  color: colors.secondary[900],
+                  fontWeight: typography.fontWeight.medium,
+                  flex: 1,
+                }}>
+                  {row.name}
+                </span>
+                <span style={{
+                  fontSize: typography.fontSize.base,
+                  color: getStatusColor(status),
+                }}>
+                  {getStatusIcon(status)}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+    ));
+  };
+
   const matrixData = useMemo<MatrixData>(() => {
     // All US states + DC
     const allStates = [
@@ -534,74 +601,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   gridTemplateColumns: 'repeat(5, 1fr)',
                   gap: spacing.md,
                 }}>
-                  {(() => {
-                    // Group programs by state
-                    const programsByState = new Map<string, typeof matrixData.stateRows>();
-                    matrixData.stateRows.forEach(row => {
-                      const state = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
-                      if (!programsByState.has(state)) {
-                        programsByState.set(state, []);
-                      }
-                      programsByState.get(state)?.push(row);
-                    });
-
-                    return Array.from(programsByState.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([state, programs]) => (
-                      <div key={`state-col-${state}`} style={{
-                        minWidth: '250px',
-                      }}>
-                        <div style={{
-                          backgroundColor: colors.primary[600],
-                          color: colors.white,
-                          padding: spacing.sm,
-                          fontWeight: typography.fontWeight.bold,
-                          fontSize: typography.fontSize.sm,
-                          textAlign: 'center',
-                          fontFamily: typography.fontFamily.primary,
-                          borderRadius: `${spacing.radius.md} ${spacing.radius.md} 0 0`,
-                        }}>
-                          {state}
-                        </div>
-                        <div style={{
-                          border: `1px solid ${colors.gray[200]}`,
-                          borderTop: 'none',
-                          borderRadius: `0 0 ${spacing.radius.md} ${spacing.radius.md}`,
-                        }}>
-                          {programs.map((row, idx) => {
-                            const status = row.jurisdictions.get(state) || null;
-                            return (
-                              <div
-                                key={`state-${state}-prog-${idx}`}
-                                style={{
-                                  padding: spacing.sm,
-                                  borderBottom: idx < programs.length - 1 ? `1px solid ${colors.gray[200]}` : 'none',
-                                  backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  alignItems: 'center',
-                                  gap: spacing.sm,
-                                }}
-                              >
-                                <span style={{
-                                  fontSize: typography.fontSize.sm,
-                                  color: colors.secondary[900],
-                                  fontWeight: typography.fontWeight.medium,
-                                  flex: 1,
-                                }}>
-                                  {row.name}
-                                </span>
-                                <span style={{
-                                  fontSize: typography.fontSize.base,
-                                  color: getStatusColor(status),
-                                }}>
-                                  {getStatusIcon(status)}
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ));
-                  })()}
+                  {renderProgramColumns(matrixData.stateRows, colors.primary[600], 'state')}
                 </div>
               </div>
             )}
@@ -653,74 +653,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   gridTemplateColumns: 'repeat(5, 1fr)',
                   gap: spacing.md,
                 }}>
-                  {(() => {
-                    // Group programs by state
-                    const programsByState = new Map<string, typeof matrixData.localRows>();
-                    matrixData.localRows.forEach(row => {
-                      const state = Array.from(row.jurisdictions.entries()).find(([_, status]) => status !== null)?.[0] || '';
-                      if (!programsByState.has(state)) {
-                        programsByState.set(state, []);
-                      }
-                      programsByState.get(state)?.push(row);
-                    });
-
-                    return Array.from(programsByState.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([state, programs]) => (
-                      <div key={`local-col-${state}`} style={{
-                        minWidth: '250px',
-                      }}>
-                        <div style={{
-                          backgroundColor: colors.secondary[700],
-                          color: colors.white,
-                          padding: spacing.sm,
-                          fontWeight: typography.fontWeight.bold,
-                          fontSize: typography.fontSize.sm,
-                          textAlign: 'center',
-                          fontFamily: typography.fontFamily.primary,
-                          borderRadius: `${spacing.radius.md} ${spacing.radius.md} 0 0`,
-                        }}>
-                          {state}
-                        </div>
-                        <div style={{
-                          border: `1px solid ${colors.gray[200]}`,
-                          borderTop: 'none',
-                          borderRadius: `0 0 ${spacing.radius.md} ${spacing.radius.md}`,
-                        }}>
-                          {programs.map((row, idx) => {
-                            const status = row.jurisdictions.get(state) || null;
-                            return (
-                              <div
-                                key={`local-${state}-prog-${idx}`}
-                                style={{
-                                  padding: spacing.sm,
-                                  borderBottom: idx < programs.length - 1 ? `1px solid ${colors.gray[200]}` : 'none',
-                                  backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
-                                  display: 'flex',
-                                  justifyContent: 'space-between',
-                                  alignItems: 'center',
-                                  gap: spacing.sm,
-                                }}
-                              >
-                                <span style={{
-                                  fontSize: typography.fontSize.sm,
-                                  color: colors.secondary[900],
-                                  fontWeight: typography.fontWeight.medium,
-                                  flex: 1,
-                                }}>
-                                  {row.name}
-                                </span>
-                                <span style={{
-                                  fontSize: typography.fontSize.base,
-                                  color: getStatusColor(status),
-                                }}>
-                                  {getStatusIcon(status)}
-                                </span>
-                              </div>
-                            );
-                          })}
-                        </div>
-                      </div>
-                    ));
-                  })()}
+                  {renderProgramColumns(matrixData.localRows, colors.secondary[700], 'local')}
                 </div>
               </div>
             )}
