@@ -1,9 +1,11 @@
 import React, { useMemo } from 'react';
 import { Program, CoverageStatus } from '../types/Program';
+import { Country } from '../types/Country';
 import { colors, typography, spacing } from '../designTokens';
 
 interface MatrixViewProps {
   programs: Program[];
+  country: Country;
 }
 
 const getStatusIcon = (status: CoverageStatus | null) => {
@@ -57,7 +59,7 @@ interface MatrixData {
   localRows: MatrixRow[];
 }
 
-const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
+const MatrixView: React.FC<MatrixViewProps> = ({ programs, country }) => {
   const [expandedSections, setExpandedSections] = React.useState({
     federal: true,
     state: true,
@@ -144,16 +146,10 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
   };
 
   const matrixData = useMemo<MatrixData>(() => {
-    // All US states + DC
-    const allStates = [
-      'AL', 'AK', 'AZ', 'AR', 'CA', 'CO', 'CT', 'DE', 'DC', 'FL',
-      'GA', 'HI', 'ID', 'IL', 'IN', 'IA', 'KS', 'KY', 'LA', 'ME',
-      'MD', 'MA', 'MI', 'MN', 'MS', 'MO', 'MT', 'NE', 'NV', 'NH',
-      'NJ', 'NM', 'NY', 'NC', 'ND', 'OH', 'OK', 'OR', 'PA', 'RI',
-      'SC', 'SD', 'TN', 'TX', 'UT', 'VT', 'VA', 'WA', 'WV', 'WI', 'WY'
-    ];
+    // Get jurisdiction codes from country configuration
+    const allStates = country.jurisdictions.map(j => j.code);
 
-    const jurisdictions = ['Federal', ...allStates];
+    const jurisdictions = [country.federalLabel, ...allStates];
 
     // Programs that apply to all states
     const universalStatePrograms = new Set([
@@ -234,9 +230,9 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       // Special handling for income taxes
       if (program.id === 'federal_income_tax') {
         // Federal income tax only applies at federal level
-        jurisdictionMap.set('Federal', program.status);
-      } else if (program.id === 'state_income_tax') {
-        // State income tax does NOT apply at federal level, only states
+        jurisdictionMap.set(country.federalLabel, program.status);
+      } else if (program.id === 'state_income_tax' || program.id === 'provincial_income_tax') {
+        // State/Provincial income tax does NOT apply at federal level, only states
         allStates.forEach(state => {
           jurisdictionMap.set(state, program.status);
         });
@@ -251,7 +247,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         }
       } else if (program.id === 'ccdf' || program.id === 'liheap') {
         // CCDF and LIHEAP apply at federal level
-        jurisdictionMap.set('Federal', program.status);
+        jurisdictionMap.set(country.federalLabel, program.status);
         // Set all states as notStarted by default
         allStates.forEach(state => {
           jurisdictionMap.set(state, 'notStarted');
@@ -266,7 +262,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         // Federal status for other programs
         if (!program.stateImplementations || program.agency !== 'State') {
           if (level === 'federal') {
-            jurisdictionMap.set('Federal', program.status);
+            jurisdictionMap.set(country.federalLabel, program.status);
           } else if (level === 'state' && program.coverage && program.coverage.length === 2) {
             // State-specific program
             jurisdictionMap.set(program.coverage, program.status);
@@ -335,7 +331,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     localRows.sort(sortByJurisdiction);
 
     return { rows, jurisdictions, federalRows, stateRows, localRows };
-  }, [programs]);
+  }, [programs, country]);
 
   return (
     <div style={{
@@ -450,21 +446,21 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 {matrixData.jurisdictions.map(jurisdiction => (
                   <th
                     key={jurisdiction}
-                    onClick={() => jurisdiction !== 'Federal' && handleStateClick(jurisdiction)}
+                    onClick={() => jurisdiction !== country.federalLabel && handleStateClick(jurisdiction)}
                     style={{
                       padding: `${spacing.sm} ${spacing.xs}`,
                       textAlign: 'center',
                       fontWeight: typography.fontWeight.bold,
                       fontSize: typography.fontSize.xs,
                       fontFamily: typography.fontFamily.primary,
-                      minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                      maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+                      minWidth: jurisdiction === country.federalLabel ? '70px' : '45px',
+                      maxWidth: jurisdiction === country.federalLabel ? '70px' : '45px',
                       backgroundColor: selectedState === jurisdiction ? colors.primary[800] : colors.primary[600],
                       color: colors.white,
                       borderRight: jurisdiction !== matrixData.jurisdictions[matrixData.jurisdictions.length - 1]
                         ? `1px solid ${colors.primary[700]}`
                         : 'none',
-                      cursor: jurisdiction !== 'Federal' ? 'pointer' : 'default',
+                      cursor: jurisdiction !== country.federalLabel ? 'pointer' : 'default',
                       transition: 'background-color 0.2s ease',
                     }}
                   >
@@ -518,8 +514,8 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
               </tr>
               {expandedSections.federal && matrixData.federalRows.map((row, idx) => {
                 // Check if this is a federal-only program (only has Federal jurisdiction)
-                const isFederalOnly = row.jurisdictions.size === 1 && row.jurisdictions.has('Federal');
-                const isFederalComplete = row.jurisdictions.get('Federal') === 'complete';
+                const isFederalOnly = row.jurisdictions.size === 1 && row.jurisdictions.has(country.federalLabel);
+                const isFederalComplete = row.jurisdictions.get(country.federalLabel) === 'complete';
 
                 // Highlight row if:
                 // 1. Selected state has this program complete, OR
@@ -598,8 +594,8 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                         color: getStatusColor(status),
                         fontSize: typography.fontSize.base,
                         background: cellBackground,
-                        minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                        maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
+                        minWidth: jurisdiction === country.federalLabel ? '70px' : '45px',
+                        maxWidth: jurisdiction === country.federalLabel ? '70px' : '45px',
                         transition: 'background-color 0.2s ease',
                       }}>
                         {getStatusIcon(status)}

@@ -1,5 +1,11 @@
 export type CoverageStatus = 'complete' | 'partial' | 'inProgress' | 'notStarted';
-export type Agency = 'USDA' | 'HHS' | 'SSA' | 'IRS' | 'HUD' | 'DOE' | 'ED' | 'DOL' | 'FCC' | 'ACA' | 'State' | 'Local';
+export type Agency =
+  // US Agencies
+  | 'USDA' | 'HHS' | 'SSA' | 'IRS' | 'HUD' | 'DOE' | 'ED' | 'DOL' | 'FCC' | 'ACA' | 'State' | 'Local'
+  // Canada Agencies
+  | 'CRA' | 'ESDC' | 'Province'
+  // UK Agencies
+  | 'DWP' | 'HMRC' | 'DfE' | 'Scottish Government';
 
 export interface StateImplementation {
   state: string;
