@@ -7,7 +7,7 @@ interface MatrixViewProps {
 }
 
 const getStatusIcon = (status: CoverageStatus | null) => {
-  if (!status) return '-';
+  if (!status) return '';
   switch (status) {
     case 'complete':
       return '✓';
@@ -18,6 +18,14 @@ const getStatusIcon = (status: CoverageStatus | null) => {
     case 'notStarted':
       return '○';
   }
+};
+
+const getCellBackground = (status: CoverageStatus | null) => {
+  if (!status) {
+    // Single diagonal line going all the way through, descending
+    return `linear-gradient(-45deg, transparent calc(50% - 0.5px), ${colors.gray[300]} calc(50% - 0.5px), ${colors.gray[300]} calc(50% + 0.5px), transparent calc(50% + 0.5px))`;
+  }
+  return undefined;
 };
 
 const getStatusColor = (status: CoverageStatus | null) => {
@@ -334,16 +342,6 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         flexWrap: 'wrap',
         boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
       }}>
-        <div style={{
-          fontSize: '10px',
-          fontWeight: typography.fontWeight.bold,
-          color: colors.secondary[900],
-          textTransform: 'uppercase',
-          letterSpacing: '0.5px',
-          fontFamily: typography.fontFamily.primary,
-        }}>
-          Legend:
-        </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
           <span style={{ fontSize: typography.fontSize.base, color: colors.primary[600] }}>✓</span>
           <span style={{
@@ -381,7 +379,12 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
           }}>Not Started</span>
         </div>
         <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-          <span style={{ fontSize: typography.fontSize.base, color: colors.gray[300] }}>-</span>
+          <div style={{
+            width: '16px',
+            height: '16px',
+            background: `linear-gradient(-45deg, transparent calc(50% - 0.5px), ${colors.gray[300]} calc(50% - 0.5px), ${colors.gray[300]} calc(50% + 0.5px), transparent calc(50% + 0.5px))`,
+            border: `1px solid ${colors.gray[200]}`,
+          }} />
           <span style={{
             fontSize: typography.fontSize.xs,
             color: colors.text.primary,
@@ -542,7 +545,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                         borderRight: `1px solid ${colors.gray[100]}`,
                         color: getStatusColor(status),
                         fontSize: typography.fontSize.base,
-                        backgroundColor: status ? undefined : colors.gray[50],
+                        background: getCellBackground(status) || (status ? undefined : colors.gray[50]),
                         minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
                         maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
                       }}>
