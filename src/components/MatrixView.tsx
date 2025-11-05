@@ -252,6 +252,78 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       border: `1px solid ${colors.border.light}`,
       overflow: 'hidden',
     }}>
+      {/* Legend - Sticky at top */}
+      <div style={{
+        position: 'sticky',
+        top: 0,
+        zIndex: 10,
+        padding: `${spacing.sm} ${spacing.md}`,
+        backgroundColor: colors.white,
+        borderBottom: `1px solid ${colors.gray[200]}`,
+        display: 'flex',
+        gap: spacing.md,
+        justifyContent: 'center',
+        alignItems: 'center',
+        flexWrap: 'wrap',
+        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+      }}>
+        <div style={{
+          fontSize: '10px',
+          fontWeight: typography.fontWeight.bold,
+          color: colors.secondary[900],
+          textTransform: 'uppercase',
+          letterSpacing: '0.5px',
+          fontFamily: typography.fontFamily.primary,
+        }}>
+          Legend:
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <span style={{ fontSize: typography.fontSize.base, color: colors.primary[600] }}>✓</span>
+          <span style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.text.primary,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.body,
+          }}>Complete</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <span style={{ fontSize: typography.fontSize.base, color: colors.primary[400] }}>◐</span>
+          <span style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.text.primary,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.body,
+          }}>Partial</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <span style={{ fontSize: typography.fontSize.base, color: colors.blue[500] }}>⟳</span>
+          <span style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.text.primary,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.body,
+          }}>In Progress</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <span style={{ fontSize: typography.fontSize.base, color: colors.gray[400] }}>○</span>
+          <span style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.text.primary,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.body,
+          }}>Not Started</span>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+          <span style={{ fontSize: typography.fontSize.base, color: colors.gray[300] }}>-</span>
+          <span style={{
+            fontSize: typography.fontSize.xs,
+            color: colors.text.primary,
+            fontWeight: typography.fontWeight.medium,
+            fontFamily: typography.fontFamily.body,
+          }}>Not Applicable</span>
+        </div>
+      </div>
+
       {/* Federal Programs Section with horizontal scroll */}
       {matrixData.federalRows.length > 0 && (
         <div style={{
@@ -612,74 +684,6 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
             )}
           </div>
         )}
-      </div>
-
-      {/* Legend */}
-      <div style={{
-        padding: spacing.xl,
-        backgroundColor: colors.gray[50],
-        borderTop: `2px solid ${colors.gray[200]}`,
-        display: 'flex',
-        gap: spacing['2xl'],
-        justifyContent: 'center',
-        alignItems: 'center',
-        flexWrap: 'wrap',
-      }}>
-        <div style={{
-          fontSize: typography.fontSize.xs,
-          fontWeight: typography.fontWeight.bold,
-          color: colors.secondary[900],
-          textTransform: 'uppercase',
-          letterSpacing: '0.5px',
-          fontFamily: typography.fontFamily.primary,
-        }}>
-          Legend:
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span style={{ fontSize: typography.fontSize.xl, color: colors.primary[600] }}>✓</span>
-          <span style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.primary,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
-          }}>Complete</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span style={{ fontSize: typography.fontSize.xl, color: colors.primary[400] }}>◐</span>
-          <span style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.primary,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
-          }}>Partial</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span style={{ fontSize: typography.fontSize.xl, color: colors.blue[500] }}>⟳</span>
-          <span style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.primary,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
-          }}>In Progress</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span style={{ fontSize: typography.fontSize.xl, color: colors.gray[400] }}>○</span>
-          <span style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.primary,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
-          }}>Not Started</span>
-        </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
-          <span style={{ fontSize: typography.fontSize.xl, color: colors.gray[300] }}>-</span>
-          <span style={{
-            fontSize: typography.fontSize.sm,
-            color: colors.text.primary,
-            fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
-          }}>Not Applicable</span>
-        </div>
       </div>
     </div>
   );
