@@ -187,7 +187,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
               stateCode = 'CA';
             } else if (program.coverage.includes('New York')) {
               stateCode = 'NY';
-            } else if (program.coverage.includes('Texas') || program.coverage.includes('Dallas')) {
+            } else if (program.coverage.includes('Texas') || program.coverage.includes('Dallas') || program.coverage.includes('Harris')) {
               stateCode = 'TX';
             } else if (program.coverage.includes('Illinois') || program.coverage.includes('Chicago')) {
               stateCode = 'IL';

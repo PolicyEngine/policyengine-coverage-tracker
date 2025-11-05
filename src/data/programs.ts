@@ -1050,6 +1050,20 @@ export const programs: Program[] = [
     },
   },
   {
+    id: 'ma_eaedc',
+    name: 'Massachusetts EAEDC',
+    fullName: 'Emergency Aid to the Elderly, Disabled, and Children',
+    agency: 'State',
+    status: 'complete',
+    coverage: 'MA',
+    variable: 'ma_eaedc',
+    githubLinks: {
+      parameters: `${GITHUB_BASE}/parameters/gov/states/ma/dta/tcap/eaedc`,
+      variables: `${GITHUB_BASE}/variables/gov/states/ma/dta/tcap/eaedc`,
+      tests: `${TESTS_BASE}/policy/baseline/gov/states/ma/dta/tcap/eaedc`,
+    },
+  },
+  {
     id: 'ny_drive_clean_rebate',
     name: 'NY Drive Clean Rebate',
     fullName: '',
