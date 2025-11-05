@@ -430,7 +430,7 @@ export const programs: Program[] = [
       },
       {
         state: 'MA',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Massachusetts CCFA',
         fullName: 'Massachusetts Child Care Financial Assistance',
         githubLinks: {},
@@ -530,7 +530,7 @@ export const programs: Program[] = [
       },
       {
         state: 'IL',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Illinois LIHEAP',
         fullName: 'Illinois Low Income Home Energy Assistance Program',
         variable: 'il_liheap',

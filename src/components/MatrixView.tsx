@@ -154,7 +154,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     const universalStatePrograms = new Set([
       'snap', 'tanf', 'medicaid', 'wic', 'state_income_tax',
       'medicare', 'eitc', 'ctc',
-      'ccdf', 'liheap', 'aca_subsidies',
+      'aca_subsidies',
       'payroll_taxes', 'school_meals', 'csfp', 'chip'
     ]);
 
@@ -239,6 +239,19 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         // SSI State Supplement does NOT apply at federal level, only states with implementations
         // Leave Federal column as null (will show as Not Applicable)
         // Process state implementations
+        if (program.stateImplementations) {
+          program.stateImplementations.forEach(impl => {
+            jurisdictionMap.set(impl.state, impl.status);
+          });
+        }
+      } else if (program.id === 'ccdf' || program.id === 'liheap') {
+        // CCDF and LIHEAP apply at federal level
+        jurisdictionMap.set('Federal', program.status);
+        // Set all states as notStarted by default
+        allStates.forEach(state => {
+          jurisdictionMap.set(state, 'notStarted');
+        });
+        // Override with actual state implementation statuses
         if (program.stateImplementations) {
           program.stateImplementations.forEach(impl => {
             jurisdictionMap.set(impl.state, impl.status);
