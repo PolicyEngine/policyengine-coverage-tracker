@@ -160,6 +160,15 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         allStates.forEach(state => {
           jurisdictionMap.set(state, program.status);
         });
+      } else if (program.id === 'ssi_state_supplement') {
+        // SSI State Supplement does NOT apply at federal level, only states with implementations
+        // Leave Federal column as null (will show as Not Applicable)
+        // Process state implementations
+        if (program.stateImplementations) {
+          program.stateImplementations.forEach(impl => {
+            jurisdictionMap.set(impl.state, impl.status);
+          });
+        }
       } else {
         // Federal status for other programs
         if (!program.stateImplementations || program.agency !== 'State') {
