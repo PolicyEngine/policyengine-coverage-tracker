@@ -88,16 +88,14 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
     });
 
     return Array.from(programsByState.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([state, statePrograms]) => {
-      // Adjust width based on number of programs
-      const programCount = statePrograms.length;
-      const minWidth = programCount <= 2 ? '180px' : programCount <= 4 ? '220px' : '260px';
-
       return (
         <div
           key={`${keyPrefix}-col-${state}`}
           style={{
-            minWidth: minWidth,
-            flex: programCount <= 2 ? '0 0 auto' : '1 1 auto',
+            width: '240px',
+            flexShrink: 0,
+            height: 'fit-content',
+            alignSelf: 'flex-start',
             borderRadius: '12px',
             overflow: 'hidden',
             boxShadow: 'var(--shadow-elevation-low)',
@@ -769,8 +767,8 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 backgroundColor: colors.background.secondary,
               }}>
                 <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                  display: 'flex',
+                  flexWrap: 'wrap',
                   gap: spacing.lg,
                 }}>
                   {renderProgramColumns(matrixData.stateRows, colors.primary[600], 'state')}
@@ -842,8 +840,8 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 backgroundColor: colors.background.secondary,
               }}>
                 <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                  display: 'flex',
+                  flexWrap: 'wrap',
                   gap: spacing.lg,
                 }}>
                   {renderProgramColumns(matrixData.localRows, colors.secondary[700], 'local')}
