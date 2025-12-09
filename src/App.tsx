@@ -244,20 +244,27 @@ function App() {
             </div>
 
             {/* Navigation tabs in header */}
-            <div style={{ display: 'flex', gap: spacing.xs }}>
+            <div style={{
+              display: 'flex',
+              gap: '4px',
+              backgroundColor: colors.gray[100],
+              padding: '4px',
+              borderRadius: '12px',
+            }}>
               <button
                 onClick={() => setDisplayMode('overview')}
                 style={{
-                  padding: `${spacing.sm} ${spacing.lg}`,
+                  padding: `${spacing.sm} ${spacing.xl}`,
                   border: 'none',
-                  backgroundColor: displayMode === 'overview' ? colors.primary[50] : 'transparent',
+                  backgroundColor: displayMode === 'overview' ? colors.white : 'transparent',
                   color: displayMode === 'overview' ? colors.primary[700] : colors.text.secondary,
                   borderRadius: '8px',
                   fontSize: typography.fontSize.sm,
-                  fontWeight: displayMode === 'overview' ? typography.fontWeight.semibold : typography.fontWeight.medium,
+                  fontWeight: typography.fontWeight.semibold,
                   cursor: 'pointer',
                   fontFamily: typography.fontFamily.primary,
                   transition: 'all 0.2s ease',
+                  boxShadow: displayMode === 'overview' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                 }}
               >
                 Overview
@@ -265,16 +272,17 @@ function App() {
               <button
                 onClick={() => setDisplayMode('developer')}
                 style={{
-                  padding: `${spacing.sm} ${spacing.lg}`,
+                  padding: `${spacing.sm} ${spacing.xl}`,
                   border: 'none',
-                  backgroundColor: displayMode === 'developer' ? colors.primary[50] : 'transparent',
+                  backgroundColor: displayMode === 'developer' ? colors.white : 'transparent',
                   color: displayMode === 'developer' ? colors.primary[700] : colors.text.secondary,
                   borderRadius: '8px',
                   fontSize: typography.fontSize.sm,
-                  fontWeight: displayMode === 'developer' ? typography.fontWeight.semibold : typography.fontWeight.medium,
+                  fontWeight: typography.fontWeight.semibold,
                   cursor: 'pointer',
                   fontFamily: typography.fontFamily.primary,
                   transition: 'all 0.2s ease',
+                  boxShadow: displayMode === 'developer' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
                 }}
               >
                 Program Details
