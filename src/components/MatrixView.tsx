@@ -338,76 +338,120 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
   }, [programs]);
 
   return (
-    <div style={{
-      backgroundColor: colors.white,
-      borderRadius: spacing.radius.lg,
-      boxShadow: spacing.shadow.md,
-      border: `1px solid ${colors.border.light}`,
-      overflow: 'hidden',
-    }}>
+    <div
+      className="animate-fade-in-up"
+      style={{
+        backgroundColor: colors.white,
+        borderRadius: '16px',
+        boxShadow: 'var(--shadow-elevation-low)',
+        border: `1px solid ${colors.border.light}`,
+        overflow: 'hidden',
+      }}
+    >
       {/* Legend - Sticky at top */}
       <div style={{
         position: 'sticky',
         top: 0,
         zIndex: 10,
-        padding: `${spacing.sm} ${spacing.md}`,
+        padding: `${spacing.md} ${spacing.lg}`,
         backgroundColor: colors.white,
         borderBottom: `1px solid ${colors.gray[200]}`,
         display: 'flex',
-        gap: spacing.md,
+        gap: spacing.xl,
         justifyContent: 'center',
         alignItems: 'center',
         flexWrap: 'wrap',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-          <span style={{ fontSize: typography.fontSize.base, color: colors.primary[600] }}>✓</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
+            backgroundColor: `${colors.primary[600]}15`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <span style={{ fontSize: typography.fontSize.sm, color: colors.primary[600] }}>✓</span>
+          </div>
           <span style={{
-            fontSize: typography.fontSize.xs,
+            fontSize: typography.fontSize.sm,
             color: colors.text.primary,
             fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
+            fontFamily: typography.fontFamily.primary,
           }}>Complete</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-          <span style={{ fontSize: typography.fontSize.base, color: colors.primary[400] }}>◐</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
+            backgroundColor: `${colors.primary[400]}15`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <span style={{ fontSize: typography.fontSize.sm, color: colors.primary[400] }}>◐</span>
+          </div>
           <span style={{
-            fontSize: typography.fontSize.xs,
+            fontSize: typography.fontSize.sm,
             color: colors.text.primary,
             fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
+            fontFamily: typography.fontFamily.primary,
           }}>Partial</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-          <span style={{ fontSize: typography.fontSize.base, color: colors.blue[500] }}>⟳</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
+            backgroundColor: `${colors.blue[500]}15`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <span className="status-in-progress" style={{ fontSize: typography.fontSize.sm, color: colors.blue[500] }}>⟳</span>
+          </div>
           <span style={{
-            fontSize: typography.fontSize.xs,
+            fontSize: typography.fontSize.sm,
             color: colors.text.primary,
             fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
+            fontFamily: typography.fontFamily.primary,
           }}>In Progress</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-          <span style={{ fontSize: typography.fontSize.base, color: colors.gray[400] }}>○</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
+            backgroundColor: colors.gray[100],
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <span style={{ fontSize: typography.fontSize.sm, color: colors.gray[400] }}>○</span>
+          </div>
           <span style={{
-            fontSize: typography.fontSize.xs,
+            fontSize: typography.fontSize.sm,
             color: colors.text.primary,
             fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
+            fontFamily: typography.fontFamily.primary,
           }}>Not Started</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
           <div style={{
-            width: '16px',
-            height: '16px',
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
             background: `linear-gradient(-45deg, transparent calc(50% - 0.5px), ${colors.gray[300]} calc(50% - 0.5px), ${colors.gray[300]} calc(50% + 0.5px), transparent calc(50% + 0.5px))`,
             border: `1px solid ${colors.gray[200]}`,
           }} />
           <span style={{
-            fontSize: typography.fontSize.xs,
+            fontSize: typography.fontSize.sm,
             color: colors.text.primary,
             fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
+            fontFamily: typography.fontFamily.primary,
           }}>Not Applicable</span>
         </div>
       </div>
