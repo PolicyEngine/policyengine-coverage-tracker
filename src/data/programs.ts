@@ -1216,7 +1216,7 @@ export const programs: Program[] = [
     status: 'complete',
     coverage: 'IL',
     variable: 'il_fpp_eligible',
-    notes: 'Income limit at 213% FPL',
+    notes: 'Only includes eligibility rules',
     githubLinks: {
       parameters: `${GITHUB_BASE}/parameters/gov/states/il/hfs/fpp`,
       variables: `${GITHUB_BASE}/variables/gov/states/il/hfs/fpp`,
