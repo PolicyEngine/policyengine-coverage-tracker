@@ -87,60 +87,100 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       programsByState.get(state)?.push(row);
     });
 
-    return Array.from(programsByState.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([state, programs]) => (
-      <div key={`${keyPrefix}-col-${state}`} style={{ minWidth: '250px' }}>
-        <div style={{
-          backgroundColor: headerColor,
-          color: colors.white,
-          padding: spacing.sm,
-          fontWeight: typography.fontWeight.bold,
-          fontSize: typography.fontSize.sm,
-          textAlign: 'center',
-          fontFamily: typography.fontFamily.primary,
-          borderRadius: `${spacing.radius.md} ${spacing.radius.md} 0 0`,
-        }}>
-          {state}
+    return Array.from(programsByState.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([state, statePrograms]) => {
+      return (
+        <div
+          key={`${keyPrefix}-col-${state}`}
+          style={{
+            width: '240px',
+            flexShrink: 0,
+            height: 'fit-content',
+            alignSelf: 'flex-start',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            boxShadow: 'var(--shadow-elevation-low)',
+            border: `1px solid ${colors.border.light}`,
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = 'var(--shadow-elevation-medium)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = 'var(--shadow-elevation-low)';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
+        >
+          <div style={{
+            backgroundColor: headerColor,
+            color: colors.white,
+            padding: `${spacing.sm} ${spacing.md}`,
+            fontWeight: typography.fontWeight.bold,
+            fontSize: typography.fontSize.sm,
+            textAlign: 'center',
+            fontFamily: typography.fontFamily.primary,
+            letterSpacing: '0.5px',
+          }}>
+            {state}
+          </div>
+          <div style={{
+            backgroundColor: colors.white,
+          }}>
+            {statePrograms.map((row, idx) => {
+              const status = row.jurisdictions.get(state) || null;
+              const statusColor = getStatusColor(status);
+              return (
+                <div
+                  key={`${keyPrefix}-${state}-prog-${idx}`}
+                  style={{
+                    padding: `${spacing.sm} ${spacing.md}`,
+                    borderBottom: idx < statePrograms.length - 1 ? `1px solid ${colors.gray[100]}` : 'none',
+                    backgroundColor: colors.white,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: spacing.sm,
+                    transition: 'background-color 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.background.secondary;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.white;
+                  }}
+                >
+                  <span style={{
+                    fontSize: typography.fontSize.sm,
+                    color: colors.secondary[900],
+                    fontWeight: typography.fontWeight.medium,
+                    flex: 1,
+                  }}>
+                    {row.name}
+                  </span>
+                  <div style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '6px',
+                    backgroundColor: `${statusColor}15`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <span style={{
+                      fontSize: typography.fontSize.sm,
+                      color: statusColor,
+                    }}>
+                      {getStatusIcon(status)}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div style={{
-          border: `1px solid ${colors.gray[200]}`,
-          borderTop: 'none',
-          borderRadius: `0 0 ${spacing.radius.md} ${spacing.radius.md}`,
-        }}>
-          {programs.map((row, idx) => {
-            const status = row.jurisdictions.get(state) || null;
-            return (
-              <div
-                key={`${keyPrefix}-${state}-prog-${idx}`}
-                style={{
-                  padding: spacing.sm,
-                  borderBottom: idx < programs.length - 1 ? `1px solid ${colors.gray[200]}` : 'none',
-                  backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  gap: spacing.sm,
-                }}
-              >
-                <span style={{
-                  fontSize: typography.fontSize.sm,
-                  color: colors.secondary[900],
-                  fontWeight: typography.fontWeight.medium,
-                  flex: 1,
-                }}>
-                  {row.name}
-                </span>
-                <span style={{
-                  fontSize: typography.fontSize.base,
-                  color: getStatusColor(status),
-                }}>
-                  {getStatusIcon(status)}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    ));
+      );
+    });
   };
 
   const matrixData = useMemo<MatrixData>(() => {
@@ -338,76 +378,120 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
   }, [programs]);
 
   return (
-    <div style={{
-      backgroundColor: colors.white,
-      borderRadius: spacing.radius.lg,
-      boxShadow: spacing.shadow.md,
-      border: `1px solid ${colors.border.light}`,
-      overflow: 'hidden',
-    }}>
+    <div
+      className="animate-fade-in-up"
+      style={{
+        backgroundColor: colors.white,
+        borderRadius: '16px',
+        boxShadow: 'var(--shadow-elevation-low)',
+        border: `1px solid ${colors.border.light}`,
+        overflow: 'hidden',
+      }}
+    >
       {/* Legend - Sticky at top */}
       <div style={{
         position: 'sticky',
         top: 0,
         zIndex: 10,
-        padding: `${spacing.sm} ${spacing.md}`,
+        padding: `${spacing.md} ${spacing.lg}`,
         backgroundColor: colors.white,
         borderBottom: `1px solid ${colors.gray[200]}`,
         display: 'flex',
-        gap: spacing.md,
+        gap: spacing.xl,
         justifyContent: 'center',
         alignItems: 'center',
         flexWrap: 'wrap',
-        boxShadow: '0 1px 3px rgba(0,0,0,0.05)',
+        boxShadow: '0 2px 8px rgba(0,0,0,0.04)',
       }}>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-          <span style={{ fontSize: typography.fontSize.base, color: colors.primary[600] }}>✓</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
+            backgroundColor: `${colors.primary[600]}15`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <span style={{ fontSize: typography.fontSize.sm, color: colors.primary[600] }}>✓</span>
+          </div>
           <span style={{
-            fontSize: typography.fontSize.xs,
+            fontSize: typography.fontSize.sm,
             color: colors.text.primary,
             fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
+            fontFamily: typography.fontFamily.primary,
           }}>Complete</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-          <span style={{ fontSize: typography.fontSize.base, color: colors.primary[400] }}>◐</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
+            backgroundColor: `${colors.primary[400]}15`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <span style={{ fontSize: typography.fontSize.sm, color: colors.primary[400] }}>◐</span>
+          </div>
           <span style={{
-            fontSize: typography.fontSize.xs,
+            fontSize: typography.fontSize.sm,
             color: colors.text.primary,
             fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
+            fontFamily: typography.fontFamily.primary,
           }}>Partial</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-          <span style={{ fontSize: typography.fontSize.base, color: colors.blue[500] }}>⟳</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
+            backgroundColor: `${colors.blue[500]}15`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <span className="status-in-progress" style={{ fontSize: typography.fontSize.sm, color: colors.blue[500] }}>⟳</span>
+          </div>
           <span style={{
-            fontSize: typography.fontSize.xs,
+            fontSize: typography.fontSize.sm,
             color: colors.text.primary,
             fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
+            fontFamily: typography.fontFamily.primary,
           }}>In Progress</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
-          <span style={{ fontSize: typography.fontSize.base, color: colors.gray[400] }}>○</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
+          <div style={{
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
+            backgroundColor: colors.gray[100],
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <span style={{ fontSize: typography.fontSize.sm, color: colors.gray[400] }}>○</span>
+          </div>
           <span style={{
-            fontSize: typography.fontSize.xs,
+            fontSize: typography.fontSize.sm,
             color: colors.text.primary,
             fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
+            fontFamily: typography.fontFamily.primary,
           }}>Not Started</span>
         </div>
-        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xs }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
           <div style={{
-            width: '16px',
-            height: '16px',
+            width: '24px',
+            height: '24px',
+            borderRadius: '6px',
             background: `linear-gradient(-45deg, transparent calc(50% - 0.5px), ${colors.gray[300]} calc(50% - 0.5px), ${colors.gray[300]} calc(50% + 0.5px), transparent calc(50% + 0.5px))`,
             border: `1px solid ${colors.gray[200]}`,
           }} />
           <span style={{
-            fontSize: typography.fontSize.xs,
+            fontSize: typography.fontSize.sm,
             color: colors.text.primary,
             fontWeight: typography.fontWeight.medium,
-            fontFamily: typography.fontFamily.body,
+            fontFamily: typography.fontFamily.primary,
           }}>Not Applicable</span>
         </div>
       </div>
@@ -447,10 +531,13 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 }}>
                   Program
                 </th>
-                {matrixData.jurisdictions.map(jurisdiction => (
+                {matrixData.jurisdictions.map(jurisdiction => {
+                  const isSelected = selectedState === jurisdiction;
+                  const isClickable = jurisdiction !== 'Federal';
+                  return (
                   <th
                     key={jurisdiction}
-                    onClick={() => jurisdiction !== 'Federal' && handleStateClick(jurisdiction)}
+                    onClick={() => isClickable && handleStateClick(jurisdiction)}
                     style={{
                       padding: `${spacing.sm} ${spacing.xs}`,
                       textAlign: 'center',
@@ -459,18 +546,31 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                       fontFamily: typography.fontFamily.primary,
                       minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
                       maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                      backgroundColor: selectedState === jurisdiction ? colors.primary[800] : colors.primary[600],
+                      backgroundColor: isSelected ? colors.secondary[900] : colors.primary[600],
                       color: colors.white,
                       borderRight: jurisdiction !== matrixData.jurisdictions[matrixData.jurisdictions.length - 1]
                         ? `1px solid ${colors.primary[700]}`
                         : 'none',
-                      cursor: jurisdiction !== 'Federal' ? 'pointer' : 'default',
-                      transition: 'background-color 0.2s ease',
+                      cursor: isClickable ? 'pointer' : 'default',
+                      transition: 'all 0.2s ease',
+                      position: 'relative',
+                      boxShadow: isSelected ? 'inset 0 -3px 0 0 #38B2AC' : 'none',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (isClickable && !isSelected) {
+                        e.currentTarget.style.backgroundColor = colors.primary[700];
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (isClickable && !isSelected) {
+                        e.currentTarget.style.backgroundColor = colors.primary[600];
+                      }
                     }}
                   >
                     {jurisdiction}
                   </th>
-                ))}
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
@@ -517,52 +617,44 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 </td>
               </tr>
               {expandedSections.federal && matrixData.federalRows.map((row, idx) => {
-                // Check if this is a federal-only program (only has Federal jurisdiction)
-                const isFederalOnly = row.jurisdictions.size === 1 && row.jurisdictions.has('Federal');
-                const isFederalComplete = row.jurisdictions.get('Federal') === 'complete';
-
-                // Highlight row if:
-                // 1. Selected state has this program complete, OR
-                // 2. It's a federal-only program that is complete
-                const isRowHighlighted = selectedState && (
-                  row.jurisdictions.get(selectedState) === 'complete' ||
-                  (isFederalOnly && isFederalComplete)
-                );
+                // Only highlight row if selected state has this program as COMPLETE
+                const selectedStateStatus = selectedState ? row.jurisdictions.get(selectedState) : null;
+                const isRowHighlighted = selectedState && selectedStateStatus === 'complete';
+                const baseBackground = idx % 2 === 0 ? colors.white : colors.background.secondary;
+                const highlightedBackground = '#E6FFFA'; // Light teal for highlighted rows
                 return (
                 <tr key={`federal-${idx}`} style={{
-                  backgroundColor: isRowHighlighted
-                    ? colors.primary[100]
-                    : idx % 2 === 0 ? colors.white : colors.background.secondary,
+                  backgroundColor: isRowHighlighted ? highlightedBackground : baseBackground,
+                  transition: 'background-color 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.primary[50];
+                  if (!isRowHighlighted) {
+                    e.currentTarget.style.backgroundColor = colors.gray[50];
+                  }
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = isRowHighlighted
-                    ? colors.primary[100]
-                    : idx % 2 === 0 ? colors.white : colors.background.secondary;
+                  e.currentTarget.style.backgroundColor = isRowHighlighted ? highlightedBackground : baseBackground;
                 }}
                 >
                   <td style={{
                     position: 'sticky',
                     left: 0,
-                    backgroundColor: isRowHighlighted
-                      ? colors.primary[100]
-                      : idx % 2 === 0 ? colors.white : colors.gray[50],
+                    backgroundColor: isRowHighlighted ? highlightedBackground : baseBackground,
                     padding: `${spacing.md} ${spacing.lg}`,
                     fontWeight: typography.fontWeight.medium,
                     borderRight: `2px solid ${colors.gray[200]}`,
-                    borderBottom: `1px solid ${colors.gray[200]}`,
-                    zIndex: 1,
-                    boxShadow: spacing.shadow.xs,
+                    borderBottom: `1px solid ${colors.gray[100]}`,
+                    zIndex: 2,
+                    boxShadow: '4px 0 8px rgba(0,0,0,0.08)',
+                    transition: 'background-color 0.2s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = colors.primary[50];
+                    if (!isRowHighlighted) {
+                      e.currentTarget.style.backgroundColor = colors.gray[50];
+                    }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = isRowHighlighted
-                      ? colors.primary[100]
-                      : idx % 2 === 0 ? colors.white : colors.gray[50];
+                    e.currentTarget.style.backgroundColor = isRowHighlighted ? highlightedBackground : baseBackground;
                   }}
                   >
                     <div style={{
@@ -579,28 +671,28 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   </td>
                   {matrixData.jurisdictions.map(jurisdiction => {
                     const status = row.jurisdictions.get(jurisdiction) || null;
-                    const isColumnHighlighted = selectedState === jurisdiction;
+                    const isColumnSelected = selectedState === jurisdiction;
                     const isCellComplete = status === 'complete';
                     let cellBackground = getCellBackground(status);
                     if (!cellBackground && !status) {
                       cellBackground = colors.gray[50];
                     }
-                    // Only highlight if column is selected AND cell is complete
-                    if (isColumnHighlighted && isCellComplete && !cellBackground) {
-                      cellBackground = colors.primary[200];
+                    // Only highlight the cell if column is selected AND cell is complete
+                    if (isColumnSelected && isCellComplete) {
+                      cellBackground = '#B2F5EA'; // Stronger teal for complete cells in selected column
                     }
                     return (
                       <td key={jurisdiction} style={{
                         padding: `${spacing.sm} 2px`,
                         textAlign: 'center',
-                        borderBottom: `1px solid ${colors.gray[200]}`,
+                        borderBottom: `1px solid ${colors.gray[100]}`,
                         borderRight: `1px solid ${colors.gray[100]}`,
                         color: getStatusColor(status),
                         fontSize: typography.fontSize.base,
                         background: cellBackground,
                         minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
                         maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                        transition: 'background-color 0.2s ease',
+                        transition: 'all 0.2s ease',
                       }}>
                         {getStatusIcon(status)}
                       </td>
@@ -619,6 +711,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         <div style={{
           maxHeight: '50vh',
           overflowY: 'auto',
+          position: 'relative',
         }}>
           <div>
             <div
@@ -633,7 +726,17 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 letterSpacing: '0.5px',
                 textTransform: 'uppercase',
                 fontFamily: typography.fontFamily.primary,
-                borderTop: `2px solid ${colors.gray[300]}`,
+                borderTop: `1px solid ${colors.gray[200]}`,
+                transition: 'background-color 0.2s ease',
+                position: 'sticky',
+                top: 0,
+                zIndex: 5,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.primary[700];
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = colors.primary[600];
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
@@ -646,17 +749,27 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   ▸
                 </span>
                 State Programs
+                <span style={{
+                  marginLeft: 'auto',
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.medium,
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                }}>
+                  {matrixData.stateRows.length}
+                </span>
               </div>
             </div>
             {expandedSections.state && (
               <div style={{
                 padding: spacing.lg,
-                backgroundColor: colors.white,
+                backgroundColor: colors.background.secondary,
               }}>
                 <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(5, 1fr)',
-                  gap: spacing.md,
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: spacing.lg,
                 }}>
                   {renderProgramColumns(matrixData.stateRows, colors.primary[600], 'state')}
                 </div>
@@ -671,6 +784,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         <div style={{
           maxHeight: '50vh',
           overflowY: 'auto',
+          position: 'relative',
         }}>
           <div>
             <div
@@ -685,7 +799,17 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 letterSpacing: '0.5px',
                 textTransform: 'uppercase',
                 fontFamily: typography.fontFamily.primary,
-                borderTop: `2px solid ${colors.gray[300]}`,
+                borderTop: `1px solid ${colors.gray[200]}`,
+                transition: 'background-color 0.2s ease',
+                position: 'sticky',
+                top: 0,
+                zIndex: 5,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.secondary[800];
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = colors.secondary[700];
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
@@ -698,17 +822,27 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   ▸
                 </span>
                 Local Programs
+                <span style={{
+                  marginLeft: 'auto',
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.medium,
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                }}>
+                  {matrixData.localRows.length}
+                </span>
               </div>
             </div>
             {expandedSections.local && (
               <div style={{
                 padding: spacing.lg,
-                backgroundColor: colors.white,
+                backgroundColor: colors.background.secondary,
               }}>
                 <div style={{
-                  display: 'grid',
-                  gridTemplateColumns: 'repeat(5, 1fr)',
-                  gap: spacing.md,
+                  display: 'flex',
+                  flexWrap: 'wrap',
+                  gap: spacing.lg,
                 }}>
                   {renderProgramColumns(matrixData.localRows, colors.secondary[700], 'local')}
                 </div>

@@ -1,6 +1,6 @@
 import React from 'react';
 import { Program, CoverageStatus } from '../types/Program';
-import { statusColors, colors } from '../designTokens';
+import { statusColors, colors, typography, spacing } from '../designTokens';
 
 interface ProgramGridProps {
   programs: Program[];
@@ -38,12 +38,13 @@ const getStatusLabel = (status: CoverageStatus) => {
 const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onStateSelect, showTechnicalLinks = true }) => {
   return (
     <div
+      className="stagger-children"
       style={{
         display: 'grid',
-        gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))',
-        gap: '20px',
-        rowGap: '28px',
-        marginTop: '24px',
+        gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))',
+        gap: spacing.lg,
+        rowGap: spacing.xl,
+        marginTop: spacing.lg,
       }}
     >
       {programs.map((program) => {
@@ -61,49 +62,78 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
 
         const statusColor = statusColors[displayStatus];
 
+        // Filter state implementations to only show non-notStarted states
+        // For TANF: only show completed state implementations
+        const filteredStateImplementations = program.stateImplementations?.filter(
+          impl => {
+            if (program.id === 'tanf') {
+              return impl.status === 'complete';
+            }
+            return impl.status !== 'notStarted';
+          }
+        );
+
         return (
           <div
             key={program.id}
+            className="card-hover"
             style={{
               backgroundColor: colors.white,
               border: `1px solid ${colors.border.light}`,
-              borderRadius: '8px',
-              padding: '20px',
-              boxShadow: '0 1px 3px rgba(0, 0, 0, 0.05)',
-              transition: 'all 0.2s ease',
-              cursor: 'pointer',
+              borderRadius: '16px',
+              padding: spacing.xl,
+              boxShadow: 'var(--shadow-elevation-low)',
+              transition: 'all 0.3s cubic-bezier(0.16, 1, 0.3, 1)',
+              cursor: 'default',
               display: 'flex',
               flexDirection: 'column',
               height: 'fit-content',
+              position: 'relative',
+              overflow: 'hidden',
             }}
             onMouseEnter={(e) => {
-              e.currentTarget.style.boxShadow = '0 4px 8px rgba(0, 0, 0, 0.1)';
-              e.currentTarget.style.transform = 'translateY(-2px)';
+              e.currentTarget.style.boxShadow = 'var(--shadow-elevation-medium)';
+              e.currentTarget.style.transform = 'translateY(-4px)';
               e.currentTarget.style.borderColor = statusColor;
             }}
             onMouseLeave={(e) => {
-              e.currentTarget.style.boxShadow = '0 1px 3px rgba(0, 0, 0, 0.05)';
+              e.currentTarget.style.boxShadow = 'var(--shadow-elevation-low)';
               e.currentTarget.style.transform = 'translateY(0)';
               e.currentTarget.style.borderColor = colors.border.light;
             }}
           >
+            {/* Status accent line at top */}
+            <div
+              style={{
+                position: 'absolute',
+                top: 0,
+                left: 0,
+                right: 0,
+                height: '4px',
+                backgroundColor: statusColor,
+              }}
+            />
+
             {/* Header with name */}
-            <div style={{ marginBottom: '12px' }}>
+            <div style={{ marginBottom: spacing.md }}>
               <h3 style={{
                 margin: 0,
-                marginBottom: '8px',
+                marginBottom: spacing.xs,
                 color: colors.secondary[900],
-                fontSize: '18px',
-                fontWeight: 600,
+                fontSize: typography.fontSize.lg,
+                fontWeight: typography.fontWeight.semibold,
+                fontFamily: typography.fontFamily.primary,
                 lineHeight: '1.3',
                 wordBreak: 'break-word',
+                letterSpacing: '-0.01em',
               }}>
                 {program.name}
               </h3>
               <p style={{
-                margin: '6px 0 0',
+                margin: `${spacing.xs} 0 0`,
                 color: colors.gray[500],
-                fontSize: '13px',
+                fontSize: typography.fontSize.sm,
+                fontFamily: typography.fontFamily.body,
                 lineHeight: '1.4',
                 overflow: 'hidden',
                 display: '-webkit-box',
@@ -113,15 +143,16 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                 {program.fullName}
               </p>
               {program.hasStateVariation && (
-                <div style={{ marginTop: '8px' }}>
+                <div style={{ marginTop: spacing.sm }}>
                   <span style={{
                     display: 'inline-block',
-                    padding: '3px 8px',
-                    borderRadius: '12px',
+                    padding: '4px 10px',
+                    borderRadius: '20px',
                     backgroundColor: colors.primary[50],
                     color: colors.primary[700],
-                    fontSize: '11px',
-                    fontWeight: 600,
+                    fontSize: typography.fontSize.xs,
+                    fontWeight: typography.fontWeight.semibold,
+                    fontFamily: typography.fontFamily.primary,
                   }}>
                     Full state variation
                   </span>
@@ -132,15 +163,20 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
             {/* Notes (if any) - more compact */}
             {program.notes && (
               <p style={{
-                margin: '0 0 12px',
+                margin: `0 0 ${spacing.md}`,
                 color: colors.text.secondary,
-                fontSize: '11px',
+                fontSize: typography.fontSize.xs,
                 fontStyle: 'italic',
-                lineHeight: '1.4',
+                fontFamily: typography.fontFamily.body,
+                lineHeight: '1.5',
                 overflow: 'hidden',
                 display: '-webkit-box',
                 WebkitLineClamp: 2,
                 WebkitBoxOrient: 'vertical',
+                padding: spacing.sm,
+                backgroundColor: colors.gray[50],
+                borderRadius: spacing.radius.sm,
+                borderLeft: `3px solid ${colors.gray[200]}`,
               }}
               title={program.notes}>
                 {program.notes}
@@ -148,32 +184,34 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
             )}
 
             {/* Status and coverage badges */}
-            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: '6px', marginBottom: '12px' }}>
+            <div style={{ display: 'flex', justifyContent: 'flex-start', gap: spacing.sm, marginBottom: spacing.md }}>
               <div
                 style={{
                   display: 'flex',
                   alignItems: 'center',
-                  padding: '3px 8px',
-                  borderRadius: '12px',
-                  backgroundColor: `${statusColor}20`,
+                  padding: '6px 12px',
+                  borderRadius: '20px',
+                  backgroundColor: `${statusColor}15`,
                   color: statusColor,
-                  fontSize: '12px',
-                  fontWeight: 600,
+                  fontSize: typography.fontSize.sm,
+                  fontWeight: typography.fontWeight.semibold,
+                  fontFamily: typography.fontFamily.primary,
                   whiteSpace: 'nowrap',
                 }}
               >
-                <span style={{ marginRight: '4px', fontSize: '14px' }}>{getStatusIcon(displayStatus)}</span>
+                <span style={{ marginRight: spacing.xs, fontSize: typography.fontSize.base }}>{getStatusIcon(displayStatus)}</span>
                 {getStatusLabel(displayStatus)}
               </div>
               {!program.stateImplementations && program.coverage && program.coverage !== 'US' && (
                 <div
                   style={{
-                    padding: '3px 8px',
-                    borderRadius: '12px',
-                    backgroundColor: colors.border.light,
-                    color: colors.secondary[900],
-                    fontSize: '12px',
-                    fontWeight: 600,
+                    padding: '6px 12px',
+                    borderRadius: '20px',
+                    backgroundColor: colors.gray[100],
+                    color: colors.secondary[700],
+                    fontSize: typography.fontSize.sm,
+                    fontWeight: typography.fontWeight.medium,
+                    fontFamily: typography.fontFamily.primary,
                     whiteSpace: 'nowrap',
                   }}
                 >
@@ -187,39 +225,45 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
               <div style={{
                 display: 'flex',
                 flexWrap: 'wrap',
-                gap: '8px',
-                paddingTop: '12px',
+                gap: spacing.sm,
+                paddingTop: spacing.md,
                 borderTop: `1px solid ${colors.border.light}`,
+                marginTop: 'auto',
               }}>
-                {program.stateImplementations && program.stateImplementations.length > 0 ? (
+                {filteredStateImplementations && filteredStateImplementations.length > 0 ? (
                 // Show state buttons or state-specific links for programs with state implementations
                 <>
                   {!isStateSpecificView ? (
-                    // Show state buttons when viewing all states
-                    program.stateImplementations.map((stateImpl) => (
+                    // Show state buttons when viewing all states (only non-notStarted)
+                    filteredStateImplementations.map((stateImpl) => (
                       <button
                         key={stateImpl.state}
                         style={{
                           flex: '0 0 auto',
-                          minWidth: '60px',
+                          minWidth: '48px',
                           textAlign: 'center',
-                          padding: '6px',
+                          padding: '6px 10px',
                           backgroundColor: colors.primary[50],
                           color: colors.primary[700],
-                          border: 'none',
-                          borderRadius: '4px',
-                          fontSize: '12px',
-                          fontWeight: 500,
-                          transition: 'background-color 0.2s',
+                          border: `1px solid ${colors.primary[100]}`,
+                          borderRadius: '8px',
+                          fontSize: typography.fontSize.xs,
+                          fontWeight: typography.fontWeight.semibold,
+                          fontFamily: typography.fontFamily.primary,
+                          transition: 'all 0.2s ease',
                           cursor: 'pointer',
                         }}
                         onMouseEnter={(e) => {
-                          e.currentTarget.style.backgroundColor = colors.primary[400];
+                          e.currentTarget.style.backgroundColor = colors.primary[600];
                           e.currentTarget.style.color = colors.white;
+                          e.currentTarget.style.borderColor = colors.primary[600];
+                          e.currentTarget.style.transform = 'translateY(-1px)';
                         }}
                         onMouseLeave={(e) => {
                           e.currentTarget.style.backgroundColor = colors.primary[50];
                           e.currentTarget.style.color = colors.primary[700];
+                          e.currentTarget.style.borderColor = colors.primary[100];
+                          e.currentTarget.style.transform = 'translateY(0)';
                         }}
                         onClick={(e) => {
                           e.stopPropagation();
@@ -247,20 +291,24 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                 style={{
                                   flex: 1,
                                   textAlign: 'center',
-                                  padding: '6px',
+                                  padding: '8px 12px',
                                   backgroundColor: colors.blue[50],
                                   color: colors.blue[700],
                                   textDecoration: 'none',
-                                  borderRadius: '4px',
-                                  fontSize: '12px',
-                                  fontWeight: 500,
-                                  transition: 'background-color 0.2s',
+                                  borderRadius: '8px',
+                                  fontSize: typography.fontSize.xs,
+                                  fontWeight: typography.fontWeight.semibold,
+                                  fontFamily: typography.fontFamily.primary,
+                                  transition: 'all 0.2s ease',
+                                  border: `1px solid ${colors.blue[100]}`,
                                 }}
                                 onMouseEnter={(e) => {
                                   e.currentTarget.style.backgroundColor = colors.blue[100];
+                                  e.currentTarget.style.transform = 'translateY(-1px)';
                                 }}
                                 onMouseLeave={(e) => {
                                   e.currentTarget.style.backgroundColor = colors.blue[50];
+                                  e.currentTarget.style.transform = 'translateY(0)';
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                               >
@@ -275,20 +323,24 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                 style={{
                                   flex: 1,
                                   textAlign: 'center',
-                                  padding: '6px',
+                                  padding: '8px 12px',
                                   backgroundColor: colors.blue[50],
                                   color: colors.blue[700],
                                   textDecoration: 'none',
-                                  borderRadius: '4px',
-                                  fontSize: '12px',
-                                  fontWeight: 500,
-                                  transition: 'background-color 0.2s',
+                                  borderRadius: '8px',
+                                  fontSize: typography.fontSize.xs,
+                                  fontWeight: typography.fontWeight.semibold,
+                                  fontFamily: typography.fontFamily.primary,
+                                  transition: 'all 0.2s ease',
+                                  border: `1px solid ${colors.blue[100]}`,
                                 }}
                                 onMouseEnter={(e) => {
                                   e.currentTarget.style.backgroundColor = colors.blue[100];
+                                  e.currentTarget.style.transform = 'translateY(-1px)';
                                 }}
                                 onMouseLeave={(e) => {
                                   e.currentTarget.style.backgroundColor = colors.blue[50];
+                                  e.currentTarget.style.transform = 'translateY(0)';
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                               >
@@ -303,20 +355,24 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                 style={{
                                   flex: 1,
                                   textAlign: 'center',
-                                  padding: '6px',
+                                  padding: '8px 12px',
                                   backgroundColor: colors.blue[50],
                                   color: colors.blue[700],
                                   textDecoration: 'none',
-                                  borderRadius: '4px',
-                                  fontSize: '12px',
-                                  fontWeight: 500,
-                                  transition: 'background-color 0.2s',
+                                  borderRadius: '8px',
+                                  fontSize: typography.fontSize.xs,
+                                  fontWeight: typography.fontWeight.semibold,
+                                  fontFamily: typography.fontFamily.primary,
+                                  transition: 'all 0.2s ease',
+                                  border: `1px solid ${colors.blue[100]}`,
                                 }}
                                 onMouseEnter={(e) => {
                                   e.currentTarget.style.backgroundColor = colors.blue[100];
+                                  e.currentTarget.style.transform = 'translateY(-1px)';
                                 }}
                                 onMouseLeave={(e) => {
                                   e.currentTarget.style.backgroundColor = colors.blue[50];
+                                  e.currentTarget.style.transform = 'translateY(0)';
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                               >
@@ -331,22 +387,23 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                                 style={{
                                   flex: '1 1 100%',
                                   textAlign: 'center',
-                                  padding: '6px',
-                                  backgroundColor: colors.primary[50],
-                                  color: colors.primary[700],
+                                  padding: '10px 12px',
+                                  background: 'linear-gradient(135deg, #2C7A7B 0%, #319795 100%)',
+                                  color: colors.white,
                                   textDecoration: 'none',
-                                  borderRadius: '4px',
-                                  fontSize: '12px',
-                                  fontWeight: 500,
-                                  transition: 'background-color 0.2s',
+                                  borderRadius: '8px',
+                                  fontSize: typography.fontSize.sm,
+                                  fontWeight: typography.fontWeight.semibold,
+                                  fontFamily: typography.fontFamily.primary,
+                                  transition: 'all 0.2s ease',
                                 }}
                                 onMouseEnter={(e) => {
-                                  e.currentTarget.style.backgroundColor = colors.primary[400];
-                                  e.currentTarget.style.color = colors.white;
+                                  e.currentTarget.style.transform = 'translateY(-2px)';
+                                  e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 122, 123, 0.3)';
                                 }}
                                 onMouseLeave={(e) => {
-                                  e.currentTarget.style.backgroundColor = colors.primary[50];
-                                  e.currentTarget.style.color = colors.primary[700];
+                                  e.currentTarget.style.transform = 'translateY(0)';
+                                  e.currentTarget.style.boxShadow = 'none';
                                 }}
                                 onClick={(e) => e.stopPropagation()}
                               >
@@ -370,20 +427,24 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                       style={{
                         flex: 1,
                         textAlign: 'center',
-                        padding: '6px',
+                        padding: '8px 12px',
                         backgroundColor: colors.blue[50],
                         color: colors.blue[700],
                         textDecoration: 'none',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                        transition: 'background-color 0.2s',
+                        borderRadius: '8px',
+                        fontSize: typography.fontSize.xs,
+                        fontWeight: typography.fontWeight.semibold,
+                        fontFamily: typography.fontFamily.primary,
+                        transition: 'all 0.2s ease',
+                        border: `1px solid ${colors.blue[100]}`,
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = colors.blue[100];
+                        e.currentTarget.style.transform = 'translateY(-1px)';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = colors.blue[50];
+                        e.currentTarget.style.transform = 'translateY(0)';
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -398,20 +459,24 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                       style={{
                         flex: 1,
                         textAlign: 'center',
-                        padding: '6px',
+                        padding: '8px 12px',
                         backgroundColor: colors.blue[50],
                         color: colors.blue[700],
                         textDecoration: 'none',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                        transition: 'background-color 0.2s',
+                        borderRadius: '8px',
+                        fontSize: typography.fontSize.xs,
+                        fontWeight: typography.fontWeight.semibold,
+                        fontFamily: typography.fontFamily.primary,
+                        transition: 'all 0.2s ease',
+                        border: `1px solid ${colors.blue[100]}`,
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = colors.blue[100];
+                        e.currentTarget.style.transform = 'translateY(-1px)';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = colors.blue[50];
+                        e.currentTarget.style.transform = 'translateY(0)';
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -426,20 +491,24 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                       style={{
                         flex: 1,
                         textAlign: 'center',
-                        padding: '6px',
+                        padding: '8px 12px',
                         backgroundColor: colors.blue[50],
                         color: colors.blue[700],
                         textDecoration: 'none',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                        transition: 'background-color 0.2s',
+                        borderRadius: '8px',
+                        fontSize: typography.fontSize.xs,
+                        fontWeight: typography.fontWeight.semibold,
+                        fontFamily: typography.fontFamily.primary,
+                        transition: 'all 0.2s ease',
+                        border: `1px solid ${colors.blue[100]}`,
                       }}
                       onMouseEnter={(e) => {
                         e.currentTarget.style.backgroundColor = colors.blue[100];
+                        e.currentTarget.style.transform = 'translateY(-1px)';
                       }}
                       onMouseLeave={(e) => {
                         e.currentTarget.style.backgroundColor = colors.blue[50];
+                        e.currentTarget.style.transform = 'translateY(0)';
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >
@@ -454,22 +523,23 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
                       style={{
                         flex: '1 1 100%',
                         textAlign: 'center',
-                        padding: '6px',
-                        backgroundColor: colors.primary[50],
-                        color: colors.primary[700],
+                        padding: '10px 12px',
+                        background: 'linear-gradient(135deg, #2C7A7B 0%, #319795 100%)',
+                        color: colors.white,
                         textDecoration: 'none',
-                        borderRadius: '4px',
-                        fontSize: '12px',
-                        fontWeight: 500,
-                        transition: 'background-color 0.2s',
+                        borderRadius: '8px',
+                        fontSize: typography.fontSize.sm,
+                        fontWeight: typography.fontWeight.semibold,
+                        fontFamily: typography.fontFamily.primary,
+                        transition: 'all 0.2s ease',
                       }}
                       onMouseEnter={(e) => {
-                        e.currentTarget.style.backgroundColor = colors.primary[400];
-                        e.currentTarget.style.color = colors.white;
+                        e.currentTarget.style.transform = 'translateY(-2px)';
+                        e.currentTarget.style.boxShadow = '0 4px 12px rgba(44, 122, 123, 0.3)';
                       }}
                       onMouseLeave={(e) => {
-                        e.currentTarget.style.backgroundColor = colors.primary[50];
-                        e.currentTarget.style.color = colors.primary[700];
+                        e.currentTarget.style.transform = 'translateY(0)';
+                        e.currentTarget.style.boxShadow = 'none';
                       }}
                       onClick={(e) => e.stopPropagation()}
                     >

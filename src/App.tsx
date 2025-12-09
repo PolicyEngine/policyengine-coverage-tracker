@@ -59,24 +59,33 @@ function App() {
           if (filterMode === 'federal') {
             expandedPrograms.push(program);
           }
-          // In state-local mode, add state-specific versions only
+          // In state-local mode, add state-specific versions only (exclude notStarted)
           else if (filterMode === 'state-local') {
             // Add state-specific versions of the program
-            program.stateImplementations.forEach(stateImpl => {
-              const stateSpecificProgram: Program = {
-                ...program,
-                id: `${program.id}_${stateImpl.state}`,
-                name: stateImpl.name || `${program.name} (${stateImpl.state})`,
-                fullName: stateImpl.fullName || program.fullName,
-                status: stateImpl.status,
-                coverage: stateImpl.state,
-                notes: stateImpl.notes || program.notes,
-                variable: stateImpl.variable || program.variable,
-                githubLinks: stateImpl.githubLinks || program.githubLinks,
-                stateImplementations: undefined,
-              };
-              expandedPrograms.push(stateSpecificProgram);
-            });
+            // For TANF: only show completed state implementations
+            // For others: filter out notStarted
+            program.stateImplementations
+              .filter(stateImpl => {
+                if (program.id === 'tanf') {
+                  return stateImpl.status === 'complete';
+                }
+                return stateImpl.status !== 'notStarted';
+              })
+              .forEach(stateImpl => {
+                const stateSpecificProgram: Program = {
+                  ...program,
+                  id: `${program.id}_${stateImpl.state}`,
+                  name: stateImpl.name || `${program.name} (${stateImpl.state})`,
+                  fullName: stateImpl.fullName || program.fullName,
+                  status: stateImpl.status,
+                  coverage: stateImpl.state,
+                  notes: stateImpl.notes || program.notes,
+                  variable: stateImpl.variable || program.variable,
+                  githubLinks: stateImpl.githubLinks || program.githubLinks,
+                  stateImplementations: undefined,
+                };
+                expandedPrograms.push(stateSpecificProgram);
+              });
           }
         } else {
           // For state-local mode, only add programs that are state/local or state income tax
@@ -198,135 +207,107 @@ function App() {
   }, [selectedStatus, filterMode, selectedAgency, selectedState, searchQuery]);
 
   return (
-    <div style={{ backgroundColor: colors.background.secondary, minHeight: '100vh' }}>
+    <div style={{ minHeight: '100vh' }}>
+      {/* Header */}
       <header
+        className="header-accent"
         style={{
           backgroundColor: colors.white,
-          boxShadow: spacing.shadow.sm,
-          padding: `${spacing['2xl']} 0`,
-          marginBottom: spacing['3xl'],
+          boxShadow: 'var(--shadow-elevation-low)',
+          position: 'sticky',
+          top: 0,
+          zIndex: 50,
         }}
       >
-        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']}` }}>
-          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.xl }}>
-            <img
-              src={`${process.env.PUBLIC_URL}/policyengine.png`}
-              alt="PolicyEngine Logo"
-              style={{
-                height: '50px',
-                width: 'auto'
-              }}
-            />
-            <div>
-              <h1 style={{
-                margin: 0,
-                color: colors.secondary[900],
-                fontSize: typography.fontSize['4xl'],
-                fontWeight: typography.fontWeight.bold,
-                fontFamily: typography.fontFamily.primary
-              }}>
-                PolicyEngine Coverage Tracker
-              </h1>
-              <p style={{
-                margin: `${spacing.sm} 0 0`,
-                color: colors.text.secondary,
-                fontSize: typography.fontSize.base,
-                fontFamily: typography.fontFamily.body
-              }}>
-                Track the implementation status of government programs in PolicyEngine US
-              </p>
+        <div style={{ maxWidth: '1400px', margin: '0 auto', padding: `${spacing.xl} ${spacing['2xl']}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: spacing.lg }}>
+              <img
+                src={`${process.env.PUBLIC_URL}/policyengine.png`}
+                alt="PolicyEngine Logo"
+                style={{
+                  height: '44px',
+                  width: 'auto'
+                }}
+              />
+              <div>
+                <h1 style={{
+                  margin: 0,
+                  color: colors.secondary[900],
+                  fontSize: typography.fontSize['2xl'],
+                  fontWeight: typography.fontWeight.bold,
+                  fontFamily: typography.fontFamily.primary,
+                  letterSpacing: '-0.02em',
+                }}>
+                  Coverage Tracker
+                </h1>
+                <p style={{
+                  margin: `2px 0 0`,
+                  color: colors.text.secondary,
+                  fontSize: typography.fontSize.sm,
+                  fontFamily: typography.fontFamily.body,
+                }}>
+                  PolicyEngine US implementation status
+                </p>
+              </div>
+            </div>
+
+            {/* Navigation tabs in header */}
+            <div style={{
+              display: 'flex',
+              gap: '4px',
+              backgroundColor: colors.gray[100],
+              padding: '4px',
+              borderRadius: '12px',
+            }}>
+              <button
+                onClick={() => setDisplayMode('overview')}
+                style={{
+                  padding: `${spacing.sm} ${spacing.xl}`,
+                  border: 'none',
+                  backgroundColor: displayMode === 'overview' ? colors.white : 'transparent',
+                  color: displayMode === 'overview' ? colors.primary[700] : colors.text.secondary,
+                  borderRadius: '8px',
+                  fontSize: typography.fontSize.sm,
+                  fontWeight: typography.fontWeight.semibold,
+                  cursor: 'pointer',
+                  fontFamily: typography.fontFamily.primary,
+                  transition: 'all 0.2s ease',
+                  boxShadow: displayMode === 'overview' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                }}
+              >
+                Overview
+              </button>
+              <button
+                onClick={() => setDisplayMode('developer')}
+                style={{
+                  padding: `${spacing.sm} ${spacing.xl}`,
+                  border: 'none',
+                  backgroundColor: displayMode === 'developer' ? colors.white : 'transparent',
+                  color: displayMode === 'developer' ? colors.primary[700] : colors.text.secondary,
+                  borderRadius: '8px',
+                  fontSize: typography.fontSize.sm,
+                  fontWeight: typography.fontWeight.semibold,
+                  cursor: 'pointer',
+                  fontFamily: typography.fontFamily.primary,
+                  transition: 'all 0.2s ease',
+                  boxShadow: displayMode === 'developer' ? '0 1px 3px rgba(0,0,0,0.1)' : 'none',
+                }}
+              >
+                Program Details
+              </button>
             </div>
           </div>
         </div>
       </header>
 
       {/* Executive Summary Section */}
-      <div style={{ backgroundColor: colors.background.secondary, paddingTop: spacing.lg, paddingBottom: spacing['3xl'] }}>
+      <div style={{ paddingTop: spacing['2xl'], paddingBottom: spacing.xl }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']}` }}>
           <ExecutiveSummary
-            programs={programs}
             statusCounts={statusCounts}
             totalPrograms={programs.length}
           />
-        </div>
-      </div>
-
-      {/* View Mode Toggle */}
-      <div style={{
-        backgroundColor: colors.background.secondary,
-        paddingBottom: spacing.xl,
-      }}>
-        <div style={{
-          maxWidth: '1400px',
-          margin: '0 auto',
-          padding: `0 ${spacing['2xl']}`,
-        }}>
-          <div style={{
-            backgroundColor: colors.white,
-            borderRadius: spacing.radius.lg,
-            boxShadow: spacing.shadow.md,
-            border: `1px solid ${colors.border.light}`,
-            borderBottom: `2px solid ${colors.gray[200]}`,
-            overflow: 'hidden',
-            display: 'flex',
-            gap: spacing.md,
-            padding: `0 ${spacing.lg}`,
-          }}>
-          <button
-            onClick={() => setDisplayMode('overview')}
-            style={{
-              padding: `${spacing.lg} ${spacing.xl}`,
-              border: 'none',
-              backgroundColor: 'transparent',
-              color: displayMode === 'overview' ? colors.primary[600] : colors.text.secondary,
-              borderBottom: displayMode === 'overview' ? `3px solid ${colors.primary[600]}` : '3px solid transparent',
-              fontSize: typography.fontSize.base,
-              fontWeight: displayMode === 'overview' ? typography.fontWeight.bold : typography.fontWeight.medium,
-              cursor: 'pointer',
-              fontFamily: typography.fontFamily.primary,
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              if (displayMode !== 'overview') {
-                e.currentTarget.style.color = colors.primary[600];
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (displayMode !== 'overview') {
-                e.currentTarget.style.color = colors.text.secondary;
-              }
-            }}
-          >
-            Overview
-          </button>
-          <button
-            onClick={() => setDisplayMode('developer')}
-            style={{
-              padding: `${spacing.lg} ${spacing.xl}`,
-              border: 'none',
-              backgroundColor: 'transparent',
-              color: displayMode === 'developer' ? colors.primary[600] : colors.text.secondary,
-              borderBottom: displayMode === 'developer' ? `3px solid ${colors.primary[600]}` : '3px solid transparent',
-              fontSize: typography.fontSize.base,
-              fontWeight: displayMode === 'developer' ? typography.fontWeight.bold : typography.fontWeight.medium,
-              cursor: 'pointer',
-              fontFamily: typography.fontFamily.primary,
-              transition: 'all 0.2s ease',
-            }}
-            onMouseEnter={(e) => {
-              if (displayMode !== 'developer') {
-                e.currentTarget.style.color = colors.primary[600];
-              }
-            }}
-            onMouseLeave={(e) => {
-              if (displayMode !== 'developer') {
-                e.currentTarget.style.color = colors.text.secondary;
-              }
-            }}
-          >
-            Program Details
-          </button>
-          </div>
         </div>
       </div>
 
@@ -367,9 +348,10 @@ function App() {
                   style={{
                     display: 'flex',
                     backgroundColor: colors.white,
-                    borderRadius: spacing.radius.md,
-                    padding: '2px',
-                    boxShadow: spacing.shadow.sm,
+                    borderRadius: '10px',
+                    padding: '3px',
+                    boxShadow: 'var(--shadow-elevation-low)',
+                    border: `1px solid ${colors.border.light}`,
                   }}
                 >
                   <button
@@ -379,20 +361,21 @@ function App() {
                       border: 'none',
                       backgroundColor: viewMode === 'grid' ? colors.primary[600] : 'transparent',
                       color: viewMode === 'grid' ? colors.white : colors.text.secondary,
-                      borderRadius: spacing.radius.sm,
+                      borderRadius: '7px',
                       fontSize: typography.fontSize.sm,
                       fontWeight: typography.fontWeight.medium,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       gap: spacing.xs,
+                      transition: 'all 0.2s ease',
                     }}
                   >
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                      <rect x="1" y="1" width="6" height="6" />
-                      <rect x="9" y="1" width="6" height="6" />
-                      <rect x="1" y="9" width="6" height="6" />
-                      <rect x="9" y="9" width="6" height="6" />
+                      <rect x="1" y="1" width="6" height="6" rx="1" />
+                      <rect x="9" y="1" width="6" height="6" rx="1" />
+                      <rect x="1" y="9" width="6" height="6" rx="1" />
+                      <rect x="9" y="9" width="6" height="6" rx="1" />
                     </svg>
                     Grid
                   </button>
@@ -403,19 +386,20 @@ function App() {
                       border: 'none',
                       backgroundColor: viewMode === 'list' ? colors.primary[600] : 'transparent',
                       color: viewMode === 'list' ? colors.white : colors.text.secondary,
-                      borderRadius: spacing.radius.sm,
+                      borderRadius: '7px',
                       fontSize: typography.fontSize.sm,
                       fontWeight: typography.fontWeight.medium,
                       cursor: 'pointer',
                       display: 'flex',
                       alignItems: 'center',
                       gap: spacing.xs,
+                      transition: 'all 0.2s ease',
                     }}
                   >
                     <svg width="16" height="16" viewBox="0 0 16 16" fill="currentColor">
-                      <rect x="1" y="2" width="14" height="2" />
-                      <rect x="1" y="7" width="14" height="2" />
-                      <rect x="1" y="12" width="14" height="2" />
+                      <rect x="1" y="2" width="14" height="2" rx="1" />
+                      <rect x="1" y="7" width="14" height="2" rx="1" />
+                      <rect x="1" y="12" width="14" height="2" rx="1" />
                     </svg>
                     List
                   </button>
@@ -425,27 +409,20 @@ function App() {
                   href="https://github.com/PolicyEngine/policyengine-us"
                   target="_blank"
                   rel="noopener noreferrer"
+                  className="btn-primary"
                   style={{
                     display: 'inline-flex',
                     alignItems: 'center',
-                    padding: `${spacing.md} ${spacing.xl}`,
-                    backgroundColor: colors.primary[600],
-                    color: colors.white,
+                    padding: `${spacing.sm} ${spacing.lg}`,
                     textDecoration: 'none',
-                    borderRadius: spacing.radius.md,
+                    borderRadius: '10px',
                     fontSize: typography.fontSize.sm,
                     fontWeight: typography.fontWeight.semibold,
                   }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = colors.primary[700];
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = colors.primary[600];
-                  }}
                 >
                   <svg
-                    width="20"
-                    height="20"
+                    width="18"
+                    height="18"
                     viewBox="0 0 16 16"
                     fill="currentColor"
                     style={{ marginRight: '8px' }}
@@ -460,20 +437,30 @@ function App() {
 
           {filteredPrograms.length === 0 ? (
             <div
+              className="animate-fade-in"
               style={{
                 backgroundColor: colors.white,
                 padding: spacing['4xl'],
-                borderRadius: spacing.radius.lg,
+                borderRadius: '16px',
                 textAlign: 'center',
                 color: colors.text.secondary,
-                boxShadow: spacing.shadow.xs,
+                boxShadow: 'var(--shadow-elevation-low)',
+                border: `1px solid ${colors.border.light}`,
               }}
             >
+              <div style={{ marginBottom: spacing.lg }}>
+                <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke={colors.gray[300]} strokeWidth="1.5">
+                  <circle cx="11" cy="11" r="8" />
+                  <path d="M21 21l-4.35-4.35" />
+                </svg>
+              </div>
               <p style={{
                 fontSize: typography.fontSize.lg,
                 margin: 0,
-                fontFamily: typography.fontFamily.body
-              }}>No programs found matching your filters.</p>
+                fontFamily: typography.fontFamily.body,
+                fontWeight: typography.fontWeight.medium,
+                color: colors.secondary[900],
+              }}>No programs found</p>
               <p style={{
                 fontSize: typography.fontSize.sm,
                 marginTop: spacing.sm,
@@ -592,56 +579,91 @@ function App() {
         </div>
       </main>
 
+      {/* Footer */}
       <footer
         style={{
           backgroundColor: colors.secondary[900],
           color: colors.white,
-          padding: `${spacing['3xl']} 0`,
-          marginTop: spacing['5xl'],
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
+        {/* Gradient accent at top */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '3px',
+            background: 'linear-gradient(90deg, #2C7A7B 0%, #38B2AC 50%, #0EA5E9 100%)',
+          }}
+        />
         <div style={{
           maxWidth: '1400px',
           margin: '0 auto',
-          padding: `0 ${spacing['2xl']}`,
-          textAlign: 'center'
+          padding: `${spacing['2xl']} ${spacing['2xl']}`,
+          display: 'flex',
+          justifyContent: 'space-between',
+          alignItems: 'center',
+          flexWrap: 'wrap',
+          gap: spacing.lg,
         }}>
-          <p style={{
-            margin: `0 0 ${spacing.sm}`,
-            fontSize: typography.fontSize.sm,
-            fontFamily: typography.fontFamily.body
-          }}>
-            © {new Date().getFullYear()} PolicyEngine. All rights reserved.
-          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
+            <img
+              src={`${process.env.PUBLIC_URL}/policyengine.png`}
+              alt="PolicyEngine Logo"
+              style={{
+                height: '28px',
+                width: 'auto',
+                opacity: 0.8,
+                filter: 'brightness(0) invert(1)',
+              }}
+            />
+            <p style={{
+              margin: 0,
+              fontSize: typography.fontSize.sm,
+              fontFamily: typography.fontFamily.body,
+              color: colors.gray[400],
+            }}>
+              © {new Date().getFullYear()} PolicyEngine
+            </p>
+          </div>
           <div style={{
             display: 'flex',
-            justifyContent: 'center',
-            gap: spacing['2xl'],
-            marginTop: spacing.lg
+            gap: spacing.lg,
           }}>
             <a
               href="https://policyengine.org"
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: colors.primary[200],
+                color: colors.gray[400],
                 textDecoration: 'none',
                 fontSize: typography.fontSize.sm,
-                fontFamily: typography.fontFamily.body
+                fontFamily: typography.fontFamily.body,
+                fontWeight: typography.fontWeight.medium,
+                transition: 'color 0.2s ease',
               }}
+              onMouseEnter={(e) => e.currentTarget.style.color = colors.primary[300]}
+              onMouseLeave={(e) => e.currentTarget.style.color = colors.gray[400]}
             >
-              PolicyEngine.org
+              Website
             </a>
             <a
               href="https://github.com/PolicyEngine"
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: colors.primary[200],
+                color: colors.gray[400],
                 textDecoration: 'none',
                 fontSize: typography.fontSize.sm,
-                fontFamily: typography.fontFamily.body
+                fontFamily: typography.fontFamily.body,
+                fontWeight: typography.fontWeight.medium,
+                transition: 'color 0.2s ease',
               }}
+              onMouseEnter={(e) => e.currentTarget.style.color = colors.primary[300]}
+              onMouseLeave={(e) => e.currentTarget.style.color = colors.gray[400]}
             >
               GitHub
             </a>
@@ -650,11 +672,15 @@ function App() {
               target="_blank"
               rel="noopener noreferrer"
               style={{
-                color: colors.primary[200],
+                color: colors.gray[400],
                 textDecoration: 'none',
                 fontSize: typography.fontSize.sm,
-                fontFamily: typography.fontFamily.body
+                fontFamily: typography.fontFamily.body,
+                fontWeight: typography.fontWeight.medium,
+                transition: 'color 0.2s ease',
               }}
+              onMouseEnter={(e) => e.currentTarget.style.color = colors.primary[300]}
+              onMouseLeave={(e) => e.currentTarget.style.color = colors.gray[400]}
             >
               Twitter
             </a>
