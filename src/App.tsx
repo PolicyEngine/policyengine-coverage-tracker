@@ -298,7 +298,6 @@ function App() {
       <div style={{ paddingTop: spacing['2xl'], paddingBottom: spacing.xl }}>
         <div style={{ maxWidth: '1400px', margin: '0 auto', padding: `0 ${spacing['2xl']}` }}>
           <ExecutiveSummary
-            programs={programs}
             statusCounts={statusCounts}
             totalPrograms={programs.length}
           />

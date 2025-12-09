@@ -1,14 +1,13 @@
 import React from 'react';
 import { colors, typography, spacing } from '../designTokens';
-import { Program, CoverageStatus } from '../types/Program';
+import { CoverageStatus } from '../types/Program';
 
 interface ExecutiveSummaryProps {
-  programs: Program[];
   statusCounts: Record<CoverageStatus, number>;
   totalPrograms: number;
 }
 
-const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ programs, statusCounts, totalPrograms }) => {
+const ExecutiveSummary: React.FC<ExecutiveSummaryProps> = ({ statusCounts, totalPrograms }) => {
   return (
     <div
       className="animate-fade-in-up"
