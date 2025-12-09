@@ -491,10 +491,13 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 }}>
                   Program
                 </th>
-                {matrixData.jurisdictions.map(jurisdiction => (
+                {matrixData.jurisdictions.map(jurisdiction => {
+                  const isSelected = selectedState === jurisdiction;
+                  const isClickable = jurisdiction !== 'Federal';
+                  return (
                   <th
                     key={jurisdiction}
-                    onClick={() => jurisdiction !== 'Federal' && handleStateClick(jurisdiction)}
+                    onClick={() => isClickable && handleStateClick(jurisdiction)}
                     style={{
                       padding: `${spacing.sm} ${spacing.xs}`,
                       textAlign: 'center',
@@ -503,18 +506,31 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                       fontFamily: typography.fontFamily.primary,
                       minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
                       maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                      backgroundColor: selectedState === jurisdiction ? colors.primary[800] : colors.primary[600],
+                      backgroundColor: isSelected ? colors.secondary[900] : colors.primary[600],
                       color: colors.white,
                       borderRight: jurisdiction !== matrixData.jurisdictions[matrixData.jurisdictions.length - 1]
                         ? `1px solid ${colors.primary[700]}`
                         : 'none',
-                      cursor: jurisdiction !== 'Federal' ? 'pointer' : 'default',
-                      transition: 'background-color 0.2s ease',
+                      cursor: isClickable ? 'pointer' : 'default',
+                      transition: 'all 0.2s ease',
+                      position: 'relative',
+                      boxShadow: isSelected ? 'inset 0 -3px 0 0 #38B2AC' : 'none',
+                    }}
+                    onMouseEnter={(e) => {
+                      if (isClickable && !isSelected) {
+                        e.currentTarget.style.backgroundColor = colors.primary[700];
+                      }
+                    }}
+                    onMouseLeave={(e) => {
+                      if (isClickable && !isSelected) {
+                        e.currentTarget.style.backgroundColor = colors.primary[600];
+                      }
                     }}
                   >
                     {jurisdiction}
                   </th>
-                ))}
+                  );
+                })}
               </tr>
             </thead>
             <tbody>
@@ -561,52 +577,44 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 </td>
               </tr>
               {expandedSections.federal && matrixData.federalRows.map((row, idx) => {
-                // Check if this is a federal-only program (only has Federal jurisdiction)
-                const isFederalOnly = row.jurisdictions.size === 1 && row.jurisdictions.has('Federal');
-                const isFederalComplete = row.jurisdictions.get('Federal') === 'complete';
-
-                // Highlight row if:
-                // 1. Selected state has this program complete, OR
-                // 2. It's a federal-only program that is complete
-                const isRowHighlighted = selectedState && (
-                  row.jurisdictions.get(selectedState) === 'complete' ||
-                  (isFederalOnly && isFederalComplete)
-                );
+                // Only highlight row if selected state has this program as COMPLETE
+                const selectedStateStatus = selectedState ? row.jurisdictions.get(selectedState) : null;
+                const isRowHighlighted = selectedState && selectedStateStatus === 'complete';
+                const baseBackground = idx % 2 === 0 ? colors.white : colors.background.secondary;
+                const highlightedBackground = '#E6FFFA'; // Light teal for highlighted rows
                 return (
                 <tr key={`federal-${idx}`} style={{
-                  backgroundColor: isRowHighlighted
-                    ? colors.primary[100]
-                    : idx % 2 === 0 ? colors.white : colors.background.secondary,
+                  backgroundColor: isRowHighlighted ? highlightedBackground : baseBackground,
+                  transition: 'background-color 0.2s ease',
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.backgroundColor = colors.primary[50];
+                  if (!isRowHighlighted) {
+                    e.currentTarget.style.backgroundColor = colors.gray[50];
+                  }
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.backgroundColor = isRowHighlighted
-                    ? colors.primary[100]
-                    : idx % 2 === 0 ? colors.white : colors.background.secondary;
+                  e.currentTarget.style.backgroundColor = isRowHighlighted ? highlightedBackground : baseBackground;
                 }}
                 >
                   <td style={{
                     position: 'sticky',
                     left: 0,
-                    backgroundColor: isRowHighlighted
-                      ? colors.primary[100]
-                      : idx % 2 === 0 ? colors.white : colors.gray[50],
+                    backgroundColor: isRowHighlighted ? highlightedBackground : baseBackground,
                     padding: `${spacing.md} ${spacing.lg}`,
                     fontWeight: typography.fontWeight.medium,
                     borderRight: `2px solid ${colors.gray[200]}`,
-                    borderBottom: `1px solid ${colors.gray[200]}`,
-                    zIndex: 1,
-                    boxShadow: spacing.shadow.xs,
+                    borderBottom: `1px solid ${colors.gray[100]}`,
+                    zIndex: 2,
+                    boxShadow: '4px 0 8px rgba(0,0,0,0.08)',
+                    transition: 'background-color 0.2s ease',
                   }}
                   onMouseEnter={(e) => {
-                    e.currentTarget.style.backgroundColor = colors.primary[50];
+                    if (!isRowHighlighted) {
+                      e.currentTarget.style.backgroundColor = colors.gray[50];
+                    }
                   }}
                   onMouseLeave={(e) => {
-                    e.currentTarget.style.backgroundColor = isRowHighlighted
-                      ? colors.primary[100]
-                      : idx % 2 === 0 ? colors.white : colors.gray[50];
+                    e.currentTarget.style.backgroundColor = isRowHighlighted ? highlightedBackground : baseBackground;
                   }}
                   >
                     <div style={{
@@ -623,28 +631,28 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   </td>
                   {matrixData.jurisdictions.map(jurisdiction => {
                     const status = row.jurisdictions.get(jurisdiction) || null;
-                    const isColumnHighlighted = selectedState === jurisdiction;
+                    const isColumnSelected = selectedState === jurisdiction;
                     const isCellComplete = status === 'complete';
                     let cellBackground = getCellBackground(status);
                     if (!cellBackground && !status) {
                       cellBackground = colors.gray[50];
                     }
-                    // Only highlight if column is selected AND cell is complete
-                    if (isColumnHighlighted && isCellComplete && !cellBackground) {
-                      cellBackground = colors.primary[200];
+                    // Only highlight the cell if column is selected AND cell is complete
+                    if (isColumnSelected && isCellComplete) {
+                      cellBackground = '#B2F5EA'; // Stronger teal for complete cells in selected column
                     }
                     return (
                       <td key={jurisdiction} style={{
                         padding: `${spacing.sm} 2px`,
                         textAlign: 'center',
-                        borderBottom: `1px solid ${colors.gray[200]}`,
+                        borderBottom: `1px solid ${colors.gray[100]}`,
                         borderRight: `1px solid ${colors.gray[100]}`,
                         color: getStatusColor(status),
                         fontSize: typography.fontSize.base,
                         background: cellBackground,
                         minWidth: jurisdiction === 'Federal' ? '70px' : '45px',
                         maxWidth: jurisdiction === 'Federal' ? '70px' : '45px',
-                        transition: 'background-color 0.2s ease',
+                        transition: 'all 0.2s ease',
                       }}>
                         {getStatusIcon(status)}
                       </td>
