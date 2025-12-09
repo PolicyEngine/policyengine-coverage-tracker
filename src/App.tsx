@@ -59,24 +59,26 @@ function App() {
           if (filterMode === 'federal') {
             expandedPrograms.push(program);
           }
-          // In state-local mode, add state-specific versions only
+          // In state-local mode, add state-specific versions only (exclude notStarted)
           else if (filterMode === 'state-local') {
-            // Add state-specific versions of the program
-            program.stateImplementations.forEach(stateImpl => {
-              const stateSpecificProgram: Program = {
-                ...program,
-                id: `${program.id}_${stateImpl.state}`,
-                name: stateImpl.name || `${program.name} (${stateImpl.state})`,
-                fullName: stateImpl.fullName || program.fullName,
-                status: stateImpl.status,
-                coverage: stateImpl.state,
-                notes: stateImpl.notes || program.notes,
-                variable: stateImpl.variable || program.variable,
-                githubLinks: stateImpl.githubLinks || program.githubLinks,
-                stateImplementations: undefined,
-              };
-              expandedPrograms.push(stateSpecificProgram);
-            });
+            // Add state-specific versions of the program, filtering out notStarted
+            program.stateImplementations
+              .filter(stateImpl => stateImpl.status !== 'notStarted')
+              .forEach(stateImpl => {
+                const stateSpecificProgram: Program = {
+                  ...program,
+                  id: `${program.id}_${stateImpl.state}`,
+                  name: stateImpl.name || `${program.name} (${stateImpl.state})`,
+                  fullName: stateImpl.fullName || program.fullName,
+                  status: stateImpl.status,
+                  coverage: stateImpl.state,
+                  notes: stateImpl.notes || program.notes,
+                  variable: stateImpl.variable || program.variable,
+                  githubLinks: stateImpl.githubLinks || program.githubLinks,
+                  stateImplementations: undefined,
+                };
+                expandedPrograms.push(stateSpecificProgram);
+              });
           }
         } else {
           // For state-local mode, only add programs that are state/local or state income tax
