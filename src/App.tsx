@@ -61,9 +61,16 @@ function App() {
           }
           // In state-local mode, add state-specific versions only (exclude notStarted)
           else if (filterMode === 'state-local') {
-            // Add state-specific versions of the program, filtering out notStarted
+            // Add state-specific versions of the program
+            // For TANF: only show completed state implementations
+            // For others: filter out notStarted
             program.stateImplementations
-              .filter(stateImpl => stateImpl.status !== 'notStarted')
+              .filter(stateImpl => {
+                if (program.id === 'tanf') {
+                  return stateImpl.status === 'complete';
+                }
+                return stateImpl.status !== 'notStarted';
+              })
               .forEach(stateImpl => {
                 const stateSpecificProgram: Program = {
                   ...program,
@@ -577,30 +584,54 @@ function App() {
         style={{
           backgroundColor: colors.secondary[900],
           color: colors.white,
-          padding: `${spacing['2xl']} 0`,
+          position: 'relative',
+          overflow: 'hidden',
         }}
       >
+        {/* Gradient accent at top */}
+        <div
+          style={{
+            position: 'absolute',
+            top: 0,
+            left: 0,
+            right: 0,
+            height: '3px',
+            background: 'linear-gradient(90deg, #2C7A7B 0%, #38B2AC 50%, #0EA5E9 100%)',
+          }}
+        />
         <div style={{
           maxWidth: '1400px',
           margin: '0 auto',
-          padding: `0 ${spacing['2xl']}`,
+          padding: `${spacing['2xl']} ${spacing['2xl']}`,
           display: 'flex',
           justifyContent: 'space-between',
           alignItems: 'center',
           flexWrap: 'wrap',
           gap: spacing.lg,
         }}>
-          <p style={{
-            margin: 0,
-            fontSize: typography.fontSize.sm,
-            fontFamily: typography.fontFamily.body,
-            color: colors.gray[400],
-          }}>
-            © {new Date().getFullYear()} PolicyEngine. All rights reserved.
-          </p>
+          <div style={{ display: 'flex', alignItems: 'center', gap: spacing.md }}>
+            <img
+              src={`${process.env.PUBLIC_URL}/policyengine.png`}
+              alt="PolicyEngine Logo"
+              style={{
+                height: '28px',
+                width: 'auto',
+                opacity: 0.8,
+                filter: 'brightness(0) invert(1)',
+              }}
+            />
+            <p style={{
+              margin: 0,
+              fontSize: typography.fontSize.sm,
+              fontFamily: typography.fontFamily.body,
+              color: colors.gray[400],
+            }}>
+              © {new Date().getFullYear()} PolicyEngine
+            </p>
+          </div>
           <div style={{
             display: 'flex',
-            gap: spacing.xl,
+            gap: spacing.lg,
           }}>
             <a
               href="https://policyengine.org"
@@ -611,12 +642,13 @@ function App() {
                 textDecoration: 'none',
                 fontSize: typography.fontSize.sm,
                 fontFamily: typography.fontFamily.body,
+                fontWeight: typography.fontWeight.medium,
                 transition: 'color 0.2s ease',
               }}
               onMouseEnter={(e) => e.currentTarget.style.color = colors.primary[300]}
               onMouseLeave={(e) => e.currentTarget.style.color = colors.gray[400]}
             >
-              PolicyEngine.org
+              Website
             </a>
             <a
               href="https://github.com/PolicyEngine"
@@ -627,6 +659,7 @@ function App() {
                 textDecoration: 'none',
                 fontSize: typography.fontSize.sm,
                 fontFamily: typography.fontFamily.body,
+                fontWeight: typography.fontWeight.medium,
                 transition: 'color 0.2s ease',
               }}
               onMouseEnter={(e) => e.currentTarget.style.color = colors.primary[300]}
@@ -643,6 +676,7 @@ function App() {
                 textDecoration: 'none',
                 fontSize: typography.fontSize.sm,
                 fontFamily: typography.fontFamily.body,
+                fontWeight: typography.fontWeight.medium,
                 transition: 'color 0.2s ease',
               }}
               onMouseEnter={(e) => e.currentTarget.style.color = colors.primary[300]}

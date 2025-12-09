@@ -87,60 +87,102 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
       programsByState.get(state)?.push(row);
     });
 
-    return Array.from(programsByState.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([state, programs]) => (
-      <div key={`${keyPrefix}-col-${state}`} style={{ minWidth: '250px' }}>
-        <div style={{
-          backgroundColor: headerColor,
-          color: colors.white,
-          padding: spacing.sm,
-          fontWeight: typography.fontWeight.bold,
-          fontSize: typography.fontSize.sm,
-          textAlign: 'center',
-          fontFamily: typography.fontFamily.primary,
-          borderRadius: `${spacing.radius.md} ${spacing.radius.md} 0 0`,
-        }}>
-          {state}
+    return Array.from(programsByState.entries()).sort(([a], [b]) => a.localeCompare(b)).map(([state, statePrograms]) => {
+      // Adjust width based on number of programs
+      const programCount = statePrograms.length;
+      const minWidth = programCount <= 2 ? '180px' : programCount <= 4 ? '220px' : '260px';
+
+      return (
+        <div
+          key={`${keyPrefix}-col-${state}`}
+          style={{
+            minWidth: minWidth,
+            flex: programCount <= 2 ? '0 0 auto' : '1 1 auto',
+            borderRadius: '12px',
+            overflow: 'hidden',
+            boxShadow: 'var(--shadow-elevation-low)',
+            border: `1px solid ${colors.border.light}`,
+            transition: 'all 0.2s ease',
+          }}
+          onMouseEnter={(e) => {
+            e.currentTarget.style.boxShadow = 'var(--shadow-elevation-medium)';
+            e.currentTarget.style.transform = 'translateY(-2px)';
+          }}
+          onMouseLeave={(e) => {
+            e.currentTarget.style.boxShadow = 'var(--shadow-elevation-low)';
+            e.currentTarget.style.transform = 'translateY(0)';
+          }}
+        >
+          <div style={{
+            backgroundColor: headerColor,
+            color: colors.white,
+            padding: `${spacing.sm} ${spacing.md}`,
+            fontWeight: typography.fontWeight.bold,
+            fontSize: typography.fontSize.sm,
+            textAlign: 'center',
+            fontFamily: typography.fontFamily.primary,
+            letterSpacing: '0.5px',
+          }}>
+            {state}
+          </div>
+          <div style={{
+            backgroundColor: colors.white,
+          }}>
+            {statePrograms.map((row, idx) => {
+              const status = row.jurisdictions.get(state) || null;
+              const statusColor = getStatusColor(status);
+              return (
+                <div
+                  key={`${keyPrefix}-${state}-prog-${idx}`}
+                  style={{
+                    padding: `${spacing.sm} ${spacing.md}`,
+                    borderBottom: idx < statePrograms.length - 1 ? `1px solid ${colors.gray[100]}` : 'none',
+                    backgroundColor: colors.white,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    gap: spacing.sm,
+                    transition: 'background-color 0.15s ease',
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.background.secondary;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = colors.white;
+                  }}
+                >
+                  <span style={{
+                    fontSize: typography.fontSize.sm,
+                    color: colors.secondary[900],
+                    fontWeight: typography.fontWeight.medium,
+                    flex: 1,
+                  }}>
+                    {row.name}
+                  </span>
+                  <div style={{
+                    width: '24px',
+                    height: '24px',
+                    borderRadius: '6px',
+                    backgroundColor: `${statusColor}15`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    flexShrink: 0,
+                  }}>
+                    <span style={{
+                      fontSize: typography.fontSize.sm,
+                      color: statusColor,
+                    }}>
+                      {getStatusIcon(status)}
+                    </span>
+                  </div>
+                </div>
+              );
+            })}
+          </div>
         </div>
-        <div style={{
-          border: `1px solid ${colors.gray[200]}`,
-          borderTop: 'none',
-          borderRadius: `0 0 ${spacing.radius.md} ${spacing.radius.md}`,
-        }}>
-          {programs.map((row, idx) => {
-            const status = row.jurisdictions.get(state) || null;
-            return (
-              <div
-                key={`${keyPrefix}-${state}-prog-${idx}`}
-                style={{
-                  padding: spacing.sm,
-                  borderBottom: idx < programs.length - 1 ? `1px solid ${colors.gray[200]}` : 'none',
-                  backgroundColor: idx % 2 === 0 ? colors.white : colors.gray[50],
-                  display: 'flex',
-                  justifyContent: 'space-between',
-                  alignItems: 'center',
-                  gap: spacing.sm,
-                }}
-              >
-                <span style={{
-                  fontSize: typography.fontSize.sm,
-                  color: colors.secondary[900],
-                  fontWeight: typography.fontWeight.medium,
-                  flex: 1,
-                }}>
-                  {row.name}
-                </span>
-                <span style={{
-                  fontSize: typography.fontSize.base,
-                  color: getStatusColor(status),
-                }}>
-                  {getStatusIcon(status)}
-                </span>
-              </div>
-            );
-          })}
-        </div>
-      </div>
-    ));
+      );
+    });
   };
 
   const matrixData = useMemo<MatrixData>(() => {
@@ -671,6 +713,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         <div style={{
           maxHeight: '50vh',
           overflowY: 'auto',
+          position: 'relative',
         }}>
           <div>
             <div
@@ -685,7 +728,17 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 letterSpacing: '0.5px',
                 textTransform: 'uppercase',
                 fontFamily: typography.fontFamily.primary,
-                borderTop: `2px solid ${colors.gray[300]}`,
+                borderTop: `1px solid ${colors.gray[200]}`,
+                transition: 'background-color 0.2s ease',
+                position: 'sticky',
+                top: 0,
+                zIndex: 5,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.primary[700];
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = colors.primary[600];
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
@@ -698,17 +751,27 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   ▸
                 </span>
                 State Programs
+                <span style={{
+                  marginLeft: 'auto',
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.medium,
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                }}>
+                  {matrixData.stateRows.length}
+                </span>
               </div>
             </div>
             {expandedSections.state && (
               <div style={{
                 padding: spacing.lg,
-                backgroundColor: colors.white,
+                backgroundColor: colors.background.secondary,
               }}>
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(5, 1fr)',
-                  gap: spacing.md,
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                  gap: spacing.lg,
                 }}>
                   {renderProgramColumns(matrixData.stateRows, colors.primary[600], 'state')}
                 </div>
@@ -723,6 +786,7 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
         <div style={{
           maxHeight: '50vh',
           overflowY: 'auto',
+          position: 'relative',
         }}>
           <div>
             <div
@@ -737,7 +801,17 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                 letterSpacing: '0.5px',
                 textTransform: 'uppercase',
                 fontFamily: typography.fontFamily.primary,
-                borderTop: `2px solid ${colors.gray[300]}`,
+                borderTop: `1px solid ${colors.gray[200]}`,
+                transition: 'background-color 0.2s ease',
+                position: 'sticky',
+                top: 0,
+                zIndex: 5,
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.backgroundColor = colors.secondary[800];
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.backgroundColor = colors.secondary[700];
               }}
             >
               <div style={{ display: 'flex', alignItems: 'center', gap: spacing.sm }}>
@@ -750,17 +824,27 @@ const MatrixView: React.FC<MatrixViewProps> = ({ programs }) => {
                   ▸
                 </span>
                 Local Programs
+                <span style={{
+                  marginLeft: 'auto',
+                  fontSize: typography.fontSize.xs,
+                  fontWeight: typography.fontWeight.medium,
+                  backgroundColor: 'rgba(255,255,255,0.2)',
+                  padding: '2px 8px',
+                  borderRadius: '12px',
+                }}>
+                  {matrixData.localRows.length}
+                </span>
               </div>
             </div>
             {expandedSections.local && (
               <div style={{
                 padding: spacing.lg,
-                backgroundColor: colors.white,
+                backgroundColor: colors.background.secondary,
               }}>
                 <div style={{
                   display: 'grid',
-                  gridTemplateColumns: 'repeat(5, 1fr)',
-                  gap: spacing.md,
+                  gridTemplateColumns: 'repeat(auto-fill, minmax(260px, 1fr))',
+                  gap: spacing.lg,
                 }}>
                   {renderProgramColumns(matrixData.localRows, colors.secondary[700], 'local')}
                 </div>

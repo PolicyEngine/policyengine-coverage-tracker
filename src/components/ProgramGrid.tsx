@@ -63,8 +63,14 @@ const ProgramGrid: React.FC<ProgramGridProps> = ({ programs, selectedState, onSt
         const statusColor = statusColors[displayStatus];
 
         // Filter state implementations to only show non-notStarted states
+        // For TANF: only show completed state implementations
         const filteredStateImplementations = program.stateImplementations?.filter(
-          impl => impl.status !== 'notStarted'
+          impl => {
+            if (program.id === 'tanf') {
+              return impl.status === 'complete';
+            }
+            return impl.status !== 'notStarted';
+          }
         );
 
         return (
