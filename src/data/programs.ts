@@ -191,7 +191,7 @@ export const programs: Program[] = [
     fullName: 'Temporary Assistance for Needy Families',
     agency: 'HHS',
     status: 'inProgress',
-    coverage: 'CA, CO, DC, IL, NY, MA, NC, NJ, MT, TX, WA, AZ, OK, MO, PA, MD',
+    coverage: 'US',
     stateImplementations: [
       {
         state: 'CA',
@@ -317,7 +317,7 @@ export const programs: Program[] = [
       },
       {
         state: 'AZ',
-        status: 'partial',
+        status: 'inProgress',
         name: 'Arizona TANF',
         fullName: 'Arizona Temporary Assistance for Needy Families',
         notes: 'Eligibility implemented',
@@ -365,7 +365,7 @@ export const programs: Program[] = [
       },
       {
         state: 'MD',
-        status: 'partial',
+        status: 'inProgress',
         name: 'Maryland TANF',
         fullName: 'Maryland Temporary Cash Assistance',
         notes: 'Implementation in progress',
@@ -374,6 +374,376 @@ export const programs: Program[] = [
           variables: `${GITHUB_BASE}/variables/gov/states/md`,
           tests: `${TESTS_BASE}/policy/baseline/gov/states/md`,
         }
+      },
+      {
+        state: 'SD',
+        status: 'complete',
+        name: 'South Dakota TANF',
+        fullName: 'South Dakota Temporary Assistance for Needy Families',
+        variable: 'sd_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/sd/dss/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/sd/dss/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/sd/dss/tanf`,
+        }
+      },
+      {
+        state: 'GA',
+        status: 'complete',
+        name: 'Georgia TANF',
+        fullName: 'Georgia Temporary Assistance for Needy Families',
+        variable: 'ga_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ga/dfcs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ga/dfcs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ga/dfcs/tanf`,
+        }
+      },
+      {
+        state: 'MS',
+        status: 'complete',
+        name: 'Mississippi TANF',
+        fullName: 'Mississippi Temporary Assistance for Needy Families',
+        variable: 'ms_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ms/dhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ms/dhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ms/dhs/tanf`,
+        }
+      },
+      {
+        state: 'IN',
+        status: 'complete',
+        name: 'Indiana TANF',
+        fullName: 'Indiana Temporary Assistance for Needy Families',
+        variable: 'in_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/in/fssa/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/in/fssa/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/in/fssa/tanf`,
+        }
+      },
+      {
+        state: 'FL',
+        status: 'complete',
+        name: 'Florida TCA',
+        fullName: 'Florida Temporary Cash Assistance',
+        variable: 'fl_tca',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/fl/dcf/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/fl/dcf/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/fl/dcf/tanf`,
+        }
+      },
+      {
+        state: 'ME',
+        status: 'complete',
+        name: 'Maine TANF',
+        fullName: 'Maine Temporary Assistance for Needy Families',
+        variable: 'me_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/me/dhhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/me/dhhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/me/dhhs/tanf`,
+        }
+      },
+      {
+        state: 'NV',
+        status: 'complete',
+        name: 'Nevada TANF',
+        fullName: 'Nevada Temporary Assistance for Needy Families',
+        variable: 'nv_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/nv/dwss/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/nv/dwss/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/nv/dwss/tanf`,
+        }
+      },
+      {
+        state: 'KS',
+        status: 'complete',
+        name: 'Kansas TANF',
+        fullName: 'Kansas Temporary Assistance for Needy Families',
+        variable: 'ks_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ks/dcf/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ks/dcf/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ks/dcf/tanf`,
+        }
+      },
+      {
+        state: 'HI',
+        status: 'complete',
+        name: 'Hawaii TANF',
+        fullName: 'Hawaii Temporary Assistance for Needy Families',
+        variable: 'hi_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/hi/dhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/hi/dhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/hi/dhs/tanf`,
+        }
+      },
+      {
+        state: 'DE',
+        status: 'complete',
+        name: 'Delaware TANF',
+        fullName: 'Delaware Temporary Assistance for Needy Families',
+        variable: 'de_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/de/dhss/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/de/dhss/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/de/dhss/tanf`,
+        }
+      },
+      {
+        state: 'OR',
+        status: 'complete',
+        name: 'Oregon TANF',
+        fullName: 'Oregon Temporary Assistance for Needy Families',
+        variable: 'or_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/or/odhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/or/odhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/or/odhs/tanf`,
+        }
+      },
+      {
+        state: 'MN',
+        status: 'complete',
+        name: 'Minnesota MFIP',
+        fullName: 'Minnesota Family Investment Program',
+        variable: 'mn_mfip',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/mn/dcyf/mfip`,
+          variables: `${GITHUB_BASE}/variables/gov/states/mn/dcyf/mfip`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/mn/dcyf/mfip`,
+        }
+      },
+      {
+        state: 'TN',
+        status: 'complete',
+        name: 'Tennessee Families First',
+        fullName: 'Tennessee Families First',
+        variable: 'tn_ff',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/tn/dhs/ff`,
+          variables: `${GITHUB_BASE}/variables/gov/states/tn/dhs/ff`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/tn/dhs/ff`,
+        }
+      },
+      {
+        state: 'WV',
+        status: 'complete',
+        name: 'West Virginia WORKS',
+        fullName: 'West Virginia WORKS',
+        variable: 'wv_works',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/wv/dhhr/works`,
+          variables: `${GITHUB_BASE}/variables/gov/states/wv/dhhr/works`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/wv/dhhr/works`,
+        }
+      },
+      {
+        state: 'RI',
+        status: 'complete',
+        name: 'Rhode Island WORKS',
+        fullName: 'Rhode Island WORKS',
+        variable: 'ri_works',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ri/dhs/works`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ri/dhs/works`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ri/dhs/works`,
+        }
+      },
+      {
+        state: 'NH',
+        status: 'complete',
+        name: 'New Hampshire FANF',
+        fullName: 'New Hampshire Family Assistance for Needy Families',
+        variable: 'nh_fanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/nh/dhhs/fanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/nh/dhhs/fanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/nh/dhhs/fanf`,
+        }
+      },
+      {
+        state: 'CT',
+        status: 'complete',
+        name: 'Connecticut TFA',
+        fullName: 'Connecticut Temporary Family Assistance',
+        variable: 'ct_tfa',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ct/dss/tfa`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ct/dss/tfa`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ct/dss/tfa`,
+        }
+      },
+      {
+        state: 'OH',
+        status: 'complete',
+        name: 'Ohio Works First',
+        fullName: 'Ohio Works First',
+        variable: 'oh_owf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/oh/odjfs/owf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/oh/odjfs/owf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/oh/odjfs/owf`,
+        }
+      },
+      {
+        state: 'MI',
+        status: 'complete',
+        name: 'Michigan FIP',
+        fullName: 'Michigan Family Independence Program',
+        variable: 'mi_fip',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/mi/mdhhs/fip`,
+          variables: `${GITHUB_BASE}/variables/gov/states/mi/mdhhs/fip`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/mi/mdhhs/fip`,
+        }
+      },
+      {
+        state: 'WI',
+        status: 'complete',
+        name: 'Wisconsin Works',
+        fullName: 'Wisconsin Works (W-2)',
+        variable: 'wi_works',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/wi/dcf/works`,
+          variables: `${GITHUB_BASE}/variables/gov/states/wi/dcf/works`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/wi/dcf/works`,
+        }
+      },
+      {
+        state: 'ID',
+        status: 'complete',
+        name: 'Idaho TAFI',
+        fullName: 'Temporary Assistance for Families in Idaho',
+        variable: 'id_tafi',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/id/tafi`,
+          variables: `${GITHUB_BASE}/variables/gov/states/id/tafi`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/id/tafi`,
+        }
+      },
+      {
+        state: 'NE',
+        status: 'complete',
+        name: 'Nebraska ADC',
+        fullName: 'Nebraska Aid to Dependent Children',
+        variable: 'ne_adc',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ne/dhhs/adc`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ne/dhhs/adc`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ne/dhhs/adc`,
+        }
+      },
+      {
+        state: 'AR',
+        status: 'complete',
+        name: 'Arkansas TEA',
+        fullName: 'Arkansas Transitional Employment Assistance',
+        variable: 'ar_tea',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ar/dhs/tea`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ar/dhs/tea`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ar/dhs/tea`,
+        }
+      },
+      {
+        state: 'UT',
+        status: 'complete',
+        name: 'Utah FEP',
+        fullName: 'Utah Family Employment Program',
+        variable: 'ut_fep',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ut/dwf/fep`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ut/dwf/fep`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ut/dwf/fep`,
+        }
+      },
+      {
+        state: 'KY',
+        status: 'complete',
+        name: 'Kentucky K-TAP',
+        fullName: 'Kentucky Transitional Assistance Program',
+        variable: 'ky_ktap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ky/dcbs/ktap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ky/dcbs/ktap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ky/dcbs/ktap`,
+        }
+      },
+      {
+        state: 'AL',
+        status: 'inProgress',
+        name: 'Alabama FA',
+        fullName: 'Alabama Family Assistance',
+        githubLinks: {}
+      },
+      {
+        state: 'AK',
+        status: 'inProgress',
+        name: 'Alaska TANF',
+        fullName: 'Alaska Temporary Assistance',
+        githubLinks: {}
+      },
+      {
+        state: 'IA',
+        status: 'inProgress',
+        name: 'Iowa FIP',
+        fullName: 'Iowa Family Investment Program',
+        githubLinks: {}
+      },
+      {
+        state: 'LA',
+        status: 'inProgress',
+        name: 'Louisiana FITAP',
+        fullName: 'Louisiana Family Independence Temporary Assistance Program',
+        githubLinks: {}
+      },
+      {
+        state: 'NM',
+        status: 'inProgress',
+        name: 'New Mexico TANF',
+        fullName: 'New Mexico Temporary Assistance for Needy Families',
+        githubLinks: {}
+      },
+      {
+        state: 'ND',
+        status: 'inProgress',
+        name: 'North Dakota TANF',
+        fullName: 'North Dakota Temporary Assistance for Needy Families',
+        githubLinks: {}
+      },
+      {
+        state: 'SC',
+        status: 'inProgress',
+        name: 'South Carolina FI',
+        fullName: 'South Carolina Family Independence',
+        githubLinks: {}
+      },
+      {
+        state: 'VT',
+        status: 'inProgress',
+        name: 'Vermont Reach Up',
+        fullName: 'Vermont Reach Up',
+        githubLinks: {}
+      },
+      {
+        state: 'VA',
+        status: 'inProgress',
+        name: 'Virginia TANF',
+        fullName: 'Virginia Temporary Assistance for Needy Families',
+        githubLinks: {}
+      },
+      {
+        state: 'WY',
+        status: 'inProgress',
+        name: 'Wyoming POWER',
+        fullName: 'Wyoming Personal Opportunities With Employment Responsibilities',
+        githubLinks: {}
       },
     ],
     githubLinks: {
