@@ -286,10 +286,15 @@ export const programs: Program[] = [
       },
       {
         state: 'NJ',
-        status: 'inProgress',
-        name: 'New Jersey TANF',
-        fullName: 'New Jersey Work First',
-        githubLinks: {}
+        status: 'complete',
+        name: 'New Jersey WFNJ',
+        fullName: 'New Jersey WorkFirst',
+        variable: 'nj_wfnj',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/nj/njdhs/wfnj`,
+          variables: `${GITHUB_BASE}/variables/gov/states/nj/njdhs/wfnj`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/nj/njdhs/wfnj`,
+        }
       },
       {
         state: 'TX',
@@ -684,10 +689,15 @@ export const programs: Program[] = [
       },
       {
         state: 'AK',
-        status: 'inProgress',
-        name: 'Alaska TANF',
-        fullName: 'Alaska Temporary Assistance',
-        githubLinks: {}
+        status: 'complete',
+        name: 'Alaska ATAP',
+        fullName: 'Alaska Temporary Assistance Program',
+        variable: 'ak_atap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/ak/dpa/atap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/ak/dpa/atap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/ak/dpa/atap`,
+        }
       },
       {
         state: 'IA',
@@ -698,24 +708,39 @@ export const programs: Program[] = [
       },
       {
         state: 'LA',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Louisiana FITAP',
         fullName: 'Louisiana Family Independence Temporary Assistance Program',
-        githubLinks: {}
+        variable: 'la_fitap',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/la/dcfs/fitap`,
+          variables: `${GITHUB_BASE}/variables/gov/states/la/dcfs/fitap`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/la/dcfs/fitap`,
+        }
       },
       {
         state: 'NM',
-        status: 'inProgress',
-        name: 'New Mexico TANF',
-        fullName: 'New Mexico Temporary Assistance for Needy Families',
-        githubLinks: {}
+        status: 'complete',
+        name: 'New Mexico Works',
+        fullName: 'New Mexico Works',
+        variable: 'nm_works',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/nm/hca/nm_works`,
+          variables: `${GITHUB_BASE}/variables/gov/states/nm/hca/nm_works`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/nm/hca/nm_works`,
+        }
       },
       {
         state: 'ND',
-        status: 'inProgress',
+        status: 'complete',
         name: 'North Dakota TANF',
         fullName: 'North Dakota Temporary Assistance for Needy Families',
-        githubLinks: {}
+        variable: 'nd_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/nd/dhs/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/nd/dhs/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/nd/dhs/tanf`,
+        }
       },
       {
         state: 'SC',
@@ -733,17 +758,27 @@ export const programs: Program[] = [
       },
       {
         state: 'VA',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Virginia TANF',
         fullName: 'Virginia Temporary Assistance for Needy Families',
-        githubLinks: {}
+        variable: 'va_tanf',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/va/dss/tanf`,
+          variables: `${GITHUB_BASE}/variables/gov/states/va/dss/tanf`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/va/dss/tanf`,
+        }
       },
       {
         state: 'WY',
-        status: 'inProgress',
+        status: 'complete',
         name: 'Wyoming POWER',
         fullName: 'Wyoming Personal Opportunities With Employment Responsibilities',
-        githubLinks: {}
+        variable: 'wy_power',
+        githubLinks: {
+          parameters: `${GITHUB_BASE}/parameters/gov/states/wy/dfs/power`,
+          variables: `${GITHUB_BASE}/variables/gov/states/wy/dfs/power`,
+          tests: `${TESTS_BASE}/policy/baseline/gov/states/wy/dfs/power`,
+        }
       },
     ],
     githubLinks: {
